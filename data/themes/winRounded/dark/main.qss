@@ -1,0 +1,16 @@
+
+QPen {
+	color: #ffffff;
+}
+
+QPen:focus {
+	color: #ff3232;
+}
+
+QPen:selected {
+	color: #0094ff;
+}
+
+QPen::grid {
+	color: #4b4b4b;
+}

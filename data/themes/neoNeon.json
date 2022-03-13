@@ -1,0 +1,13 @@
+{
+    "info": {
+        "name": "Neo Neon",
+        "version": 1.0,
+        "description": "Theme for QT6 App."
+    },
+    "qss": {
+        "dark/green": {
+            "displayName": "Dark (Green)",
+            "filename": "dark/green/main.qss"
+        }
+    }
+}
