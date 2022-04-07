@@ -1,0 +1,217 @@
+{
+    "info": {
+        "name": "Français",
+        "version": 1.0,
+        "description": "Langage français pour l'application PERT Maker."
+    },
+    "data": {
+        "QMainWindow": {
+            "title": "PERT Maker",
+            "QMenuBar": {
+                "fileMenu": {
+                    "title": "Fichier",
+                    "QAction": {
+                        "new": "Nouveau",
+                        "open": "Ouvrir...",
+                        "save": "Sauvegarder",
+                        "saveAs": "Sauvegarder Sous...",
+                        "settings": "Paramètres...",
+                        "exit": "Quitter"
+                    },
+                    "QMenu": {
+                        "importMenu": {
+                            "title": "Importer",
+                            "QAction": {
+                                "table": "Tableau..."
+                            }
+                        },
+                        "exportMenu": {
+                            "title": "Exporter",
+                            "QAction": {
+                                "table": "Tableau..."
+                            },
+                            "QFileDialog": {
+                                "table": {
+                                    "title": "PERT Maker > Exporter > Tableau"
+                                }
+                            }
+                        }
+                    }
+                },
+                "viewMenu": {
+                    "title": "Affichage",
+                    "QAction": {
+                        "gridSwitch": "Changer de Grille",
+                        "gridAlign": "Aligner les Nœuds sur la Grille"
+                    }
+                },
+                "helpMenu": {
+                    "title": "Aide",
+                    "QAction": {
+                        "about": "A Propos de PERT Maker...",
+                        "tips": "Astuces...",
+                        "aboutQt": "A Propos de Qt..."
+                    }
+                }
+            }
+        },
+        "QSettingsDialog": {
+            "title": "PERT Maker > Paramètres",
+            "langTab": {
+                "title": "Langage",
+                "QLabel": {
+                    "lang": "Choisir un Langage:"
+                }
+            },
+            "themesTab": {
+                "title": "Thème",
+                "QLabel": {
+                    "themes": "Choisir un Thème:",
+                    "themeVariants": "Choisir une Variante:"
+                }
+            },
+            "editorTab": {
+                "title": "Editor",
+                "QSpinBoxWithLabel": {
+                    "QLabel": {
+                        "maxLoop": "Maximum de Boucles:",
+                        "gridSize": "Taille de la Grille:"
+                    }
+                }
+            }
+        },
+        "QMessageBox": {
+            "critical": {
+                "notImplemented": {
+                    "title": "PERT Maker > Fonctionnalité Non-Implémentée",
+                    "text": "Cette fonctionnalité n'existe pas encore et sera\ndisponible dans une version ultérieure du logiciel.",
+                    "details": "Détails"
+                }
+            },
+            "warning": {
+                "refreshConnectionView": {
+                    "title": "PERT Maker > Recharger la Vue des Connexions",
+                    "text": "Une erreur est survenue lors du processus!",
+                    "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
+                    "details": "Détails",
+                    "startNode": "Nœud de Départ",
+                    "endNode": "Nœud d'Arrivée"
+                },
+                "generateMinMaxTime": {
+                    "title": "PERT Maker > Générer les Temps Min et Max",
+                    "text": "Une erreur est survenue lors du processus!",
+                    "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
+                    "details": "Détails",
+                    "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie.\n\nBoucles Restantes (1): %s\nBoucles Restantes (2): %s"
+                },
+                "generateCriticalPath": {
+                    "title": "Générer le Chemin Critique",
+                    "text": "Une erreur est survenue lors du processus!",
+                    "informativeText": "",
+                    "details": "Détails",
+                    "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie."
+                }
+            },
+            "information": {
+                "settingsReload": {
+                    "title": "PERT Maker > Paramètres",
+                    "text": "Un redémarrage du logiciel est nécessaire afin\nd'appliquer correctement tous les paramètres."
+                }
+            }
+        },
+        "QFileDialog": {
+            "open": {
+                "title": "PERT Maker > Ouvrir"
+            },
+            "saveAs": {
+                "title": "PERT Maker > Sauvegarder Sous"
+            }
+        },
+        "QDockWidget": {
+            "properties": {
+                "title": "Propriétés",
+                "QSpinBoxWithLabel": {
+                    "QLabel": {
+                        "minTime": "Temps Minimum:",
+                        "maxTime": "Temps Maximum:",
+                        "id": "ID:"
+                    }
+                },
+                "QComboBoxWithLabel": {
+                    "QLabel": {
+                        "node": "Nœud:"
+                    }
+                },
+                "QLineEditWithLabel": {
+                    "QLabel": {
+                        "displayName": "Nom d'Affichage:"
+                    }
+                },
+                "QGroupBox": {
+                    "pathToNodeX": "Chemin allant au nœud '%s'"
+                },
+                "QPushButton": {
+                    "deleteConnection": "Supprimer la Connexion"
+                }
+            },
+            "connectionView": {
+                "title": "Visualisation des Connexions",
+                "QBetterListWidget": {
+                    "task": "Tâche",
+                    "previousTasks": "Tâches Antérieures",
+                    "time": "Durée"
+                }
+            },
+            "criticalPathView": {
+                "title": "Vue du Chemin Critique",
+                "QBetterListWidget": {
+                    "criticalPath": "Chemin Critique"
+                }
+            },
+            "generation": {
+                "title": "Génération",
+                "QPushButton": {
+                    "refreshConnectionView": "Recharger la Vue des Connexions",
+                    "generateMinMaxTime": "Générer les Temps Min et Max",
+                    "generateCriticalPath": "Générer le Chemin Critique"
+                },
+                "QCheckBox": {
+                    "liveRefreshConnectionView": "Actualiser la vue des Connexion en Direct",
+                    "liveGenerateMinMax": "Générer les Temps Min et Max en Direct",
+                    "liveGenerateCriticalPath": "Auto-Générer le Chemin Critique en Direct",
+                    "useNodeNamesInsteadOfPathNames": "Utiliser les Noms de Nœud à la Place des Noms de Chemin"
+                }
+            }
+        },
+        "QAbout": {
+            "pertMaker": {
+                "title": "A Propos de PERT Maker",
+                "texts": [
+                    "PERT Maker est un éditeur de graphiques PERT,\nutilisé pour les statistiques et le management de projets.",
+                    "Pert Maker est programmé par %s.",
+                    "Accédez au %s pour plus d'informations."
+                ]
+            }
+        },
+        "QImportTableDialog": {
+            "title": "PERT Maker > Import > Table",
+            "QTableWidget": {
+                "horizonalHeader": {
+                    "task": "Task",
+                    "previousTasks": "Previous Tasks",
+                    "time": "Time"
+                }
+            },
+            "QPushButton": {
+                "open": "Open..."
+            },
+            "QFileDialog": {
+                "title": "PERT Maker > Import > Table > Open"
+            },
+            "QComboBox": {
+                "tasksAsPathNames": "Tâches en tant que Noms de Chemin",
+                "tasksAsNodeNames": "Tâches en tant que Noms de Nœud"
+            }
+        }
+    }
+}
