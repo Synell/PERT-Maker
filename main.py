@@ -5,7 +5,6 @@ from sys import exit
 from math import *
 import json
 from pyautogui import *
-import os
 
 from data.lib import *
 
@@ -68,21 +67,24 @@ class SaveData(QSaveData):
         }
 
     def loadExtraData(self, extraData: dict = ...) -> None:
-        self.maxLoop = extraData['maxLoop']
+        try:
+            self.maxLoop = extraData['maxLoop']
 
-        self.alignToGrid = extraData['alignToGrid']
+            self.alignToGrid = extraData['alignToGrid']
 
-        self.gridMode = extraData['gridMode']
-        self.gridSize = extraData['gridSize']
+            self.gridMode = extraData['gridMode']
+            self.gridSize = extraData['gridSize']
 
-        self.liveRefreshConnectionView = extraData['liveRefreshConnectionView']
-        self.liveGenerateCriticalPath = extraData['liveGenerateCriticalPath']
-        self.liveMinMax = extraData['liveMinMax']
+            self.liveRefreshConnectionView = extraData['liveRefreshConnectionView']
+            self.liveGenerateCriticalPath = extraData['liveGenerateCriticalPath']
+            self.liveMinMax = extraData['liveMinMax']
+
+        except: pass
 
 
 
 class Application(QBaseApplication):
-    BUILD = '07e63f6a'
+    BUILD = '07e65539'
     VERSION = 'Experimental'
 
     DELTA = 80
@@ -95,12 +97,16 @@ class Application(QBaseApplication):
 
     SAVE_PATH = None
 
+    KEY_WORDS = ['Start', 'End']
+
     def __init__(self):
         super().__init__()
 
         self.selectedItem = None
         self.selectedNode = None
         self.unsaved = False
+
+        self.useNodeNames = True
 
         self.shiftKey = False
 
@@ -127,7 +133,7 @@ class Application(QBaseApplication):
 
         QMessageBoxWithWidget(
             app = self,
-            windowTitle = lang['title'],
+            title = lang['title'],
             text = lang['text'],
             icon = QMessageBoxWithWidget.Icon.Critical,
             widget = w
@@ -217,6 +223,32 @@ class Application(QBaseApplication):
 
             fileMenu: QMenu = menuBar.addMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['title'])
 
+            def createImportMenu():
+                lang = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['QAction']
+
+                importMenu = QMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['title'], self.window)
+                importMenu.setIcon(self.saveData.getIcon('menubar/import.png'))
+
+                tableAction = QAction(lang['table'], self.window)
+                tableAction.triggered.connect(self.fileMenu_importMenu_tableAction)
+
+                importMenu.addAction(tableAction)
+
+                return importMenu
+
+            def createExportMenu():
+                lang = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['QAction']
+
+                exportMenu = QMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['title'], self.window)
+                exportMenu.setIcon(self.saveData.getIcon('menubar/export.png'))
+
+                tableAction = QAction(lang['table'], self.window)
+                tableAction.triggered.connect(self.fileMenu_exportMenu_tableAction)
+
+                exportMenu.addAction(tableAction)
+
+                return exportMenu
+
             newAction = QAction(self.saveData.getIcon('menubar/new.png'), lang['new'], self.window)
             newAction.setShortcut('Ctrl+N')
             newAction.triggered.connect(self.fileMenu_newAction)
@@ -224,6 +256,9 @@ class Application(QBaseApplication):
             openAction = QAction(self.saveData.getIcon('menubar/open.png'), lang['open'], self.window)
             openAction.setShortcut('Ctrl+O')
             openAction.triggered.connect(self.fileMenu_openAction)
+
+            importMenu = createImportMenu()
+            exportMenu = createExportMenu()
 
             saveAction = QAction(self.saveData.getIcon('menubar/save.png'), lang['save'], self.window)
             saveAction.setShortcut('Ctrl+S')
@@ -244,6 +279,9 @@ class Application(QBaseApplication):
 
             fileMenu.addAction(newAction)
             fileMenu.addAction(openAction)
+            fileMenu.addSeparator()
+            fileMenu.addMenu(importMenu)
+            fileMenu.addMenu(exportMenu)
             fileMenu.addSeparator()
             fileMenu.addAction(saveAction)
             fileMenu.addAction(saveAsAction)
@@ -298,6 +336,8 @@ class Application(QBaseApplication):
         beginNodes = []
         errors = []
 
+        if self.useNodeNames: self.graph.setPathNamesAsNodeNames()
+
         for node in self.graph.nodes:
             if len(list(self.graph.node(node).next.keys())) > 0:
                 if len(list(self.graph.node(node).previous.keys())) > 0: nodes.append(self.graph.node(node))
@@ -329,6 +369,10 @@ class Application(QBaseApplication):
             for x in list(beginNodes[i].next.keys()):
                 paths[beginNodes[i].next[x].name] = {'value': beginNodes[i].next[x].value, 'previous': []}
 
+        if self.useNodeNames:
+            self.graph.resetPathNamesAsNodeNames()
+            self.canvas.update()
+
 
         pathsLst = list(paths.keys())
         pathsLst.sort()
@@ -336,6 +380,10 @@ class Application(QBaseApplication):
         for n in pathsLst:
             prevLst: list[str] = paths[n]['previous']
             prevLst.sort()
+
+            if n in self.KEY_WORDS: continue
+            for kw in self.KEY_WORDS:
+                if kw in prevLst: prevLst.remove(kw)
 
             self.connectionTable.addItem(
                 items = [
@@ -357,7 +405,7 @@ class Application(QBaseApplication):
             dropDownWidget = QDropDownWidget(text = lang['details'], widget = listWidget)
             msgBox = QMessageBoxWithWidget(
                 app = self,
-                windowTitle = lang['title'],
+                title = lang['title'],
                 text = lang['text'],
                 informativeText = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
@@ -439,7 +487,7 @@ class Application(QBaseApplication):
             dropDownWidget = QDropDownWidget(text = lang['details'], widget = label)
             QMessageBoxWithWidget(
                 app = self,
-                windowTitle = lang['title'],
+                title = lang['title'],
                 text = lang['text'],
                 informativeText = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
@@ -496,7 +544,7 @@ class Application(QBaseApplication):
             dropDownWidget = QDropDownWidget(text = lang['details'], widget = label)
             QMessageBoxWithWidget(
                 app = self,
-                windowTitle = lang['title'],
+                title = lang['title'],
                 text = lang['text'],
                 informativeText = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
@@ -520,16 +568,30 @@ class Application(QBaseApplication):
         lang = self.saveData.languageData['QDockWidget']['generation']
 
         def rcvValueChanged(value: int):
-            if value: self.saveData.liveRefreshConnectionView = True
+            if value:
+                self.saveData.liveRefreshConnectionView = True
+                self.refreshConnectionView()
             else: self.saveData.liveRefreshConnectionView = False
 
         def mmValueChanged(value: int):
-            if value: self.saveData.liveMinMax = True
+            if value:
+                self.saveData.liveMinMax = True
+                self.generateMinMaxTime()
             else: self.saveData.liveMinMax = False
 
         def gcpValueChanged(value: int):
-            if value: self.saveData.liveGenerateCriticalPath = True
+            if value:
+                self.saveData.liveGenerateCriticalPath = True
+                self.generateCriticalPath()
             else: self.saveData.liveGenerateCriticalPath = False
+
+        def unniopnValueChanged(value: int):
+            if value: self.useNodeNames = True
+            else: self.useNodeNames = False
+
+            if self.saveData.liveRefreshConnectionView: self.refreshConnectionView()
+            if self.saveData.liveMinMax: self.generateMinMaxTime()
+            if self.saveData.liveGenerateCriticalPath: self.generateCriticalPath()
 
         refreshConnectionViewButton = QPushButton(lang['QPushButton']['refreshConnectionView'])
         refreshConnectionViewButton.clicked.connect(self.refreshConnectionView)
@@ -549,6 +611,10 @@ class Application(QBaseApplication):
         if self.saveData.liveGenerateCriticalPath: liveGenerateCriticalPathCheckbox.setCheckState(Qt.CheckState.Checked)
         liveGenerateCriticalPathCheckbox.stateChanged.connect(gcpValueChanged)
 
+        self.useNodeNamesInsteadOfPathNamesCheckbox = QCheckBox(lang['QCheckBox']['useNodeNamesInsteadOfPathNames'])
+        if self.useNodeNames: self.useNodeNamesInsteadOfPathNamesCheckbox.setCheckState(Qt.CheckState.Checked)
+        self.useNodeNamesInsteadOfPathNamesCheckbox.stateChanged.connect(unniopnValueChanged)
+
 
         self.generationMenu.scrollLayout.addWidget(refreshConnectionViewButton, 0, 0)
         self.generationMenu.scrollLayout.addWidget(liveRefreshConnectionViewCheckbox, 0, 1)
@@ -556,6 +622,12 @@ class Application(QBaseApplication):
         self.generationMenu.scrollLayout.addWidget(liveGenerateMinMaxCheckbox, 1, 1)
         self.generationMenu.scrollLayout.addWidget(generateCriticalPathButton, 2, 0)
         self.generationMenu.scrollLayout.addWidget(liveGenerateCriticalPathCheckbox, 2, 1)
+        self.generationMenu.scrollLayout.addWidget(self.useNodeNamesInsteadOfPathNamesCheckbox, 3, 0, 1, 2)
+
+        rcvValueChanged(self.saveData.liveRefreshConnectionView)
+        mmValueChanged(self.saveData.liveMinMax)
+        gcpValueChanged(self.saveData.liveGenerateCriticalPath)
+        unniopnValueChanged(self.useNodeNames)
 
     def propertiesMenuLoad(self):
         lang = self.saveData.languageData['QDockWidget']['properties']
@@ -982,7 +1054,14 @@ class Application(QBaseApplication):
         self.selectedItem = None
 
         with open(self.SAVE_PATH, 'r', encoding = 'utf-8') as infile:
-            self.graph.loadFromDict(json.load(infile))
+            data = json.load(infile)
+            if 'data' in list(data.keys()) and 'info' in list(data.keys()):
+                self.graph.loadFromDict(data['data'])
+                self.useNodeNames = bool(data['info']['useNodeNames'])
+            else:
+                self.graph.loadFromDict(data)
+                self.useNodeNames = False
+            self.useNodeNamesInsteadOfPathNamesCheckbox.setChecked(self.useNodeNames)
 
         self.propertiesMenuLoad()
         self.canvas.update()
@@ -994,7 +1073,18 @@ class Application(QBaseApplication):
             return self.fileMenu_saveAsAction()
 
         with open(self.SAVE_PATH, 'w', encoding = 'utf-8') as outfile:
-            json.dump(self.graph.toDict(), outfile, indent = 4, sort_keys = True, ensure_ascii = False)
+            json.dump(
+                {
+                    'info': {
+                        'comment': 'Data file generated with PERT Maker.',
+                        'useNodeNames': self.useNodeNames
+                    },
+                    'data': self.graph.toDict()
+                },
+                outfile,
+                sort_keys = True,
+                ensure_ascii = False
+            )
 
         self.setSaved()
 
@@ -1047,6 +1137,97 @@ class Application(QBaseApplication):
 
     def helpMenu_aboutQtAction(self):
         self.aboutQt()
+
+
+    def fileMenu_importMenu_tableAction(self):
+        data = QImportTableDialog(self.window, self.saveData.languageData['QImportTableDialog'], int(self.useNodeNames)).exec()
+        if not data: return
+
+        self.fileMenu_newAction()
+        nodeData = data[0]
+        nodeOrder = []
+        maxLevel = 0
+        data = bool(data[1])
+
+        nodeDct = {}
+        for row in range(len(nodeData)):
+            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(' ', '').split(','), nodeData[row][2]]
+            if [''] == nodeDct[nodeData[row][0]][2]: nodeDct[nodeData[row][0]][2] = []
+            nodeOrder.append(nodeData[row][0])
+            if len(nodeDct[nodeData[row][0]][2]) > maxLevel: maxLevel = len(nodeDct[nodeData[row][0]][2])
+
+        newMaxLvl = 0
+        for lvl in range(maxLevel + 1):
+            for node in list(nodeDct.keys()):
+                for previousNode in nodeDct[node][2]:
+                    if nodeDct[previousNode][0] >= nodeDct[node][0]:
+                        nodeDct[node][0] = nodeDct[previousNode][0] + 1
+                        if newMaxLvl < nodeDct[node][0]: newMaxLvl = nodeDct[node][0]
+
+        newNodeLst = []
+        for lvl in range(newMaxLvl + 1):
+            newNodeLst.append([])
+
+            for node in list(nodeDct.keys()):
+                if nodeDct[node][0] == lvl:
+                    newNodeLst[lvl].append((nodeOrder.index(nodeDct[node][1]), nodeDct[node][1], nodeDct[node][2], nodeDct[node][3]))
+
+        nodeValuesDct = {}
+        for x in range(len(newNodeLst)):
+            for y in range(len(newNodeLst[x])):
+                self.graph.addNode(name = newNodeLst[x][y][1], pos = Vector2((x * (self.saveData.gridSize * 3)) + self.saveData.gridSize, (y * (self.saveData.gridSize * 3)) + self.saveData.gridSize))
+                nodeValuesDct[newNodeLst[x][y][1]] = newNodeLst[x][y][3]
+
+        for x in range(len(newNodeLst)):
+            for y in range(len(newNodeLst[x])):
+                for prev in newNodeLst[x][y][2]:
+                    if data == 0:
+                        self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = newNodeLst[x][y][1], value = nodeValuesDct[newNodeLst[x][y][1]])
+                    elif data == 1:
+                        self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = '', value = nodeValuesDct[prev])
+        
+        self.graph.addNode(name = '-2', pos = Vector2(((x + 1) * (self.saveData.gridSize * 3)) + self.saveData.gridSize, self.saveData.gridSize))
+        for node in self.graph.nodes:
+            if self.graph.node(node).next == {} and self.graph.node(node).name != '-2':
+                self.graph.addConnection(from_ = self.graph.node(node).name, to_ = '-2', name = '', value = nodeValuesDct[self.graph.node(node).name])
+
+        if not data:
+            for x in range(len(newNodeLst)):
+                for y in range(len(newNodeLst[x])):
+                    self.graph.rename(newNodeLst[x][y][1], self.graph.__TEMP_PATH_NAME__ + newNodeLst[x][y][1])
+
+            for x in range(len(newNodeLst)):
+                for y in range(len(newNodeLst[x])):
+                    self.graph.rename(self.graph.__TEMP_PATH_NAME__ + newNodeLst[x][y][1], str(newNodeLst[x][y][0]))
+
+                    for node in list(self.graph.node(str(newNodeLst[x][y][0])).previous.keys()):
+                        for nextNode in list(self.graph.node(node).next.keys()):
+                            if nextNode == str(newNodeLst[x][y][0]):
+                                self.graph.node(node).next[nextNode].name = newNodeLst[x][y][1]
+
+        self.useNodeNames = data
+        self.useNodeNamesInsteadOfPathNamesCheckbox.setChecked(data)
+
+        if '-1' in self.graph.nodes:
+            self.graph.rename('-1', 'Start')
+
+        if '-2' in self.graph.nodes:
+            self.graph.rename('-2', 'End')
+
+    def fileMenu_exportMenu_tableAction(self):
+        langData = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']
+
+        path = QFileDialog.getSaveFileName(
+            parent = self.window,
+            directory = './',
+            caption = langData['QFileDialog']['table']['title'],
+            filter = 'CSV (*.csv)'
+        )[0]
+
+        if not path: return
+
+        with open(path, 'w', encoding = 'utf-8') as outfile:
+            outfile.write('Task;Previous Tasks;Time\n' + '\n'.join(list(';'.join(item) for item in self.connectionTable.getItems())))
 
 
 
