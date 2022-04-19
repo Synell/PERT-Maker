@@ -9,6 +9,10 @@ QLabel.small {
 	padding-left: 4px;
 }
 
+QLabel.bold {
+	font-weight: bold;
+}
+
 QLabel.file {
 	font-size: 12px;
 	font-style: italic;

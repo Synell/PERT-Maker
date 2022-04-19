@@ -33,6 +33,45 @@ QWidget.dockWidget {
 
 
 
+/* QStatusBar */
+
+QStatusBar {
+	background-color: #d5d5d5;
+}
+
+QStatusBar::item {
+	border: none;
+}
+
+
+
+/* QProgressBar */
+
+QProgressBar
+{
+	border-radius: 5px;
+	color: #000000;
+	background-color: #d5d5d5;
+}
+QProgressBar::chunk 
+{
+	background-color: #05b8cc;
+	border-radius: 5px;
+}
+
+QProgressBar.small
+{
+	height: 12px;
+	border-radius: 5px;
+}
+QProgressBar::chunk .small
+{
+	height: 12px;
+	border-radius: 5px;
+}
+
+
+
 /* QLabel */
 
 QLabel {
@@ -47,6 +86,10 @@ QLabel::link {
 QLabel.small {
 	font-size: 12px;
 	padding-left: 4px;
+}
+
+QLabel.bold {
+	font-weight: bold;
 }
 
 QLabel.file {
