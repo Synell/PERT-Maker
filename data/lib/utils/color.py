@@ -53,6 +53,7 @@ class Color:
                 self.red = red
                 self.green = green
                 self.blue = blue
+                self.alpha = 255
 
             case (red, green, blue, alpha):
                 self.red = red
@@ -65,15 +66,15 @@ class Color:
                 color = color[1:]
 
                 if len(color) == 6:
-                    red, green, blue = Byte(color[0:2]), Byte(color[2:4]), Byte(color[4:6])
+                    red, green, blue, alpha = Byte(color[0:2]), Byte(color[2:4]), Byte(color[4:6]), Byte(255)
                 elif len(color) == 8:
                     red, green, blue, alpha = Byte(color[0:2]), Byte(color[2:4]), Byte(color[4:6]), Byte(color[6:])
-                    self.alpha = alpha
                 else: return
 
                 self.red = red
                 self.green = green
                 self.blue = blue
+                self.alpha = alpha
 
 
 
