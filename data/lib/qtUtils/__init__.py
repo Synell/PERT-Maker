@@ -16,4 +16,5 @@ from .QComboBoxWithLabel import QComboBoxWithLabel
 from .QDoubleSpinBoxWithLabel import QDoubleSpinBoxWithLabel
 from .QDropDownWidget import QDropDownWidget
 from .QSpinBoxWithLabel import QSpinBoxWithLabel
+from .QColorButton import QColorButton
 #----------------------------------------------------------------------

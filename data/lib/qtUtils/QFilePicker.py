@@ -215,12 +215,20 @@ class QFilePicker(QWidget):
                     caption = self.__filePickerData__['QFileDialog']['title'],
                     filter = self.__extensions__
                 )[0]
+            case QFilePicker.Type.SaveFileName:
+                path = QFileDialog.getSaveFileName(
+                    parent = self,
+                    directory = self.getCurrentDir(),
+                    caption = self.__filePickerData__['QFileDialog']['title'],
+                    filter = self.__extensions__
+                )[0]
             case QFilePicker.Type.ExistingDirectory:
                 path = QFileDialog.getExistingDirectory(
                     parent = self,
                     directory = self.getCurrentDir(),
                     caption = self.__filePickerData__['QFileDialog']['title']
                 )
+            case _: path = ''
 
         if path == '': path = None
 
