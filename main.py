@@ -24,32 +24,67 @@ class SaveData(QSaveData):
         self.liveGenerateCriticalPath = False
         self.liveMinMax = False
 
+        self.arrowMoveSpeed = 20
+
+        self.zoomSpeed = 0.25
+
+        self.exportImageBgColor = Color('#000000ff')
+        self.exportImageBgMode = 0
+
+        self.exportImageScale = 1
+
         super().__init__()
 
 
     def settingsMenuExtra(self):
-        lang = self.languageData['QSettingsDialog']['editorTab']
+        editorLang = self.languageData['QSettingsDialog']['editorTab']
+        exportLang = self.languageData['QSettingsDialog']['exportTab']
 
-        widget = QScrollableGridWidget()
+        editorWidget = QScrollableGridWidget()
 
-        widget.maxLoopSpinbox = QSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['maxLoop'])
-        widget.maxLoopSpinbox.spinBox.setRange(255, 65535)
-        widget.maxLoopSpinbox.spinBox.setValue(self.maxLoop)
+        editorWidget.maxLoopSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['maxLoop'])
+        editorWidget.maxLoopSpinbox.spinBox.setRange(255, 65535)
+        editorWidget.maxLoopSpinbox.spinBox.setValue(self.maxLoop)
 
-        widget.gridSizeSpinbox = QSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['gridSize'])
-        widget.gridSizeSpinbox.spinBox.setRange(10, 200)
-        widget.gridSizeSpinbox.spinBox.setValue(self.gridSize)
+        editorWidget.gridSizeSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['gridSize'])
+        editorWidget.gridSizeSpinbox.spinBox.setRange(10, 200)
+        editorWidget.gridSizeSpinbox.spinBox.setValue(self.gridSize)
 
-        widget.scrollLayout.addWidget(widget.maxLoopSpinbox, 0, 0)
-        widget.scrollLayout.addWidget(widget.gridSizeSpinbox, 0, 1)
+        editorWidget.arrowMoveSpeedSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['arrowMoveSpeed'])
+        editorWidget.arrowMoveSpeedSpinbox.spinBox.setRange(1, 200)
+        editorWidget.arrowMoveSpeedSpinbox.spinBox.setValue(self.arrowMoveSpeed)
 
-        return {lang['title']: widget}, self.getExtra
+        editorWidget.zoomSpeedSpinbox = QDoubleSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['zoomSpeed'])
+        editorWidget.zoomSpeedSpinbox.spinBox.setRange(0.01, 1)
+        editorWidget.zoomSpeedSpinbox.spinBox.setValue(self.zoomSpeed)
+
+        editorWidget.scrollLayout.addWidget(editorWidget.maxLoopSpinbox, 0, 0)
+        editorWidget.scrollLayout.addWidget(editorWidget.gridSizeSpinbox, 0, 1)
+        editorWidget.scrollLayout.addWidget(editorWidget.arrowMoveSpeedSpinbox, 1, 0)
+        editorWidget.scrollLayout.addWidget(editorWidget.zoomSpeedSpinbox, 1, 1)
+
+
+        exportWidget = QScrollableGridWidget()
+
+        exportWidget.exportImageScaleSpinbox = QDoubleSpinBoxWithLabel(exportLang['QSpinBoxWithLabel']['QLabel']['exportImageScale'])
+        exportWidget.exportImageScaleSpinbox.spinBox.setRange(0.25, 3)
+        exportWidget.exportImageScaleSpinbox.spinBox.setValue(self.exportImageScale)
+        exportWidget.exportImageScaleSpinbox.spinBox.setSingleStep(self.zoomSpeed)
+
+        exportWidget.scrollLayout.addWidget(exportWidget.exportImageScaleSpinbox, 0, 0)
+
+
+        return {editorLang['title']: editorWidget, exportLang['title']: exportWidget}, self.getExtra
 
     def getExtra(self, extraTabs: dict = {}):
-        lang = self.languageData['QSettingsDialog']['editorTab']
+        editorLang = self.languageData['QSettingsDialog']['editorTab']
+        exportLang = self.languageData['QSettingsDialog']['exportTab']
 
-        self.maxLoop = extraTabs[lang['title']].maxLoopSpinbox.spinBox.value()
-        self.gridSize = extraTabs[lang['title']].gridSizeSpinbox.spinBox.value()
+        self.maxLoop = extraTabs[editorLang['title']].maxLoopSpinbox.spinBox.value()
+        self.gridSize = extraTabs[editorLang['title']].gridSizeSpinbox.spinBox.value()
+        self.arrowMoveSpeed = extraTabs[editorLang['title']].arrowMoveSpeedSpinbox.spinBox.value()
+
+        self.exportImageScale = extraTabs[exportLang['title']].exportImageScaleSpinbox.spinBox.value()
 
 
     def saveExtraData(self) -> dict:
@@ -63,7 +98,17 @@ class SaveData(QSaveData):
 
             'liveRefreshConnectionView': self.liveRefreshConnectionView,
             'liveGenerateCriticalPath': self.liveGenerateCriticalPath,
-            'liveMinMax': self.liveMinMax
+            'liveMinMax': self.liveMinMax,
+
+            'arrowMoveSpeed': self.arrowMoveSpeed,
+
+            'zoomSpeed': self.zoomSpeed,
+
+            'exportImage': {
+                'bgColor': self.exportImageBgColor.toHexa(),
+                'bgMode': self.exportImageBgMode,
+                'scale': self.exportImageScale
+            }
         }
 
     def loadExtraData(self, extraData: dict = ...) -> None:
@@ -79,12 +124,20 @@ class SaveData(QSaveData):
             self.liveGenerateCriticalPath = extraData['liveGenerateCriticalPath']
             self.liveMinMax = extraData['liveMinMax']
 
-        except: pass
+            self.arrowMoveSpeed = extraData['arrowMoveSpeed']
+
+            self.zoomSpeed = extraData['zoomSpeed']
+
+            self.exportImageBgColor = Color(extraData['exportImage']['bgColor'])
+            self.exportImageBgMode = extraData['exportImage']['bgMode']
+            self.exportImageScale = extraData['exportImage']['scale']
+
+        except: self.save()
 
 
 
 class Application(QBaseApplication):
-    BUILD = '07e65539'
+    BUILD = '07e6559c'
     VERSION = 'Experimental'
 
     DELTA = 80
@@ -99,6 +152,9 @@ class Application(QBaseApplication):
 
     KEY_WORDS = ['Start', 'End']
 
+    ZOOM_MIN = 0.25
+    ZOOM_MAX = 4.0
+
     def __init__(self):
         super().__init__()
 
@@ -109,6 +165,9 @@ class Application(QBaseApplication):
         self.useNodeNames = True
 
         self.shiftKey = False
+        self.controlKey = False
+
+        self.zoom = 1 # TODO: find the freaking formula to do this
 
         self.cameraPos = Vector2()
         self.oldMousePos = Vector2()
@@ -147,6 +206,87 @@ class Application(QBaseApplication):
         self.canvas = QWidget()
         self.canvas.setMinimumSize(600, 400)
         self.root.gridLayout.addWidget(self.canvas, 0, 0)
+        # print(self.canvas.devicePixelRatio())
+        # print(self.canvas.devicePixelRatioF())
+        # print(self.canvas.devicePixelRatioFScale())
+
+
+        self.statusBar = QStatusBar()
+        self.window.setStatusBar(self.statusBar)
+
+
+        self.statusBar.coordinatesLabel = QLabel()
+        self.statusBar.coordinatesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.statusBar.addPermanentWidget(self.statusBar.coordinatesLabel, 2)
+
+
+        emptyWidget = QGridWidget()
+        emptyWidget.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setSpacing(0)
+        self.statusBar.addPermanentWidget(emptyWidget, 14)
+
+
+        emptyWidget = QGridWidget()
+        emptyWidget.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setSpacing(0)
+        self.statusBar.addPermanentWidget(emptyWidget, 3)
+
+        self.statusBar.progressBar = QProgressBar()
+        self.statusBar.progressBar.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.statusBar.progressBar.setRange(0, 100)
+        self.statusBar.progressBar.setValue(0)
+        self.statusBar.progressBar.setProperty('class', 'small')
+        self.statusBar.progressBar.setHidden(True)
+        emptyWidget.gridLayout.addWidget(self.statusBar.progressBar)
+
+
+        emptyWidget = QGridWidget()
+        emptyWidget.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
+        emptyWidget.gridLayout.setSpacing(0)
+        self.statusBar.addPermanentWidget(emptyWidget, 1)
+
+
+        self.statusBar.zoom = QGridWidget()
+        self.statusBar.zoom.setContentsMargins(0, 0, 0, 0)
+        self.statusBar.zoom.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.statusBar.zoom.gridLayout.setSpacing(0)
+
+        self.statusBar.zoom.zoomMin = QToolButton()
+        self.statusBar.zoom.zoomMin.setIcon(self.saveData.getIcon('statusbar/zoomMin.png'))
+        self.statusBar.zoom.zoomMin.clicked.connect(self.zoomMin)
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomMin, 0, 0)
+
+        self.statusBar.zoom.zoomOut = QToolButton()
+        self.statusBar.zoom.zoomOut.setIcon(self.saveData.getIcon('statusbar/zoomOut.png'))
+        self.statusBar.zoom.zoomOut.clicked.connect(self.zoomOut)
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomOut, 0, 1)
+
+        self.statusBar.zoom.zoomSlider = QSlider()
+        self.statusBar.zoom.zoomSlider.setOrientation(Qt.Orientation.Horizontal)
+        self.statusBar.zoom.zoomSlider.setRange(25, 400)
+        self.statusBar.zoom.zoomSlider.valueChanged.connect(self.zoomSliderValueChanged)
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomSlider, 0, 2)
+
+        self.statusBar.zoom.zoomIn = QToolButton()
+        self.statusBar.zoom.zoomIn.setIcon(self.saveData.getIcon('statusbar/zoomIn.png'))
+        self.statusBar.zoom.zoomIn.clicked.connect(self.zoomIn)
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomIn, 0, 3)
+
+        self.statusBar.zoom.zoomMax = QToolButton()
+        self.statusBar.zoom.zoomMax.setIcon(self.saveData.getIcon('statusbar/zoomMax.png'))
+        self.statusBar.zoom.zoomMax.clicked.connect(self.zoomMax)
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomMax, 0, 4)
+
+        self.statusBar.zoom.zoomLevel = QLabel()
+        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomLevel, 0, 5)
+
+        self.updateZoom()
+
+        self.statusBar.addPermanentWidget(self.statusBar.zoom, 6)
+
 
 
         self.propertiesMenu = QScrollableGridWidget()
@@ -207,6 +347,8 @@ class Application(QBaseApplication):
 
 
         self.canvas.installEventFilter(self)
+        self.canvas.setMouseTracking(True)
+        self.canvas.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.window.keyPressEvent = self.keyPressEvent
         self.window.keyReleaseEvent = self.keyReleaseEvent
 
@@ -245,7 +387,11 @@ class Application(QBaseApplication):
                 tableAction = QAction(lang['table'], self.window)
                 tableAction.triggered.connect(self.fileMenu_exportMenu_tableAction)
 
+                imageAction = QAction(lang['image'], self.window)
+                imageAction.triggered.connect(self.fileMenu_exportMenu_imageAction)
+
                 exportMenu.addAction(tableAction)
+                exportMenu.addAction(imageAction)
 
                 return exportMenu
 
@@ -817,6 +963,7 @@ class Application(QBaseApplication):
                     if event.buttons() == Qt.MouseButton.LeftButton: self.canvasLMBMoveEvent(event)
                     #elif event.buttons() == Qt.MouseButton.RightButton: self.canvasRMBMoveEvent(event)
                     elif event.buttons() == Qt.MouseButton.MiddleButton: self.canvasMMBMoveEvent(event)
+                    elif event.buttons() == Qt.MouseButton.NoButton: self.canvasNoButtonMoveEvent(event)
 
                 case QEvent.Type.MouseButtonRelease:
                     #if event.button() == Qt.MouseButton.LeftButton: self.canvasLMBReleaseEvent(event)
@@ -825,8 +972,7 @@ class Application(QBaseApplication):
 
                 case QEvent.Type.Paint: self.canvasPaintEvent(event)
 
-                case QEvent.Type.Wheel:
-                    self.canvasWheelEvent(event)
+                case QEvent.Type.Wheel: self.canvasWheelEvent(event)
             
 
         return super(Application, self).eventFilter(source, event)
@@ -839,12 +985,32 @@ class Application(QBaseApplication):
                 self.selectedNode = None
                 self.propertiesMenuLoad()
                 self.canvas.update()
+
         elif event.key() == Qt.Key.Key_Shift:
             self.shiftKey = True
+
+        elif event.key() == Qt.Key.Key_Control:
+            self.controlKey = True
+
+        elif event.key() == Qt.Key.Key_Right:
+            self.cameraPos += Vector2(-self.saveData.arrowMoveSpeed, 0)
+            self.canvas.update()
+        elif event.key() == Qt.Key.Key_Left:
+            self.cameraPos += Vector2(self.saveData.arrowMoveSpeed, 0)
+            self.canvas.update()
+        elif event.key() == Qt.Key.Key_Down:
+            self.cameraPos += Vector2(0, -self.saveData.arrowMoveSpeed)
+            self.canvas.update()
+        elif event.key() == Qt.Key.Key_Up:
+            self.cameraPos += Vector2(0, self.saveData.arrowMoveSpeed)
+            self.canvas.update()
 
     def keyReleaseEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key.Key_Shift:
             self.shiftKey = False
+
+        elif event.key() == Qt.Key.Key_Control:
+            self.controlKey = False
 
 
 
@@ -859,7 +1025,7 @@ class Application(QBaseApplication):
 
     def canvasDrawPoints(self, qp: QPainter):
         if self.saveData.gridMode > 0:
-            size = Vector2(self.canvas.size().width(), self.canvas.size().height())
+            size = Vector2(self.canvas.size().width(), self.canvas.size().height()) * (1 / self.zoom)
             startPos = self.cameraPos % self.saveData.gridSize
             nb = (size // self.saveData.gridSize) + 1
 
@@ -868,42 +1034,42 @@ class Application(QBaseApplication):
 
                 for n in range(int(nb.x)):
                     if (n - offset.x) % 5 == 0:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2))
+                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                     else:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1))
+                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([4, 4])
+                        pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
                         qp.setPen(pen)
                     qp.drawLine(
-                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0)),
-                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y))
+                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom),
+                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y) * self.zoom)
                     )
 
                 for n in range(int(nb.y)):
                     if (n - offset.y) % 5 == 0:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2))
+                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                     else:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1))
+                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([4, 4])
+                        pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
                         qp.setPen(pen)
                     qp.drawLine(
-                        self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y)),
-                        self.Vector2ToQPoint(Vector2(size.x, (n * self.saveData.gridSize) + startPos.y))
+                        self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
+                        self.Vector2ToQPoint(Vector2(size.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
                     )
 
             elif self.saveData.gridMode == 2:
                 offset = (self.cameraPos // self.saveData.gridSize) % 2
 
-                qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1))
+                qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
                 brush = QBrush(self.COLOR_GRID.toQColor())
                 brush.setStyle(Qt.BrushStyle.SolidPattern)
                 qp.setBrush(brush)
@@ -912,7 +1078,7 @@ class Application(QBaseApplication):
                         rectPos = Vector2((x * self.saveData.gridSize) + startPos.x - self.saveData.gridSize, (y * self.saveData.gridSize) + startPos.y - self.saveData.gridSize)
                         if (y % 2) == 0: rectPos.x += self.saveData.gridSize
                         if offset.y: rectPos.y += self.saveData.gridSize
-                        qp.drawRect(int(rectPos.x), int(rectPos.y), self.saveData.gridSize, self.saveData.gridSize)
+                        qp.drawRect(int(rectPos.x * self.zoom), int(rectPos.y * self.zoom), int(self.saveData.gridSize * self.zoom), int(self.saveData.gridSize * self.zoom))
 
 
 
@@ -921,44 +1087,48 @@ class Application(QBaseApplication):
         if self.saveData.liveGenerateCriticalPath: self.generateCriticalPath()
         if self.saveData.liveMinMax: self.generateMinMaxTime()
 
+        f = qp.font()
+        f.setPointSizeF(f.pointSizeF() * self.zoom)
+        qp.setFont(f)
+
         for k in self.graph.nodes:
             p = self.graph.node(k)
-            if p == self.selectedItem: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3))
-            else: qp.setPen(QPen(self.COLOR_NORMAL.toQColor(), 2))
-            qp.drawEllipse(int(self.cameraPos.x + p.pos.x) - (self.DELTA // 2), int(self.cameraPos.y + p.pos.y) - (self.DELTA // 2), self.DELTA, self.DELTA)
-            qp.drawLine(self.Vector2ToQPoint(self.cameraPos + p.pos), self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x, p.pos.y - (self.DELTA / 2))))
-            qp.drawLine(self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x - (self.DELTA / 2), p.pos.y)), self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x + (self.DELTA / 2), p.pos.y)))
-            qp.drawText(self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x - (qp.font().weight() / 135 * len(p.name)), p.pos.y + (self.DELTA / 4))), p.name)
-            qp.drawText(self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.minTime))), p.pos.y - (self.DELTA / 6))), str(p.minTime))
-            qp.drawText(self.Vector2ToQPoint(self.cameraPos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.maxTime))), p.pos.y - (self.DELTA / 6))), str(p.maxTime))
+            if p == self.selectedItem: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3 * self.zoom))
+            else: qp.setPen(QPen(self.COLOR_NORMAL.toQColor(), 2 * self.zoom))
+            qp.drawEllipse(int(((self.cameraPos.x + p.pos.x) - (self.DELTA / 2)) * self.zoom), int(((self.cameraPos.y + p.pos.y) - (self.DELTA / 2)) * self.zoom), int(self.DELTA * self.zoom), int(self.DELTA * self.zoom))
+            qp.drawLine(self.Vector2ToQPoint((self.cameraPos + p.pos) * self.zoom), self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x, p.pos.y - (self.DELTA / 2))) * self.zoom))
+            qp.drawLine(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (self.DELTA / 2), p.pos.y)) * self.zoom), self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x + (self.DELTA / 2), p.pos.y)) * self.zoom))
+            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (qp.font().weight() / 135 * len(p.name)), p.pos.y + (self.DELTA / 4))) * self.zoom), p.name)
+            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.minTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
+            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.maxTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
 
             for pathKey in list(p.next.keys()):
                 if p == self.selectedItem:
-                    if pathKey == self.selectedNode: qp.setPen(QPen(self.COLOR_SELECTED.toQColor(), 3))
-                    else: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3))
+                    if pathKey == self.selectedNode: qp.setPen(QPen(self.COLOR_SELECTED.toQColor(), 3 * self.zoom))
+                    else: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3 * self.zoom))
                 path = p.next[pathKey]
                 if (path.value == 0 and path.name == ''):
                     pen = qp.pen()
                     pen.setStyle(Qt.PenStyle.CustomDashLine)
-                    pen.setDashPattern([4, 4])
+                    pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
                     qp.setPen(pen)
 
                 vect2 = (path.node.pos - p.pos).normalized * (self.DELTA // 2)
-                qp.drawLine(self.Vector2ToQPoint(self.cameraPos + p.pos + vect2), self.Vector2ToQPoint(self.cameraPos + path.node.pos - vect2))
+                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + p.pos + vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom))
 
                 pen = qp.pen()
                 pen.setStyle(Qt.PenStyle.SolidLine)
                 qp.setPen(pen)
 
-                qp.drawLine(self.Vector2ToQPoint(self.cameraPos + path.node.pos - vect2), self.Vector2ToQPoint(self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 25)) * 10)))
-                qp.drawLine(self.Vector2ToQPoint(self.cameraPos + path.node.pos - vect2), self.Vector2ToQPoint(self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg - 25)) * 10)))
-                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2ToQPoint(self.cameraPos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)), f'{path.name} {path.value}')
+                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 25)) * 10)) * self.zoom))
+                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg - 25)) * 10)) * self.zoom))
+                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2ToQPoint((self.cameraPos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)) * self.zoom), f'{path.name} {path.value}')
 
     def canvasGetPoint(self, event: QMouseEvent):
         return Vector2(event.pos().x(), event.pos().y())
 
     def canvasGetNode(self, event: QMouseEvent):
-        point = self.canvasGetPoint(event) - self.cameraPos
+        point = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
 
         nodeLst = self.graph.nodes
         dist = nodeLst[0]
@@ -982,7 +1152,7 @@ class Application(QBaseApplication):
         s = '0'
         while s in self.graph.nodes:
             s = str(int(s) + 1)
-        self.graph.addNode(name = s, pos = self.canvasGetPoint(event) - self.cameraPos)
+        self.graph.addNode(name = s, pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos)
         if self.selectedItem: self.graph.addConnection(self.selectedItem.name, s)
         self.selectedItem = self.graph.node(s)
         if self.saveData.alignToGrid: self.selectedItem.pos -= (self.selectedItem.pos % self.saveData.gridSize)
@@ -1001,11 +1171,15 @@ class Application(QBaseApplication):
 
     def canvasLMBMoveEvent(self, event: QMouseEvent):
         if not self.selectedItem: return
-        self.selectedItem.pos = self.canvasGetPoint(event) - self.cameraPos
+        self.selectedItem.pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
         if self.saveData.alignToGrid: self.selectedItem.pos -= (self.selectedItem.pos % self.saveData.gridSize)
 
         self.canvas.update()
         self.setUnsaved()
+
+    def canvasNoButtonMoveEvent(self, event: QMouseEvent):
+        mousePos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
+        self.statusBar.coordinatesLabel.setText(f'({floor(mousePos.x / (self.saveData.gridSize))}, {floor(mousePos.y / (self.saveData.gridSize))}) - ({floor(mousePos.x)}, {floor(mousePos.y)})')
 
     def canvasMMBPressEvent(self, event: QMouseEvent):
         self.setOverrideCursor(Qt.CursorShape.SizeAllCursor)
@@ -1013,7 +1187,7 @@ class Application(QBaseApplication):
 
     def canvasMMBMoveEvent(self, event: QMouseEvent):
         pos = self.canvasGetPoint(event)
-        self.cameraPos += pos - self.oldMousePos
+        self.cameraPos += (pos - self.oldMousePos) / self.zoom
         self.oldMousePos = pos
 
         self.canvas.update()
@@ -1022,9 +1196,14 @@ class Application(QBaseApplication):
         self.setOverrideCursor(Qt.CursorShape.ArrowCursor)
 
     def canvasWheelEvent(self, event: QWheelEvent):
-        if self.shiftKey: self.cameraPos += Vector2(event.angleDelta().y(), event.angleDelta().x())
-        else: self.cameraPos += Vector2(event.angleDelta().x(), event.angleDelta().y())
-        self.canvas.update()
+        if self.controlKey:
+            self.editZoom(self.zoom + ((event.angleDelta().y() / 120) * self.saveData.zoomSpeed))
+
+        else:
+            if self.shiftKey: self.cameraPos += Vector2(event.angleDelta().y(), event.angleDelta().x())
+            else: self.cameraPos += Vector2(event.angleDelta().x(), event.angleDelta().y())
+
+            self.canvas.update()
 
 
     def fileMenu_newAction(self):
@@ -1143,12 +1322,16 @@ class Application(QBaseApplication):
         data = QImportTableDialog(self.window, self.saveData.languageData['QImportTableDialog'], int(self.useNodeNames)).exec()
         if not data: return
 
+        self.statusBar.progressBar.setHidden(False)
+        self.statusBar.progressBar.setRange(0, 8)
+        self.statusBar.progressBar.setValue(0)
         self.fileMenu_newAction()
         nodeData = data[0]
         nodeOrder = []
         maxLevel = 0
         data = bool(data[1])
 
+        self.statusBar.progressBar.setValue(1)
         nodeDct = {}
         for row in range(len(nodeData)):
             nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(' ', '').split(','), nodeData[row][2]]
@@ -1156,6 +1339,7 @@ class Application(QBaseApplication):
             nodeOrder.append(nodeData[row][0])
             if len(nodeDct[nodeData[row][0]][2]) > maxLevel: maxLevel = len(nodeDct[nodeData[row][0]][2])
 
+        self.statusBar.progressBar.setValue(2)
         newMaxLvl = 0
         for lvl in range(maxLevel + 1):
             for node in list(nodeDct.keys()):
@@ -1164,6 +1348,7 @@ class Application(QBaseApplication):
                         nodeDct[node][0] = nodeDct[previousNode][0] + 1
                         if newMaxLvl < nodeDct[node][0]: newMaxLvl = nodeDct[node][0]
 
+        self.statusBar.progressBar.setValue(3)
         newNodeLst = []
         for lvl in range(newMaxLvl + 1):
             newNodeLst.append([])
@@ -1172,12 +1357,14 @@ class Application(QBaseApplication):
                 if nodeDct[node][0] == lvl:
                     newNodeLst[lvl].append((nodeOrder.index(nodeDct[node][1]), nodeDct[node][1], nodeDct[node][2], nodeDct[node][3]))
 
+        self.statusBar.progressBar.setValue(4)
         nodeValuesDct = {}
         for x in range(len(newNodeLst)):
             for y in range(len(newNodeLst[x])):
                 self.graph.addNode(name = newNodeLst[x][y][1], pos = Vector2((x * (self.saveData.gridSize * 3)) + self.saveData.gridSize, (y * (self.saveData.gridSize * 3)) + self.saveData.gridSize))
                 nodeValuesDct[newNodeLst[x][y][1]] = newNodeLst[x][y][3]
 
+        self.statusBar.progressBar.setValue(5)
         for x in range(len(newNodeLst)):
             for y in range(len(newNodeLst[x])):
                 for prev in newNodeLst[x][y][2]:
@@ -1185,12 +1372,14 @@ class Application(QBaseApplication):
                         self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = newNodeLst[x][y][1], value = nodeValuesDct[newNodeLst[x][y][1]])
                     elif data == 1:
                         self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = '', value = nodeValuesDct[prev])
-        
+
+        self.statusBar.progressBar.setValue(6)
         self.graph.addNode(name = '-2', pos = Vector2(((x + 1) * (self.saveData.gridSize * 3)) + self.saveData.gridSize, self.saveData.gridSize))
         for node in self.graph.nodes:
             if self.graph.node(node).next == {} and self.graph.node(node).name != '-2':
                 self.graph.addConnection(from_ = self.graph.node(node).name, to_ = '-2', name = '', value = nodeValuesDct[self.graph.node(node).name])
 
+        self.statusBar.progressBar.setValue(7)
         if not data:
             for x in range(len(newNodeLst)):
                 for y in range(len(newNodeLst[x])):
@@ -1205,6 +1394,7 @@ class Application(QBaseApplication):
                             if nextNode == str(newNodeLst[x][y][0]):
                                 self.graph.node(node).next[nextNode].name = newNodeLst[x][y][1]
 
+        self.statusBar.progressBar.setValue(8)
         self.useNodeNames = data
         self.useNodeNamesInsteadOfPathNamesCheckbox.setChecked(data)
 
@@ -1214,7 +1404,23 @@ class Application(QBaseApplication):
         if '-2' in self.graph.nodes:
             self.graph.rename('-2', 'End')
 
+        self.statusBar.progressBar.setHidden(True)
+
+        self.canvas.update()
+
     def fileMenu_exportMenu_tableAction(self):
+        if not self.connectionTable.getItems():
+            self.refreshConnectionView()
+
+        if not self.connectionTable.getItems():
+            return QMessageBoxWithWidget(
+                app = self,
+                title = self.saveData.languageData['QMessageBox']['warning']['exportTable']['title'],
+                text = self.saveData.languageData['QMessageBox']['warning']['exportTable']['text'],
+                informativeText = self.saveData.languageData['QMessageBox']['warning']['exportTable']['informativeText'],
+                icon = QMessageBoxWithWidget.Icon.Warning
+            ).exec()
+
         langData = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']
 
         path = QFileDialog.getSaveFileName(
@@ -1228,6 +1434,103 @@ class Application(QBaseApplication):
 
         with open(path, 'w', encoding = 'utf-8') as outfile:
             outfile.write('Task;Previous Tasks;Time\n' + '\n'.join(list(';'.join(item) for item in self.connectionTable.getItems())))
+
+    def fileMenu_exportMenu_imageAction(self):
+        if not self.graph.nodes:
+            return QMessageBoxWithWidget(
+                app = self,
+                title = self.saveData.languageData['QMessageBox']['warning']['exportImage']['title'],
+                text = self.saveData.languageData['QMessageBox']['warning']['exportImage']['text'],
+                informativeText = self.saveData.languageData['QMessageBox']['warning']['exportImage']['informativeText'],
+                icon = QMessageBoxWithWidget.Icon.Warning
+            ).exec()
+
+        def generateImage() -> QImage:
+            gridMode = self.saveData.gridMode
+            self.saveData.gridMode = 0
+            zoom = self.zoom
+            self.zoom = self.saveData.exportImageScale
+            self.selectedItem = None
+            self.canvas.update()
+
+
+            nodes = self.graph.nodes
+
+            minPoint = self.graph.node(nodes[0]).pos.copy
+            maxPoint = minPoint.copy
+            for k in nodes[1:]:
+                p = self.graph.node(k)
+
+                if p.pos.x < minPoint.x: minPoint.x = p.pos.x
+                elif p.pos.x > maxPoint.x: maxPoint.x = p.pos.x
+
+                if p.pos.y < minPoint.y: minPoint.y = p.pos.y
+                elif p.pos.y > maxPoint.y: maxPoint.y = p.pos.y
+
+            minPoint -= self.DELTA
+            maxPoint += self.DELTA
+
+            minPoint += self.cameraPos
+            maxPoint += self.cameraPos
+
+            minPoint *= self.zoom
+            maxPoint *= self.zoom
+
+
+            img = self.canvas.grab(QRect(int(minPoint.x), int(minPoint.y), int(maxPoint.x - minPoint.x), int(maxPoint.y - minPoint.y))).toImage()
+
+
+            self.saveData.gridMode = gridMode
+            self.zoom = zoom
+            self.canvas.update()
+
+            return img
+
+        image = generateImage()
+        if image.bits():
+            result = QExportImageDialog(self.window, self.saveData.languageData['QExportImageDialog'], self.saveData.exportImageBgMode, self.saveData.exportImageBgColor, image, self.statusBar.progressBar).exec()
+            if result:
+                self.saveData.exportImageBgMode = result[0]
+                self.saveData.exportImageBgColor = result[1]
+                self.saveData.save()
+
+        else:
+            QMessageBoxWithWidget(
+                app = self,
+                title = self.saveData.languageData['QMessageBox']['critical']['exportImage']['title'],
+                text = self.saveData.languageData['QMessageBox']['critical']['exportImage']['text'],
+                informativeText = self.saveData.languageData['QMessageBox']['critical']['exportImage']['informativeText'],
+                icon = QMessageBoxWithWidget.Icon.Critical
+            ).exec()
+
+
+
+    def editZoom(self, zoom):
+        if (zoom) >= self.ZOOM_MIN and (zoom) <= self.ZOOM_MAX:
+            self.zoom = zoom
+            self.updateZoom()
+
+    def zoomIn(self, event = None):
+        self.editZoom(self.zoom + self.saveData.zoomSpeed)
+
+    def zoomOut(self, event = None):
+        self.editZoom(self.zoom - self.saveData.zoomSpeed)
+
+    def zoomMin(self, event = None):
+        self.editZoom(self.ZOOM_MIN)
+
+    def zoomMax(self, event = None):
+        self.editZoom(self.ZOOM_MAX)
+
+    def zoomSliderValueChanged(self, event = None):
+        self.editZoom(self.statusBar.zoom.zoomSlider.value() / 100)
+
+    def updateZoom(self):
+        self.statusBar.zoom.zoomSlider.setValue(int(self.zoom * 100))
+        self.statusBar.zoom.zoomLevel.setText(f' {int(self.zoom * 100)}%\t')
+        self.canvas.update()
+
+
 
 
 
