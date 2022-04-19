@@ -28,7 +28,8 @@
                         "exportMenu": {
                             "title": "Export",
                             "QAction": {
-                                "table": "Table..."
+                                "table": "Table...",
+                                "image": "Image..."
                             },
                             "QFileDialog": {
                                 "table": {
@@ -75,7 +76,17 @@
                 "QSpinBoxWithLabel": {
                     "QLabel": {
                         "maxLoop": "Max Loops:",
-                        "gridSize": "Grid Size:"
+                        "gridSize": "Grid Size:",
+                        "arrowMoveSpeed": "Moving Speed (Arrow Keys):",
+                        "zoomSpeed": "Zoom Speed:"
+                    }
+                }
+            },
+            "exportTab": {
+                "title": "Export",
+                "QSpinBoxWithLabel": {
+                    "QLabel": {
+                        "exportImageScale": "Image Scale (Affects Quality):"
                     }
                 }
             }
@@ -86,12 +97,17 @@
                     "title": "PERT Maker > Not Implemented Feature",
                     "text": "This functionality doesn't exist yet and will be\navailable in a later version of the software.",
                     "details": "Details"
+                },
+                "exportImage": {
+                    "title": "PERT Maker > Export > Image",
+                    "text": "An error occurred during the process !",
+                    "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
                 }
             },
             "warning": {
                 "refreshConnectionView": {
                     "title": "PERT Maker > Refresh Connection View",
-                    "text": "An error occurred during the process!",
+                    "text": "An error occurred during the process !",
                     "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
                     "details": "Details",
                     "startNode": "Start Node",
@@ -99,17 +115,27 @@
                 },
                 "generateMinMaxTime": {
                     "title": "PERT Maker > Generate Min and Max Times",
-                    "text": "An error occurred during the process!",
+                    "text": "An error occurred during the process !",
                     "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
                     "details": "Details",
                     "label": "The loop limit has been reached during the process,\nexceeding %s loops. Probably an infinite loop.\n\nLoops Remaining (1): %s\nLoops Remaining (2): %s"
                 },
                 "generateCriticalPath": {
-                    "title": "Générer le Chemin Critique",
-                    "text": "Une erreur est survenue lors du processus!",
+                    "title": "PERT Maker > Generate Critical Path",
+                    "text": "An error occurred during the process !",
                     "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
                     "details": "Détails",
                     "label": "The loop limit has been reached during the process,\nexceeding %s loops. Probably an infinite loop."
+                },
+                "exportTable": {
+                    "title": "PERT Maker > Export > Table",
+                    "text": "Your table is empty !",
+                    "informativeText": "Can't export a table that doesn't exist."
+                },
+                "exportImage": {
+                    "title": "PERT Maker > Export > Image",
+                    "text": "Your graph is empty !",
+                    "informativeText": "Can't export a graph that doesn't exist."
                 }
             },
             "information": {
@@ -211,6 +237,34 @@
             "QComboBox": {
                 "tasksAsPathNames": "Tasks as Path Names",
                 "tasksAsNodeNames": "Tasks as Node Names"
+            }
+        },
+        "QExportImageDialog": {
+            "title": "PERT Maker > Export > Image",
+            "QComboBoxWithLabel": {
+                "QLabel": {
+                    "bgMode": "Background Mode:"
+                },
+                "QComboBox": {
+                    "default": "Default",
+                    "color": "Color",
+                    "transparent": "Transparent"
+                }
+            },
+            "QFilePicker": {
+                "title": "Output File",
+                "QPushButton": {
+                    "selectFile": "Select Output File..."
+                },
+                "QFileDialog": {
+                    "title": "PERT Maker > Export > Image > Output File"
+                },
+                "QLabel": {
+                    "noFile": "No File"
+                }
+            },
+            "QColorButton": {
+                "bg": "Background"
             }
         }
     }

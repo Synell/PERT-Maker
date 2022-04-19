@@ -28,7 +28,8 @@
                         "exportMenu": {
                             "title": "Exporter",
                             "QAction": {
-                                "table": "Tableau..."
+                                "table": "Tableau...",
+                                "image": "Image..."
                             },
                             "QFileDialog": {
                                 "table": {
@@ -71,11 +72,21 @@
                 }
             },
             "editorTab": {
-                "title": "Editor",
+                "title": "Editeur",
                 "QSpinBoxWithLabel": {
                     "QLabel": {
                         "maxLoop": "Maximum de Boucles:",
-                        "gridSize": "Taille de la Grille:"
+                        "gridSize": "Taille de la Grille:",
+                        "arrowMoveSpeed": "Vitesse de Déplacement (Flèches):",
+                        "zoomSpeed": "Vitesse de Zoom:"
+                    }
+                }
+            },
+            "exportTab": {
+                "title": "Exporter",
+                "QSpinBoxWithLabel": {
+                    "QLabel": {
+                        "exportImageScale": "Échelle d'Image (Affecte la Qualité):"
                     }
                 }
             }
@@ -86,12 +97,17 @@
                     "title": "PERT Maker > Fonctionnalité Non-Implémentée",
                     "text": "Cette fonctionnalité n'existe pas encore et sera\ndisponible dans une version ultérieure du logiciel.",
                     "details": "Détails"
+                },
+                "exportImage": {
+                    "title": "PERT Maker > Exporter > Image",
+                    "text": "Une erreur est survenue lors du processus !",
+                    "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
                 }
             },
             "warning": {
                 "refreshConnectionView": {
                     "title": "PERT Maker > Recharger la Vue des Connexions",
-                    "text": "Une erreur est survenue lors du processus!",
+                    "text": "Une erreur est survenue lors du processus !",
                     "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
                     "details": "Détails",
                     "startNode": "Nœud de Départ",
@@ -99,17 +115,27 @@
                 },
                 "generateMinMaxTime": {
                     "title": "PERT Maker > Générer les Temps Min et Max",
-                    "text": "Une erreur est survenue lors du processus!",
+                    "text": "Une erreur est survenue lors du processus !",
                     "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
                     "details": "Détails",
                     "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie.\n\nBoucles Restantes (1): %s\nBoucles Restantes (2): %s"
                 },
                 "generateCriticalPath": {
                     "title": "Générer le Chemin Critique",
-                    "text": "Une erreur est survenue lors du processus!",
-                    "informativeText": "",
+                    "text": "Une erreur est survenue lors du processus !",
+                    "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
                     "details": "Détails",
                     "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie."
+                },
+                "exportTable": {
+                    "title": "PERT Maker > Exporter > Tableau",
+                    "text": "Votre tableau est vide !",
+                    "informativeText": "Aucun tableau ne peut être exporté car il n'y en a pas."
+                },
+                "exportImage": {
+                    "title": "PERT Maker > Exporter > Image",
+                    "text": "Votre graphe est vide !",
+                    "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
                 }
             },
             "information": {
@@ -194,23 +220,51 @@
             }
         },
         "QImportTableDialog": {
-            "title": "PERT Maker > Import > Table",
+            "title": "PERT Maker > Importer > Tableau",
             "QTableWidget": {
                 "horizonalHeader": {
-                    "task": "Task",
-                    "previousTasks": "Previous Tasks",
-                    "time": "Time"
+                    "task": "Tâche",
+                    "previousTasks": "Tâches Précédentes",
+                    "time": "Temps"
                 }
             },
             "QPushButton": {
-                "open": "Open..."
+                "open": "Ouvrir..."
             },
             "QFileDialog": {
-                "title": "PERT Maker > Import > Table > Open"
+                "title": "PERT Maker > Importer > Table > Ouvrir"
             },
             "QComboBox": {
                 "tasksAsPathNames": "Tâches en tant que Noms de Chemin",
                 "tasksAsNodeNames": "Tâches en tant que Noms de Nœud"
+            }
+        },
+        "QExportImageDialog": {
+            "title": "PERT Maker > Exporter > Image",
+            "QComboBoxWithLabel": {
+                "QLabel": {
+                    "bgMode": "Mode d'Arrière-Plan:"
+                },
+                "QComboBox": {
+                    "default": "Défaut",
+                    "color": "Couleur",
+                    "transparent": "Transparent"
+                }
+            },
+            "QFilePicker": {
+                "title": "Fichier Sortant",
+                "QPushButton": {
+                    "selectFile": "Sélectionner un fichier sortant..."
+                },
+                "QFileDialog": {
+                    "title": "PERT Maker > Exporter > Image > Fichier Sortant"
+                },
+                "QLabel": {
+                    "noFile": "Aucun Fichier"
+                }
+            },
+            "QColorButton": {
+                "bg": "Arrière-Plan"
             }
         }
     }
