@@ -137,7 +137,7 @@ class SaveData(QSaveData):
 
 
 class Application(QBaseApplication):
-    BUILD = '07e6559c'
+    BUILD = '07e655b4'
     VERSION = 'Experimental'
 
     DELTA = 80
@@ -1030,7 +1030,9 @@ class Application(QBaseApplication):
             nb = (size // self.saveData.gridSize) + 1
 
             if self.saveData.gridMode == 1:
+                lineSpace = int(self.saveData.gridSize / 10)
                 offset = self.cameraPos // self.saveData.gridSize
+                lineOffset = (self.cameraPos % ((lineSpace * 2) * self.zoom)) - (Vector2(lineSpace, lineSpace) * self.zoom)
 
                 for n in range(int(nb.x)):
                     if (n - offset.x) % 5 == 0:
@@ -1038,16 +1040,20 @@ class Application(QBaseApplication):
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
+                        qp.drawLine(
+                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y) * self.zoom),
+                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom)
+                        )
                     else:
                         qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
+                        pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
                         qp.setPen(pen)
-                    qp.drawLine(
-                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom),
-                        self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y) * self.zoom)
-                    )
+                        qp.drawLine(
+                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y + lineOffset.y) * self.zoom),
+                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom),
+                        )
 
                 for n in range(int(nb.y)):
                     if (n - offset.y) % 5 == 0:
@@ -1055,16 +1061,20 @@ class Application(QBaseApplication):
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
+                        qp.drawLine(
+                            self.Vector2ToQPoint(Vector2(size.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
+                            self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
+                        )
                     else:
                         qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
+                        pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
                         qp.setPen(pen)
-                    qp.drawLine(
-                        self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
-                        self.Vector2ToQPoint(Vector2(size.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
-                    )
+                        qp.drawLine(
+                            self.Vector2ToQPoint(Vector2(size.x + lineOffset.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
+                            self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
+                        )
 
             elif self.saveData.gridMode == 2:
                 offset = (self.cameraPos // self.saveData.gridSize) % 2
@@ -1110,7 +1120,7 @@ class Application(QBaseApplication):
                 if (path.value == 0 and path.name == ''):
                     pen = qp.pen()
                     pen.setStyle(Qt.PenStyle.CustomDashLine)
-                    pen.setDashPattern([4 * self.zoom, 4 * self.zoom])
+                    pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
                     qp.setPen(pen)
 
                 vect2 = (path.node.pos - p.pos).normalized * (self.DELTA // 2)
@@ -1155,7 +1165,13 @@ class Application(QBaseApplication):
         self.graph.addNode(name = s, pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos)
         if self.selectedItem: self.graph.addConnection(self.selectedItem.name, s)
         self.selectedItem = self.graph.node(s)
-        if self.saveData.alignToGrid: self.selectedItem.pos -= (self.selectedItem.pos % self.saveData.gridSize)
+        if self.saveData.alignToGrid:
+            pos = self.selectedItem.pos % self.saveData.gridSize
+            halfGridSize = self.saveData.gridSize / 2
+            self.selectedItem.pos -= Vector2(
+                pos.x - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.x < halfGridSize))),
+                pos.y - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.y < halfGridSize)))
+            )
 
     def canvasLMBPressEvent(self, event: QMouseEvent):
         self.selectedItem = None
@@ -1172,7 +1188,13 @@ class Application(QBaseApplication):
     def canvasLMBMoveEvent(self, event: QMouseEvent):
         if not self.selectedItem: return
         self.selectedItem.pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
-        if self.saveData.alignToGrid: self.selectedItem.pos -= (self.selectedItem.pos % self.saveData.gridSize)
+        if self.saveData.alignToGrid:
+            pos = self.selectedItem.pos % self.saveData.gridSize
+            halfGridSize = self.saveData.gridSize / 2
+            self.selectedItem.pos -= Vector2(
+                pos.x - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.x < halfGridSize))),
+                pos.y - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.y < halfGridSize)))
+            )
 
         self.canvas.update()
         self.setUnsaved()
