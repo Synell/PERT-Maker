@@ -876,7 +876,7 @@ class Application(QBaseApplication):
         nameEntry = QLineEditWithLabel(lang['QLineEditWithLabel']['QLabel']['displayName'])
         nameEntry.lineEdit.setText(self.selectedItem.next[key].name)
         nameEntry.lineEdit.textChanged.connect(editName)
-        valueSpinbox = QDoubleSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['id'])
+        valueSpinbox = QDoubleSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['time'])
         valueSpinbox.spinBox.setValue(self.selectedItem.next[key].value)
         valueSpinbox.spinBox.valueChanged.connect(editValue)
 
