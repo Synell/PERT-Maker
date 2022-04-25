@@ -1024,13 +1024,14 @@ class Application(QBaseApplication):
         qp.end()
 
     def canvasDrawPoints(self, qp: QPainter):
+        lineSpace = int(self.saveData.gridSize / 10)
+
         if self.saveData.gridMode > 0:
             size = Vector2(self.canvas.size().width(), self.canvas.size().height()) * (1 / self.zoom)
             startPos = self.cameraPos % self.saveData.gridSize
             nb = (size // self.saveData.gridSize) + 1
 
             if self.saveData.gridMode == 1:
-                lineSpace = int(self.saveData.gridSize / 10)
                 offset = self.cameraPos // self.saveData.gridSize
                 lineOffset = (self.cameraPos % ((lineSpace * 2) * self.zoom)) - (Vector2(lineSpace, lineSpace) * self.zoom)
 
@@ -1356,7 +1357,7 @@ class Application(QBaseApplication):
         self.statusBar.progressBar.setValue(1)
         nodeDct = {}
         for row in range(len(nodeData)):
-            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(' ', '').split(','), nodeData[row][2]]
+            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(', ', '').split(','), nodeData[row][2]]
             if [''] == nodeDct[nodeData[row][0]][2]: nodeDct[nodeData[row][0]][2] = []
             nodeOrder.append(nodeData[row][0])
             if len(nodeDct[nodeData[row][0]][2]) > maxLevel: maxLevel = len(nodeDct[nodeData[row][0]][2])
