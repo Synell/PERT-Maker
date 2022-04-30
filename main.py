@@ -1,6 +1,7 @@
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
+from PyQt6.QtSvg import *
 from sys import exit
 from math import *
 import json
@@ -137,7 +138,7 @@ class SaveData(QSaveData):
 
 
 class Application(QBaseApplication):
-    BUILD = '07e655cd'
+    BUILD = '07e655f6'
     VERSION = 'Experimental'
 
     DELTA = 80
@@ -206,6 +207,8 @@ class Application(QBaseApplication):
         self.canvas = QWidget()
         self.canvas.setMinimumSize(600, 400)
         self.root.gridLayout.addWidget(self.canvas, 0, 0)
+        self.canvas.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
+        self.canvas.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground, True)
         # print(self.canvas.devicePixelRatio())
         # print(self.canvas.devicePixelRatioF())
         # print(self.canvas.devicePixelRatioFScale())
@@ -390,8 +393,12 @@ class Application(QBaseApplication):
                 imageAction = QAction(lang['image'], self.window)
                 imageAction.triggered.connect(self.fileMenu_exportMenu_imageAction)
 
+                svgAction = QAction(lang['svg'], self.window)
+                svgAction.triggered.connect(self.fileMenu_exportMenu_svgAction)
+
                 exportMenu.addAction(tableAction)
                 exportMenu.addAction(imageAction)
+                exportMenu.addAction(svgAction)
 
                 return exportMenu
 
@@ -1468,48 +1475,7 @@ class Application(QBaseApplication):
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
-        def generateImage() -> QImage:
-            gridMode = self.saveData.gridMode
-            self.saveData.gridMode = 0
-            zoom = self.zoom
-            self.zoom = self.saveData.exportImageScale
-            self.selectedItem = None
-            self.canvas.update()
-
-
-            nodes = self.graph.nodes
-
-            minPoint = self.graph.node(nodes[0]).pos.copy
-            maxPoint = minPoint.copy
-            for k in nodes[1:]:
-                p = self.graph.node(k)
-
-                if p.pos.x < minPoint.x: minPoint.x = p.pos.x
-                elif p.pos.x > maxPoint.x: maxPoint.x = p.pos.x
-
-                if p.pos.y < minPoint.y: minPoint.y = p.pos.y
-                elif p.pos.y > maxPoint.y: maxPoint.y = p.pos.y
-
-            minPoint -= self.DELTA
-            maxPoint += self.DELTA
-
-            minPoint += self.cameraPos
-            maxPoint += self.cameraPos
-
-            minPoint *= self.zoom
-            maxPoint *= self.zoom
-
-
-            img = self.canvas.grab(QRect(int(minPoint.x), int(minPoint.y), int(maxPoint.x - minPoint.x), int(maxPoint.y - minPoint.y))).toImage()
-
-
-            self.saveData.gridMode = gridMode
-            self.zoom = zoom
-            self.canvas.update()
-
-            return img
-
-        image = generateImage()
+        image = self.generateCanvasPixmap().toImage()
         if image.bits():
             result = QExportImageDialog(self.window, self.saveData.languageData['QExportImageDialog'], self.saveData.exportImageBgMode, self.saveData.exportImageBgColor, image, self.statusBar.progressBar).exec()
             if result:
@@ -1525,6 +1491,80 @@ class Application(QBaseApplication):
                 informativeText = self.saveData.languageData['QMessageBox']['critical']['exportImage']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Critical
             ).exec()
+
+    def fileMenu_exportMenu_svgAction(self):
+        if not self.graph.nodes:
+            return QMessageBoxWithWidget(
+                app = self,
+                title = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['title'],
+                text = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['text'],
+                informativeText = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['informativeText'],
+                icon = QMessageBoxWithWidget.Icon.Critical
+            ).exec()
+
+        lang = self.saveData.languageData['QFileDialog']['exportSVG']
+
+        path = QFileDialog.getSaveFileName(
+            parent = self.window,
+            directory = './',
+            caption = lang['title'],
+            filter = 'SVG (*.svg)'
+        )[0]
+
+        if not path: return
+        
+        generator = QSvgGenerator()
+        generator.setFileName(path)
+        generator.setTitle('.'.join(path.split('/')[-1].split('\\')[-1].split('.')[0:-1]))
+        generator.setDescription(f'\nGenerated with PERT Maker by Synel.\nVersion: {self.VERSION} - Build: {self.BUILD}\nYou can find this app here: https://github.com/Synell/PERT-Maker/releases/latest\n')
+        self.generateCanvasPixmap(generator)
+
+
+
+    def generateCanvasPixmap(self, obj: QSvgGenerator = None) -> QPixmap|None:
+        gridMode = self.saveData.gridMode
+        self.saveData.gridMode = 0
+        zoom = self.zoom
+        self.zoom = self.saveData.exportImageScale
+        self.selectedItem = None
+        self.canvas.update()
+
+
+        nodes = self.graph.nodes
+
+        minPoint = self.graph.node(nodes[0]).pos.copy
+        maxPoint = minPoint.copy
+        for k in nodes[1:]:
+            p = self.graph.node(k)
+
+            if p.pos.x < minPoint.x: minPoint.x = p.pos.x
+            elif p.pos.x > maxPoint.x: maxPoint.x = p.pos.x
+
+            if p.pos.y < minPoint.y: minPoint.y = p.pos.y
+            elif p.pos.y > maxPoint.y: maxPoint.y = p.pos.y
+
+        minPoint -= self.DELTA
+        maxPoint += self.DELTA
+
+        minPoint += self.cameraPos
+        maxPoint += self.cameraPos
+
+        minPoint *= self.zoom
+        maxPoint *= self.zoom
+
+
+        result = None
+        if type(obj) is QSvgGenerator:
+            obj.setViewBox(QRectF(minPoint.x, minPoint.y, maxPoint.x - minPoint.x, maxPoint.y - minPoint.y))
+            self.canvas.render(obj, flags = QWidget.RenderFlag.DrawWindowBackground)
+
+        else: result = self.canvas.grab(QRect(int(minPoint.x), int(minPoint.y), int(maxPoint.x - minPoint.x), int(maxPoint.y - minPoint.y)))
+
+        self.saveData.gridMode = gridMode
+        self.zoom = zoom
+        self.canvas.update()
+
+        return result
 
 
 
