@@ -29,7 +29,8 @@
                             "title": "Exporter",
                             "QAction": {
                                 "table": "Tableau...",
-                                "image": "Image..."
+                                "image": "Image...",
+                                "svg": "SVG..."
                             },
                             "QFileDialog": {
                                 "table": {
@@ -102,6 +103,11 @@
                     "title": "PERT Maker > Exporter > Image",
                     "text": "Une erreur est survenue lors du processus !",
                     "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
+                },
+                "exportSVG": {
+                    "title": "PERT Maker > Exporter > SVG",
+                    "text": "Une erreur est survenue lors du processus !",
+                    "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
                 }
             },
             "warning": {
@@ -136,6 +142,11 @@
                     "title": "PERT Maker > Exporter > Image",
                     "text": "Votre graphe est vide !",
                     "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
+                },
+                "exportSVG": {
+                    "title": "PERT Maker > Exporter > SVG",
+                    "text": "Votre graphe est vide !",
+                    "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
                 }
             },
             "information": {
@@ -151,6 +162,9 @@
             },
             "saveAs": {
                 "title": "PERT Maker > Sauvegarder Sous"
+            },
+            "exportSVG": {
+                "title": "PERT Maker > Export > SVG"
             }
         },
         "QDockWidget": {
@@ -160,7 +174,7 @@
                     "QLabel": {
                         "minTime": "Temps Minimum:",
                         "maxTime": "Temps Maximum:",
-                        "id": "ID:"
+                        "time": "Temps:"
                     }
                 },
                 "QComboBoxWithLabel": {

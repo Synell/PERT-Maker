@@ -29,7 +29,8 @@
                             "title": "Export",
                             "QAction": {
                                 "table": "Table...",
-                                "image": "Image..."
+                                "image": "Image...",
+                                "svg": "SVG..."
                             },
                             "QFileDialog": {
                                 "table": {
@@ -102,6 +103,11 @@
                     "title": "PERT Maker > Export > Image",
                     "text": "An error occurred during the process !",
                     "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
+                },
+                "exportSVG": {
+                    "title": "PERT Maker > Export > SVG",
+                    "text": "An error occurred during the process !",
+                    "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
                 }
             },
             "warning": {
@@ -136,6 +142,11 @@
                     "title": "PERT Maker > Export > Image",
                     "text": "Your graph is empty !",
                     "informativeText": "Can't export a graph that doesn't exist."
+                },
+                "exportSVG": {
+                    "title": "PERT Maker > Export > SVG",
+                    "text": "Your graph is empty !",
+                    "informativeText": "Can't export a graph that doesn't exist."
                 }
             },
             "information": {
@@ -151,6 +162,9 @@
             },
             "saveAs": {
                 "title": "PERT Maker > Save As"
+            },
+            "exportSVG": {
+                "title": "PERT Maker > Export > SVG"
             }
         },
         "QDockWidget": {
@@ -160,7 +174,7 @@
                     "QLabel": {
                         "minTime": "Minimum Time:",
                         "maxTime": "Maximum Time:",
-                        "id": "ID:"
+                        "time": "Time:"
                     }
                 },
                 "QComboBoxWithLabel": {
