@@ -3,8 +3,14 @@
     # Libraries
 from PyQt6.QtWidgets import QDialog, QTabWidget, QLabel, QComboBox, QDialogButtonBox, QGridLayout, QWidget
 from PyQt6.QtCore import Qt
+
+from data.lib.qtUtils.QGridWidget import QGridWidget
+
 from .QScrollableGridWidget import QScrollableGridWidget
 import json
+
+from .QSidePanelWidget import QSidePanelWidget
+from .QSidePanel import QSidePanel, QSidePanelItem
 
 from data.lib.customOS import *
 #----------------------------------------------------------------------
@@ -56,26 +62,50 @@ class QSettingsDialog(QDialog):
 
         self.setWindowTitle(settingsData['title'])
 
-        self.tabs = QTabWidget()
+        self.root = QSidePanelWidget(widget = QGridWidget())
+
         self.__data__ = __QData__(langFolder, themesFolder)
+        def clearRootWidget(widget: QWidget):
+            for i in reversed(range(self.root.widget.layout().count())):
+                self.root.widget.layout().itemAt(i).widget().setHidden(True)
+            widget.setHidden(False)
+
+        def showLangTab():
+            clearRootWidget(self.langTab)
+            self.root.sidepanel.setSelectedItem(0)
+
+        def showThemeTab():
+            clearRootWidget(self.themesTab)
+            self.root.sidepanel.setSelectedItem(1)
+
+        def showExtraTab(widget, index):
+            clearRootWidget(widget)
+            self.root.sidepanel.setSelectedItem(index)
+
         self.langTab = self.__langTabWidget__(settingsData['langTab'], currentLang)
-        self.tabs.addTab(self.langTab, settingsData['langTab']['title'])
-        self.tabs.setTabText(1, settingsData['langTab']['title'])
+        self.root.widget.layout().addWidget(self.langTab)
+        self.root.sidepanel.addItem(QSidePanelItem(settingsData['langTab']['title'], None, showLangTab))
+
         self.themesTab = self.__themesTabWidget__(settingsData['themesTab'], currentTheme, currentThemeVariant)
-        self.tabs.addTab(self.themesTab, settingsData['themesTab']['title'])
-        self.tabs.setTabText(2, settingsData['themesTab']['title'])
+        self.root.widget.layout().addWidget(self.themesTab)
+        self.root.sidepanel.addItem(QSidePanelItem(settingsData['themesTab']['title'], None, showThemeTab))
 
         self.extraTabs = extraTabs
 
         kLst = list(extraTabs.keys())
+        sendParam = lambda w, i: lambda: showExtraTab(w, i)
         for k in range(len(kLst)):
-            self.tabs.addTab(self.extraTabs[kLst[k]], kLst[k])
-            self.tabs.setTabText(k + 3, kLst[k])
+            self.root.widget.layout().addWidget(self.extraTabs[kLst[k]])
+            self.root.sidepanel.addItem(QSidePanelItem(kLst[k], None, sendParam(self.extraTabs[kLst[k]], k + 2)))
+
+        showLangTab()
+
+        self.setMinimumWidth(480)
+        self.setMinimumHeight(max(len(self.root.sidepanel.items) * 30 + 50, 240))
 
         self.getFunction = getFunction
 
-        self.layout.addWidget(self.tabs, 0, 0)
-
+        self.layout.addWidget(self.root, 0, 0)
         self.layout.addWidget(self.buttonBox, 1, 0)
 
         self.setLayout(self.layout)
@@ -118,6 +148,7 @@ class QSettingsDialog(QDialog):
         widget.scrollLayout.addWidget(self.themeVariantsDropdown, 1, 1)
 
         return widget
+
 
     def __loadThemeVariants__(self, index):
         self.themeVariantsDropdown.clear()

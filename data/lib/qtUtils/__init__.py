@@ -17,4 +17,6 @@ from .QDoubleSpinBoxWithLabel import QDoubleSpinBoxWithLabel
 from .QDropDownWidget import QDropDownWidget
 from .QSpinBoxWithLabel import QSpinBoxWithLabel
 from .QColorButton import QColorButton
+from .QSidePanel import QSidePanel, QSidePanelItem
+from .QSidePanelWidget import QSidePanelWidget
 #----------------------------------------------------------------------
