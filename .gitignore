@@ -6,3 +6,4 @@ generateBuildVersion.py
 *.pypert
 *.pyc
 data/save.dat
+*.pyw
