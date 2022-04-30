@@ -4,3 +4,5 @@ compileConfig.json
 generateBuildVersion.py
 *.csv
 *.pypert
+*.pyc
+data/save.dat
