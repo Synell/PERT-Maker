@@ -1364,7 +1364,7 @@ class Application(QBaseApplication):
         self.statusBar.progressBar.setValue(1)
         nodeDct = {}
         for row in range(len(nodeData)):
-            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(', ', '').split(','), nodeData[row][2]]
+            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(', ', ',').split(','), nodeData[row][2]]
             if [''] == nodeDct[nodeData[row][0]][2]: nodeDct[nodeData[row][0]][2] = []
             nodeOrder.append(nodeData[row][0])
             if len(nodeDct[nodeData[row][0]][2]) > maxLevel: maxLevel = len(nodeDct[nodeData[row][0]][2])
