@@ -138,7 +138,7 @@ class SaveData(QSaveData):
 
 
 class Application(QBaseApplication):
-    BUILD = '07e655f6'
+    BUILD = '07e69431'
     VERSION = 'Experimental'
 
     DELTA = 80
