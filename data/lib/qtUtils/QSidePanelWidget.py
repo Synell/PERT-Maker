@@ -8,11 +8,12 @@ from .QSidePanel import QSidePanel
 
     # Class
 class QSidePanelWidget(QWidget):
-    def __init__(self, parent = None, widget: QWidget = None, width: int = 120, direction: Qt.LayoutDirection = Qt.LayoutDirection.LeftToRight, sideMerge: bool = False):
+    def __init__(self, parent = None, widget: QWidget = None, width: int = 120):
         super().__init__(parent)
         self.__layout__ = QGridLayout(self)
 
-        self.sidepanel = QSidePanel(self, width = width, direction = direction, sideMerge = sideMerge)
+        self.sidepanel = QSidePanel(self, width = width)
+        self.sidepanel.setProperty('border-right', True)
         self.widget = widget
 
         self.__layout__.setSpacing(0)

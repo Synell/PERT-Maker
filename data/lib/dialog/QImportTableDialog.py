@@ -3,7 +3,7 @@
     # Libraries
 from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
 from PyQt6.QtCore import Qt
-from data.lib.qtUtils import QFilePicker
+# from data.lib.qtUtils import QFilePicker
 #----------------------------------------------------------------------
 
     # Class

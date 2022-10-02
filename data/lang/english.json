@@ -58,38 +58,69 @@
             }
         },
         "QSettingsDialog": {
-            "title": "PERT Maker > Settings",
-            "langTab": {
-                "title": "Language",
-                "QLabel": {
-                    "lang": "Choose a Language:"
-                }
-            },
-            "themesTab": {
-                "title": "Theme",
-                "QLabel": {
-                    "themes": "Choose a Theme:",
-                    "themeVariants": "Choose a Variant:"
-                }
-            },
-            "editorTab": {
-                "title": "Editor",
-                "QSpinBoxWithLabel": {
+            "title": "App Manager > Settings",
+            "QSidePanel": {
+                "appearance": {
+                    "title": "Appearance",
                     "QLabel": {
-                        "maxLoop": "Max Loops:",
-                        "gridSize": "Grid Size:",
-                        "arrowMoveSpeed": "Moving Speed (Arrow Keys):",
-                        "zoomSpeed": "Zoom Speed:"
+                        "language": {
+                            "title": "Language",
+                            "description": "Select a display language for App Manager."
+                        },
+                        "theme": {
+                            "title": "Theme",
+                            "description": "Select a display theme for App Manager."
+                        }
+                    },
+                    "QNamedComboBox": {
+                        "language": "Language",
+                        "theme": "Theme",
+                        "themeVariant": "Theme Variant"
+                    }
+                },
+                "editor": {
+                    "title": "Editor",
+                    "QLabel": {
+                        "maxLoops": {
+                            "title": "Max Loops",
+                            "description": "Set the maximum number of loops for the algorithm."
+                        },
+                        "gridSize": {
+                            "title": "Grid Size",
+                            "description": "Set the grid size for the editor."
+                        },
+                        "arrowMoveSpeed": {
+                            "title": "Arrow Move Speed",
+                            "description": "Set the speed of arrow key movement."
+                        },
+                        "zoomSpeed": {
+                            "title": "Zoom Speed",
+                            "description": "Set the speed of zooming."
+                        }
+                    },
+                    "QNamedSpinBox": {
+                        "maxLoops": "Max Loops",
+                        "gridSize": "Grid Size",
+                        "arrowMoveSpeed": "Moving Speed (Arrow Keys)",
+                        "zoomSpeed": "Zoom Speed"
+                    }
+                },
+                "export": {
+                    "title": "Export",
+                    "QLabel": {
+                        "exportImageScale": {
+                            "title": "Export Image Scale",
+                            "description": "Set the scale of exported images."
+                        }
+                    },
+                    "QNamedSpinBox": {
+                        "exportImageScale": "Export Image Scale"
                     }
                 }
             },
-            "exportTab": {
-                "title": "Export",
-                "QSpinBoxWithLabel": {
-                    "QLabel": {
-                        "exportImageScale": "Image Scale (Affects Quality):"
-                    }
-                }
+            "QPushButton": {
+                "cancel": "Cancel",
+                "apply": "Apply"
             }
         },
         "QMessageBox": {
@@ -170,21 +201,21 @@
         "QDockWidget": {
             "properties": {
                 "title": "Properties",
-                "QSpinBoxWithLabel": {
+                "QNamedSpinBox": {
                     "QLabel": {
-                        "minTime": "Minimum Time:",
-                        "maxTime": "Maximum Time:",
-                        "time": "Time:"
+                        "minTime": "Minimum Time",
+                        "maxTime": "Maximum Time",
+                        "time": "Time"
                     }
                 },
-                "QComboBoxWithLabel": {
+                "QNamedComboBox": {
                     "QLabel": {
-                        "node": "Node:"
+                        "node": "Node"
                     }
                 },
-                "QLineEditWithLabel": {
+                "QNamedLineEdit": {
                     "QLabel": {
-                        "displayName": "Display Name:"
+                        "displayName": "Display Name"
                     }
                 },
                 "QGroupBox": {
@@ -215,7 +246,7 @@
                     "generateMinMaxTime": "Generate Min and Max Times",
                     "generateCriticalPath": "Generate Critical Path"
                 },
-                "QCheckBox": {
+                "QToggleButton": {
                     "liveRefreshConnectionView": "Refresh Live Connection View",
                     "liveGenerateMinMax": "Generate Live Min and Max Times",
                     "liveGenerateCriticalPath": "Generate Live Critical Path",
@@ -255,9 +286,9 @@
         },
         "QExportImageDialog": {
             "title": "PERT Maker > Export > Image",
-            "QComboBoxWithLabel": {
+            "QNamedComboBox": {
                 "QLabel": {
-                    "bgMode": "Background Mode:"
+                    "bgMode": "Background Mode"
                 },
                 "QComboBox": {
                     "default": "Default",
@@ -265,17 +296,9 @@
                     "transparent": "Transparent"
                 }
             },
-            "QFilePicker": {
+            "QFileButton": {
                 "title": "Output File",
-                "QPushButton": {
-                    "selectFile": "Select Output File..."
-                },
-                "QFileDialog": {
-                    "title": "PERT Maker > Export > Image > Output File"
-                },
-                "QLabel": {
-                    "noFile": "No File"
-                }
+                "dialog": "PERT Maker > Export > Image > Output File"
             },
             "QColorButton": {
                 "bg": "Background"

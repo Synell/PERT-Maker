@@ -1,0 +1,15 @@
+
+/* QDockWidget */
+
+QDockWidget {
+	background-color: #262626;
+	color: #fefefe;
+	border: none;
+	border-color: #4f5b62;
+	titlebar-close-icon: url({path}dockwidget/close.png);
+	titlebar-normal-icon:  url({path}dockwidget/sendToFront.png);
+}
+
+QWidget[QDockWidget=true] {
+	background-color: #202020;
+}

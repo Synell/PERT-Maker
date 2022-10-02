@@ -12,142 +12,18 @@ from data.lib import *
 
 
 
-class SaveData(QSaveData):
-    def __init__(self) -> None:
-        self.maxLoop = 5000
-
-        self.alignToGrid = False
-
-        self.gridMode = 0
-        self.gridSize = 50
-
-        self.liveRefreshConnectionView = False
-        self.liveGenerateCriticalPath = False
-        self.liveMinMax = False
-
-        self.arrowMoveSpeed = 20
-
-        self.zoomSpeed = 0.25
-
-        self.exportImageBgColor = Color('#000000ff')
-        self.exportImageBgMode = 0
-
-        self.exportImageScale = 1
-
-        super().__init__()
-
-
-    def settingsMenuExtra(self):
-        editorLang = self.languageData['QSettingsDialog']['editorTab']
-        exportLang = self.languageData['QSettingsDialog']['exportTab']
-
-        editorWidget = QScrollableGridWidget()
-
-        editorWidget.maxLoopSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['maxLoop'])
-        editorWidget.maxLoopSpinbox.spinBox.setRange(255, 65535)
-        editorWidget.maxLoopSpinbox.spinBox.setValue(self.maxLoop)
-
-        editorWidget.gridSizeSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['gridSize'])
-        editorWidget.gridSizeSpinbox.spinBox.setRange(10, 200)
-        editorWidget.gridSizeSpinbox.spinBox.setValue(self.gridSize)
-
-        editorWidget.arrowMoveSpeedSpinbox = QSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['arrowMoveSpeed'])
-        editorWidget.arrowMoveSpeedSpinbox.spinBox.setRange(1, 200)
-        editorWidget.arrowMoveSpeedSpinbox.spinBox.setValue(self.arrowMoveSpeed)
-
-        editorWidget.zoomSpeedSpinbox = QDoubleSpinBoxWithLabel(editorLang['QSpinBoxWithLabel']['QLabel']['zoomSpeed'])
-        editorWidget.zoomSpeedSpinbox.spinBox.setRange(0.01, 1)
-        editorWidget.zoomSpeedSpinbox.spinBox.setValue(self.zoomSpeed)
-
-        editorWidget.scrollLayout.addWidget(editorWidget.maxLoopSpinbox, 0, 0)
-        editorWidget.scrollLayout.addWidget(editorWidget.gridSizeSpinbox, 0, 1)
-        editorWidget.scrollLayout.addWidget(editorWidget.arrowMoveSpeedSpinbox, 1, 0)
-        editorWidget.scrollLayout.addWidget(editorWidget.zoomSpeedSpinbox, 1, 1)
-
-
-        exportWidget = QScrollableGridWidget()
-
-        exportWidget.exportImageScaleSpinbox = QDoubleSpinBoxWithLabel(exportLang['QSpinBoxWithLabel']['QLabel']['exportImageScale'])
-        exportWidget.exportImageScaleSpinbox.spinBox.setRange(0.25, 3)
-        exportWidget.exportImageScaleSpinbox.spinBox.setValue(self.exportImageScale)
-        exportWidget.exportImageScaleSpinbox.spinBox.setSingleStep(self.zoomSpeed)
-
-        exportWidget.scrollLayout.addWidget(exportWidget.exportImageScaleSpinbox, 0, 0)
-
-
-        return {editorLang['title']: editorWidget, exportLang['title']: exportWidget}, self.getExtra
-
-    def getExtra(self, extraTabs: dict = {}):
-        editorLang = self.languageData['QSettingsDialog']['editorTab']
-        exportLang = self.languageData['QSettingsDialog']['exportTab']
-
-        self.maxLoop = extraTabs[editorLang['title']].maxLoopSpinbox.spinBox.value()
-        self.gridSize = extraTabs[editorLang['title']].gridSizeSpinbox.spinBox.value()
-        self.arrowMoveSpeed = extraTabs[editorLang['title']].arrowMoveSpeedSpinbox.spinBox.value()
-
-        self.exportImageScale = extraTabs[exportLang['title']].exportImageScaleSpinbox.spinBox.value()
-
-
-    def saveExtraData(self) -> dict:
-        return {
-            'maxLoop': self.maxLoop,
-
-            'alignToGrid': self.alignToGrid,
-
-            'gridMode': self.gridMode,
-            'gridSize': self.gridSize,
-
-            'liveRefreshConnectionView': self.liveRefreshConnectionView,
-            'liveGenerateCriticalPath': self.liveGenerateCriticalPath,
-            'liveMinMax': self.liveMinMax,
-
-            'arrowMoveSpeed': self.arrowMoveSpeed,
-
-            'zoomSpeed': self.zoomSpeed,
-
-            'exportImage': {
-                'bgColor': self.exportImageBgColor.toHexa(),
-                'bgMode': self.exportImageBgMode,
-                'scale': self.exportImageScale
-            }
-        }
-
-    def loadExtraData(self, extraData: dict = ...) -> None:
-        try:
-            self.maxLoop = extraData['maxLoop']
-
-            self.alignToGrid = extraData['alignToGrid']
-
-            self.gridMode = extraData['gridMode']
-            self.gridSize = extraData['gridSize']
-
-            self.liveRefreshConnectionView = extraData['liveRefreshConnectionView']
-            self.liveGenerateCriticalPath = extraData['liveGenerateCriticalPath']
-            self.liveMinMax = extraData['liveMinMax']
-
-            self.arrowMoveSpeed = extraData['arrowMoveSpeed']
-
-            self.zoomSpeed = extraData['zoomSpeed']
-
-            self.exportImageBgColor = Color(extraData['exportImage']['bgColor'])
-            self.exportImageBgMode = extraData['exportImage']['bgMode']
-            self.exportImageScale = extraData['exportImage']['scale']
-
-        except: self.save()
-
-
 
 class Application(QBaseApplication):
-    BUILD = '07e69431'
-    VERSION = 'Experimental'
+    BUILD = '07e6d410'
+    VERSION = 'Broken (Big Update Coming Soon)'
 
     DELTA = 80
 
-    COLOR_NORMAL = Color()
-    COLOR_FOCUS = Color()
-    COLOR_SELECTED = Color()
-    COLOR_GRID = Color()
-    COLOR_LINK = Color()
+    COLOR_NORMAL = QUtilsColor()
+    COLOR_FOCUS = QUtilsColor()
+    COLOR_SELECTED = QUtilsColor()
+    COLOR_GRID = QUtilsColor()
+    COLOR_LINK = QUtilsColor()
 
     SAVE_PATH = None
 
@@ -159,37 +35,41 @@ class Application(QBaseApplication):
     def __init__(self):
         super().__init__()
 
-        self.selectedItem = None
-        self.selectedNode = None
+        self.selected_item = None
+        self.selected_node = None
         self.unsaved = False
 
-        self.useNodeNames = True
+        self.use_node_names = True
 
-        self.shiftKey = False
-        self.controlKey = False
+        self.shift_key = False
+        self.control_key = False
 
         self.zoom = 1 # TODO: find the freaking formula to do this
 
-        self.cameraPos = Vector2()
-        self.oldMousePos = Vector2()
+        self.camera_pos = Vector2()
+        self.old_mouse_pos = Vector2()
 
         self.graph = Graph()
 
-        self.saveData = SaveData()
+        self.save_data = SaveData()
 
-        self.saveData.setStyleSheet(self)
+        self.window.setProperty('color', 'magenta')
+
+        self.save_data.setStyleSheet(self)
+
+        self.load_colors()
 
         self.setWindowIcon(QIcon('./data/themes/logo.ico'))
 
-        self.createWidgets()
-        self.fileMenu_newAction()
+        self.create_widgets()
+        self.file_menu_new_action()
 
     def notImplemented(self, text = ''):
         if text:
             w = QDropDownWidget(text = lang['details'], widget = QLabel(text))
         else: w = None
 
-        lang = self.saveData.languageData['QMessageBox']['critical']['notImplemented']
+        lang = self.save_data.language_data['QMessageBox']['critical']['notImplemented']
 
         QMessageBoxWithWidget(
             app = self,
@@ -199,151 +79,148 @@ class Application(QBaseApplication):
             widget = w
         ).exec()
 
-    def createWidgets(self):
+    def create_widgets(self):
         self.root = QGridWidget()
-        self.root.gridLayout.setSpacing(0)
-        self.root.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.root.grid_layout.setSpacing(0)
+        self.root.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.canvas = QWidget()
         self.canvas.setMinimumSize(600, 400)
-        self.root.gridLayout.addWidget(self.canvas, 0, 0)
+        self.root.grid_layout.addWidget(self.canvas, 0, 0)
         self.canvas.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.canvas.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground, True)
-        # print(self.canvas.devicePixelRatio())
-        # print(self.canvas.devicePixelRatioF())
-        # print(self.canvas.devicePixelRatioFScale())
 
 
-        self.statusBar = QStatusBar()
-        self.window.setStatusBar(self.statusBar)
+        self.status_bar = QStatusBar()
+        self.window.setStatusBar(self.status_bar)
 
 
-        self.statusBar.coordinatesLabel = QLabel()
-        self.statusBar.coordinatesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.statusBar.addPermanentWidget(self.statusBar.coordinatesLabel, 2)
+        self.status_bar.coordinates_label = QLabel()
+        self.status_bar.coordinates_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.status_bar.addPermanentWidget(self.status_bar.coordinates_label, 2)
 
 
-        emptyWidget = QGridWidget()
-        emptyWidget.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setSpacing(0)
-        self.statusBar.addPermanentWidget(emptyWidget, 14)
+        empty_widget = QGridWidget()
+        empty_widget.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setSpacing(0)
+        self.status_bar.addPermanentWidget(empty_widget, 14)
 
 
-        emptyWidget = QGridWidget()
-        emptyWidget.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setSpacing(0)
-        self.statusBar.addPermanentWidget(emptyWidget, 3)
+        empty_widget = QGridWidget()
+        empty_widget.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setSpacing(0)
+        self.status_bar.addPermanentWidget(empty_widget, 3)
 
-        self.statusBar.progressBar = QProgressBar()
-        self.statusBar.progressBar.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.statusBar.progressBar.setRange(0, 100)
-        self.statusBar.progressBar.setValue(0)
-        self.statusBar.progressBar.setProperty('class', 'small')
-        self.statusBar.progressBar.setHidden(True)
-        emptyWidget.gridLayout.addWidget(self.statusBar.progressBar)
-
-
-        emptyWidget = QGridWidget()
-        emptyWidget.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setContentsMargins(0, 0, 0, 0)
-        emptyWidget.gridLayout.setSpacing(0)
-        self.statusBar.addPermanentWidget(emptyWidget, 1)
+        self.status_bar.progress_bar = QProgressBar()
+        self.status_bar.progress_bar.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.status_bar.progress_bar.setRange(0, 100)
+        self.status_bar.progress_bar.setValue(0)
+        self.status_bar.progress_bar.setProperty('class', 'small')
+        self.status_bar.progress_bar.setHidden(True)
+        empty_widget.grid_layout.addWidget(self.status_bar.progress_bar)
 
 
-        self.statusBar.zoom = QGridWidget()
-        self.statusBar.zoom.setContentsMargins(0, 0, 0, 0)
-        self.statusBar.zoom.gridLayout.setContentsMargins(0, 0, 0, 0)
-        self.statusBar.zoom.gridLayout.setSpacing(0)
+        empty_widget = QGridWidget()
+        empty_widget.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setSpacing(0)
+        self.status_bar.addPermanentWidget(empty_widget, 1)
 
-        self.statusBar.zoom.zoomMin = QToolButton()
-        self.statusBar.zoom.zoomMin.setIcon(self.saveData.getIcon('statusbar/zoomMin.png'))
-        self.statusBar.zoom.zoomMin.clicked.connect(self.zoomMin)
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomMin, 0, 0)
 
-        self.statusBar.zoom.zoomOut = QToolButton()
-        self.statusBar.zoom.zoomOut.setIcon(self.saveData.getIcon('statusbar/zoomOut.png'))
-        self.statusBar.zoom.zoomOut.clicked.connect(self.zoomOut)
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomOut, 0, 1)
+        self.status_bar.zoom = QGridWidget()
+        self.status_bar.zoom.setContentsMargins(0, 0, 0, 0)
+        self.status_bar.zoom.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.status_bar.zoom.grid_layout.setSpacing(0)
 
-        self.statusBar.zoom.zoomSlider = QSlider()
-        self.statusBar.zoom.zoomSlider.setOrientation(Qt.Orientation.Horizontal)
-        self.statusBar.zoom.zoomSlider.setRange(25, 400)
-        self.statusBar.zoom.zoomSlider.valueChanged.connect(self.zoomSliderValueChanged)
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomSlider, 0, 2)
+        self.status_bar.zoom.zoom_min = QToolButton()
+        self.status_bar.zoom.zoom_min.setIcon(self.save_data.getIcon('statusbar/zoomMin.png'))
+        self.status_bar.zoom.zoom_min.clicked.connect(self.zoom_min)
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_min, 0, 0)
 
-        self.statusBar.zoom.zoomIn = QToolButton()
-        self.statusBar.zoom.zoomIn.setIcon(self.saveData.getIcon('statusbar/zoomIn.png'))
-        self.statusBar.zoom.zoomIn.clicked.connect(self.zoomIn)
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomIn, 0, 3)
+        self.status_bar.zoom.zoom_out = QToolButton()
+        self.status_bar.zoom.zoom_out.setIcon(self.save_data.getIcon('statusbar/zoomOut.png'))
+        self.status_bar.zoom.zoom_out.clicked.connect(self.zoom_out)
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_out, 0, 1)
 
-        self.statusBar.zoom.zoomMax = QToolButton()
-        self.statusBar.zoom.zoomMax.setIcon(self.saveData.getIcon('statusbar/zoomMax.png'))
-        self.statusBar.zoom.zoomMax.clicked.connect(self.zoomMax)
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomMax, 0, 4)
+        self.status_bar.zoom.zoom_slider = QSlider()
+        self.status_bar.zoom.zoom_slider.setOrientation(Qt.Orientation.Horizontal)
+        self.status_bar.zoom.zoom_slider.setRange(25, 400)
+        self.status_bar.zoom.zoom_slider.valueChanged.connect(self.zoom_slider_value_changed)
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_slider, 0, 2)
 
-        self.statusBar.zoom.zoomLevel = QLabel()
-        self.statusBar.zoom.gridLayout.addWidget(self.statusBar.zoom.zoomLevel, 0, 5)
+        self.status_bar.zoom.zoom_in = QToolButton()
+        self.status_bar.zoom.zoom_in.setIcon(self.save_data.getIcon('statusbar/zoomIn.png'))
+        self.status_bar.zoom.zoom_in.clicked.connect(self.zoom_in)
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_in, 0, 3)
 
-        self.updateZoom()
+        self.status_bar.zoom.zoom_max = QToolButton()
+        self.status_bar.zoom.zoom_max.setIcon(self.save_data.getIcon('statusbar/zoomMax.png'))
+        self.status_bar.zoom.zoom_max.clicked.connect(self.zoom_max)
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_max, 0, 4)
 
-        self.statusBar.addPermanentWidget(self.statusBar.zoom, 6)
+        self.status_bar.zoom.zoom_level = QLabel()
+        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_level, 0, 5)
+
+        self.update_zoom()
+
+        self.status_bar.addPermanentWidget(self.status_bar.zoom, 6)
 
 
 
-        self.propertiesMenu = QScrollableGridWidget()
-        self.propertiesMenu.setMinimumWidth(300)
-        self.propertiesMenu.setMinimumHeight(200)
-        self.propertiesMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.propertiesMenu.scrollWidget.setProperty('class', 'dockWidget')
+        self.properties_menu = QScrollableGridWidget()
+        self.properties_menu.setMinimumWidth(300)
+        self.properties_menu.setMinimumHeight(200)
+        self.properties_menu.setFrameShape(QFrame.Shape.NoFrame)
+        self.properties_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.propertiesMenuDockWidget = QDockWidget(self.saveData.languageData['QDockWidget']['properties']['title'])
-        self.propertiesMenuDockWidget.setWidget(self.propertiesMenu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.propertiesMenuDockWidget)
+        self.properties_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['properties']['title'])
+        self.properties_menu_dock_widget.setWidget(self.properties_menu)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
 
 
         self.connectionViewMenu = QScrollableGridWidget()
         self.connectionViewMenu.setMinimumWidth(450)
         self.connectionViewMenu.setMinimumHeight(200)
         self.connectionViewMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.connectionViewMenu.scrollWidget.setProperty('class', 'dockWidget')
+        self.connectionViewMenu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.connectionViewMenuDockWidget = QDockWidget(self.saveData.languageData['QDockWidget']['connectionView']['title'])
+        self.connectionViewMenuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
         self.connectionViewMenuDockWidget.setWidget(self.connectionViewMenu)
         self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connectionViewMenuDockWidget)
 
-        self.createConnectionViewMenu()
+        self.create_connection_view_menu()
 
 
         self.criticalPathViewMenu = QScrollableGridWidget()
         self.criticalPathViewMenu.setMinimumWidth(450)
         self.criticalPathViewMenu.setMinimumHeight(200)
         self.criticalPathViewMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.criticalPathViewMenu.scrollWidget.setProperty('class', 'dockWidget')
+        self.criticalPathViewMenu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.criticalPathViewMenuDockWidget = QDockWidget(self.saveData.languageData['QDockWidget']['criticalPathView']['title'])
+        self.criticalPathViewMenuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
         self.criticalPathViewMenuDockWidget.setWidget(self.criticalPathViewMenu)
         self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.criticalPathViewMenuDockWidget)
 
-        self.createCriticalPathViewMenu()
+        self.create_critical_path_view_menu()
 
 
         self.window.tabifyDockWidget(self.connectionViewMenuDockWidget, self.criticalPathViewMenuDockWidget)
         self.connectionViewMenuDockWidget.raise_()
 
 
-        self.generationMenu = QScrollableGridWidget()
-        self.generationMenu.setMinimumWidth(450)
-        self.generationMenu.setMinimumHeight(200)
-        self.generationMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.generationMenu.scrollWidget.setProperty('class', 'dockWidget')
+        self.generation_menu = QScrollableGridWidget()
+        self.generation_menu.setMinimumWidth(450)
+        self.generation_menu.setMinimumHeight(200)
+        self.generation_menu.setFrameShape(QFrame.Shape.NoFrame)
+        self.generation_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.generationMenuDockWidget = QDockWidget(self.saveData.languageData['QDockWidget']['generation']['title'])
-        self.generationMenuDockWidget.setWidget(self.generationMenu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.generationMenuDockWidget)
+        self.generation_menuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['generation']['title'])
+        self.generation_menuDockWidget.setWidget(self.generation_menu)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.generation_menuDockWidget)
 
-        self.createGenerationMenu()
+        self.create_generation_menu()
 
 
         self.window.setCentralWidget(self.root)
@@ -352,144 +229,143 @@ class Application(QBaseApplication):
         self.canvas.installEventFilter(self)
         self.canvas.setMouseTracking(True)
         self.canvas.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.window.keyPressEvent = self.keyPressEvent
-        self.window.keyReleaseEvent = self.keyReleaseEvent
+        self.window.keyPressEvent = self.key_press_event
+        self.window.keyReleaseEvent = self.key_release_event
 
-        self.createMenuBar()
+        self.create_menu_bar()
 
-        self.loadColors()
         self.canvas.update()
 
-    def createMenuBar(self):
+    def create_menu_bar(self):
         menuBar = self.window.menuBar()
 
-        def createFileMenu():
-            lang = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QAction']
+        def create_file_menu():
+            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QAction']
 
-            fileMenu: QMenu = menuBar.addMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['title'])
+            file_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['title'])
 
-            def createImportMenu():
-                lang = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['QAction']
+            def create_import_menu():
+                lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['QAction']
 
-                importMenu = QMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['title'], self.window)
-                importMenu.setIcon(self.saveData.getIcon('menubar/import.png'))
+                import_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['title'], self.window)
+                import_menu.setIcon(self.save_data.getIcon('menubar/import.png'))
 
-                tableAction = QAction(lang['table'], self.window)
-                tableAction.triggered.connect(self.fileMenu_importMenu_tableAction)
+                table_action = QAction(lang['table'], self.window)
+                table_action.triggered.connect(self.file_menu_import_menu_table_action)
 
-                importMenu.addAction(tableAction)
+                import_menu.addAction(table_action)
 
-                return importMenu
+                return import_menu
 
-            def createExportMenu():
-                lang = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['QAction']
+            def create_export_menu():
+                lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['QAction']
 
-                exportMenu = QMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['title'], self.window)
-                exportMenu.setIcon(self.saveData.getIcon('menubar/export.png'))
+                export_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['title'], self.window)
+                export_menu.setIcon(self.save_data.getIcon('menubar/export.png'))
 
-                tableAction = QAction(lang['table'], self.window)
-                tableAction.triggered.connect(self.fileMenu_exportMenu_tableAction)
+                table_action = QAction(lang['table'], self.window)
+                table_action.triggered.connect(self.file_menu_export_menu_table_action)
 
-                imageAction = QAction(lang['image'], self.window)
-                imageAction.triggered.connect(self.fileMenu_exportMenu_imageAction)
+                image_action = QAction(lang['image'], self.window)
+                image_action.triggered.connect(self.file_menu_export_menu_image_action)
 
-                svgAction = QAction(lang['svg'], self.window)
-                svgAction.triggered.connect(self.fileMenu_exportMenu_svgAction)
+                svg_action = QAction(lang['svg'], self.window)
+                svg_action.triggered.connect(self.file_menu_export_menu_svg_action)
 
-                exportMenu.addAction(tableAction)
-                exportMenu.addAction(imageAction)
-                exportMenu.addAction(svgAction)
+                export_menu.addAction(table_action)
+                export_menu.addAction(image_action)
+                export_menu.addAction(svg_action)
 
-                return exportMenu
+                return export_menu
 
-            newAction = QAction(self.saveData.getIcon('menubar/new.png'), lang['new'], self.window)
-            newAction.setShortcut('Ctrl+N')
-            newAction.triggered.connect(self.fileMenu_newAction)
+            new_action = QAction(self.save_data.getIcon('menubar/new.png'), lang['new'], self.window)
+            new_action.setShortcut('Ctrl+N')
+            new_action.triggered.connect(self.file_menu_new_action)
 
-            openAction = QAction(self.saveData.getIcon('menubar/open.png'), lang['open'], self.window)
-            openAction.setShortcut('Ctrl+O')
-            openAction.triggered.connect(self.fileMenu_openAction)
+            open_action = QAction(self.save_data.getIcon('menubar/open.png'), lang['open'], self.window)
+            open_action.setShortcut('Ctrl+O')
+            open_action.triggered.connect(self.file_menu_open_action)
 
-            importMenu = createImportMenu()
-            exportMenu = createExportMenu()
+            import_menu = create_import_menu()
+            export_menu = create_export_menu()
 
-            saveAction = QAction(self.saveData.getIcon('menubar/save.png'), lang['save'], self.window)
-            saveAction.setShortcut('Ctrl+S')
-            saveAction.triggered.connect(self.fileMenu_saveAction)
+            save_action = QAction(self.save_data.getIcon('menubar/save.png'), lang['save'], self.window)
+            save_action.setShortcut('Ctrl+S')
+            save_action.triggered.connect(self.file_menu_save_action)
 
-            saveAsAction = QAction(self.saveData.getIcon('menubar/saveAs.png'), lang['saveAs'], self.window)
-            saveAsAction.setShortcut('Ctrl+Shift+S')
-            saveAsAction.triggered.connect(self.fileMenu_saveAsAction)
+            save_as_action = QAction(self.save_data.getIcon('menubar/saveAs.png'), lang['saveAs'], self.window)
+            save_as_action.setShortcut('Ctrl+Shift+S')
+            save_as_action.triggered.connect(self.file_menu_save_as_action)
 
-            settingsAction = QAction(self.saveData.getIcon('menubar/settings.png'), lang['settings'], self.window)
-            settingsAction.setShortcut('Ctrl+Alt+S')
-            settingsAction.triggered.connect(self.fileMenu_settingsAction)
+            settings_action = QAction(self.save_data.getIcon('menubar/settings.png'), lang['settings'], self.window)
+            settings_action.setShortcut('Ctrl+Alt+S')
+            settings_action.triggered.connect(self.file_menu_settings_action)
 
-            exitAction = QAction(self.saveData.getIcon('menubar/exit.png'), lang['exit'], self.window)
+            exitAction = QAction(self.save_data.getIcon('menubar/exit.png'), lang['exit'], self.window)
             exitAction.setShortcut('Alt+F4')
             exitAction.triggered.connect(self.window.close)
 
 
-            fileMenu.addAction(newAction)
-            fileMenu.addAction(openAction)
-            fileMenu.addSeparator()
-            fileMenu.addMenu(importMenu)
-            fileMenu.addMenu(exportMenu)
-            fileMenu.addSeparator()
-            fileMenu.addAction(saveAction)
-            fileMenu.addAction(saveAsAction)
-            fileMenu.addSeparator()
-            fileMenu.addAction(settingsAction)
-            fileMenu.addSeparator()
-            fileMenu.addAction(exitAction)
+            file_menu.addAction(new_action)
+            file_menu.addAction(open_action)
+            file_menu.addSeparator()
+            file_menu.addMenu(import_menu)
+            file_menu.addMenu(export_menu)
+            file_menu.addSeparator()
+            file_menu.addAction(save_action)
+            file_menu.addAction(save_as_action)
+            file_menu.addSeparator()
+            file_menu.addAction(settings_action)
+            file_menu.addSeparator()
+            file_menu.addAction(exitAction)
 
-        def createViewMenu():
-            lang = self.saveData.languageData['QMainWindow']['QMenuBar']['viewMenu']['QAction']
+        def create_view_menu():
+            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['QAction']
 
-            viewMenu: QMenu = menuBar.addMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['viewMenu']['title'])
+            view_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['title'])
 
-            gridSwitchAction = QAction(self.saveData.getIcon('menubar/grid.png'), lang['gridSwitch'], self.window)
-            gridSwitchAction.triggered.connect(self.viewMenu_gridSwitchAction)
+            grid_switch_action = QAction(self.save_data.getIcon('menubar/grid.png'), lang['gridSwitch'], self.window)
+            grid_switch_action.triggered.connect(self.view_menu_grid_switch_action)
 
-            gridAlignAction = QAction(self.saveData.getIcon('menubar/gridAlign.png'), lang['gridAlign'], self.window)
-            gridAlignAction.triggered.connect(self.viewMenu_gridAlignAction)
-
-
-            viewMenu.addAction(gridSwitchAction)
-            viewMenu.addAction(gridAlignAction)
-
-        def createHelpMenu():
-            lang = self.saveData.languageData['QMainWindow']['QMenuBar']['helpMenu']['QAction']
-
-            helpMenu: QMenu = menuBar.addMenu(self.saveData.languageData['QMainWindow']['QMenuBar']['helpMenu']['title'])
-
-            aboutAction = QAction(QIcon('./data/themes/logo.ico'), lang['about'], self.window)
-            aboutAction.triggered.connect(self.helpMenu_aboutAction)
-
-            tipsAction = QAction(self.saveData.getIcon('menubar/tips.png'), lang['tips'], self.window)
-            tipsAction.triggered.connect(self.helpMenu_tipsAction)
-
-            aboutQtAction = QAction(self.saveData.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutQt'], self.window)
-            aboutQtAction.triggered.connect(self.helpMenu_aboutQtAction)
+            grid_align_action = QAction(self.save_data.getIcon('menubar/gridAlign.png'), lang['gridAlign'], self.window)
+            grid_align_action.triggered.connect(self.view_menu_grid_align_action)
 
 
-            helpMenu.addAction(aboutAction)
-            helpMenu.addAction(tipsAction)
-            helpMenu.addAction(aboutQtAction)
+            view_menu.addAction(grid_switch_action)
+            view_menu.addAction(grid_align_action)
+
+        def create_help_menu():
+            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QAction']
+
+            help_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['title'])
+
+            about_action = QAction(QIcon('./data/themes/logo.ico'), lang['about'], self.window)
+            about_action.triggered.connect(self.help_menu_about_action)
+
+            tips_action = QAction(self.save_data.getIcon('menubar/tips.png'), lang['tips'], self.window)
+            tips_action.triggered.connect(self.help_menu_tips_action)
+
+            about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutQt'], self.window)
+            about_qt_action.triggered.connect(self.help_menu_about_qt_action)
 
 
-        createFileMenu()
-        createViewMenu()
-        createHelpMenu()
+            help_menu.addAction(about_action)
+            help_menu.addAction(tips_action)
+            help_menu.addAction(about_qt_action)
 
-    def refreshConnectionView(self):
+
+        create_file_menu()
+        create_view_menu()
+        create_help_menu()
+
+    def refresh_connection_view(self):
         self.connectionTable.clear()
         paths = {}
         nodes = []
         beginNodes = []
         errors = []
 
-        if self.useNodeNames: self.graph.setPathNamesAsNodeNames()
+        if self.use_node_names: self.graph.set_path_names_as_node_names()
 
         for node in self.graph.nodes:
             if len(list(self.graph.node(node).next.keys())) > 0:
@@ -501,7 +377,7 @@ class Application(QBaseApplication):
                 if nodes[i].next[x].name:
                     paths[nodes[i].next[x].name] = {'value': nodes[i].next[x].value, 'previous': []}
             for y in list(nodes[i].previous.keys()):
-                p = self.graph.findPath(y, nodes[i].name)
+                p = self.graph.find_path(y, nodes[i].name)
                 if p:
                     if p.name:
                         for x in list(nodes[i].next.keys()):
@@ -522,8 +398,8 @@ class Application(QBaseApplication):
             for x in list(beginNodes[i].next.keys()):
                 paths[beginNodes[i].next[x].name] = {'value': beginNodes[i].next[x].value, 'previous': []}
 
-        if self.useNodeNames:
-            self.graph.resetPathNamesAsNodeNames()
+        if self.use_node_names:
+            self.graph.reset_path_names_as_node_names()
             self.canvas.update()
 
 
@@ -538,7 +414,7 @@ class Application(QBaseApplication):
             for kw in self.KEY_WORDS:
                 if kw in prevLst: prevLst.remove(kw)
 
-            self.connectionTable.addItem(
+            self.connectionTable.add_item(
                 items = [
                     n,
                     ', '.join(prevLst),
@@ -547,31 +423,31 @@ class Application(QBaseApplication):
                 alignmentFlag = Qt.AlignmentFlag.AlignCenter
             )
 
-        if len(errors) > 0 and not self.saveData.liveRefreshConnectionView:
-            lang = self.saveData.languageData['QMessageBox']['warning']['refreshConnectionView']
+        if len(errors) > 0 and not self.save_data.live_refresh_connection_view:
+            lang = self.save_data.language_data['QMessageBox']['warning']['refreshConnectionView']
 
-            listWidget = QBetterListWidget(headers = [lang['startNode'], lang['endNode']], minimumSectionSize = 100, alignmentFlag = Qt.AlignmentFlag.AlignCenter)
+            listWidget = QBetterListWidget(headers = [lang['startNode'], lang['endNode']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
             listWidget.setMinimumHeight(100)
             for e in errors:
-                listWidget.addItem(items = [str(e[0]), str(e[1])], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
+                listWidget.add_item(items = [str(e[0]), str(e[1])], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
 
             dropDownWidget = QDropDownWidget(text = lang['details'], widget = listWidget)
             msgBox = QMessageBoxWithWidget(
                 app = self,
                 title = lang['title'],
                 text = lang['text'],
-                informativeText = lang['informativeText'],
+                informative_text = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
 
-    def generateMinMaxTime(self):
+    def generate_min_max_time(self):
         for k in self.graph.nodes:
             self.graph.node(k).minTime = 0
             self.graph.node(k).maxTime = 0
 
-        maxLoop1 = self.saveData.maxLoop
-        maxLoop2 = self.saveData.maxLoop
+        max_loops1 = self.save_data.max_loops
+        max_loops2 = self.save_data.max_loops
 
         nodes = []
         for k in self.graph.nodes:
@@ -579,8 +455,8 @@ class Application(QBaseApplication):
                 nodes.append(k)
         if not nodes: return
 
-        while nodes and maxLoop1 > 0:
-            maxLoop1 -= 1
+        while nodes and max_loops1 > 0:
+            max_loops1 -= 1
             for n in nodes.copy():
                 nodes.remove(n)
                 for k in list(self.graph.node(n).next.keys()):
@@ -604,8 +480,8 @@ class Application(QBaseApplication):
             if (not self.graph.node(k).next) and self.graph.node(k).previous:
                 nodes.append(k)
 
-        while nodes and maxLoop2 > 0:
-            maxLoop2 -= 1
+        while nodes and max_loops2 > 0:
+            max_loops2 -= 1
 
             for n in nodes.copy():
                 nodes.remove(n)
@@ -621,19 +497,19 @@ class Application(QBaseApplication):
                     self.graph.node(n).maxTime = min(values)
 
 
-        self.setUnsaved()
+        self.set_unsaved()
         self.canvas.update()
 
-        if (maxLoop1 == 0 or maxLoop2 == 2) and not self.saveData.liveMinMax:
-            lang = self.saveData.languageData['QMessageBox']['warning']['generateMinMaxTime']
+        if (max_loops1 == 0 or max_loops2 == 2) and not self.save_data.live_min_max:
+            lang = self.save_data.language_data['QMessageBox']['warning']['generate_min_max_time']
 
             label = QLabel(
                 StringUtils.replaceFirst(
                     StringUtils.replaceFirst(
-                        StringUtils.replaceFirst(lang['label'], '%s', str(self.saveData.maxLoop)),
-                        '%s', str(maxLoop1)
+                        StringUtils.replaceFirst(lang['label'], '%s', str(self.save_data.max_loops)),
+                        '%s', str(max_loops1)
                     ),
-                    '%s', str(maxLoop2)
+                    '%s', str(max_loops2)
                 )
             )
 
@@ -642,13 +518,13 @@ class Application(QBaseApplication):
                 app = self,
                 title = lang['title'],
                 text = lang['text'],
-                informativeText = lang['informativeText'],
+                informative_text = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
 
-    def generateCriticalPath(self):
-        if not self.saveData.liveMinMax: self.generateMinMaxTime()
+    def generate_critical_path(self):
+        if not self.save_data.live_min_max: self.generate_min_max_time()
 
         startNode = None
         for n in self.graph.nodes:
@@ -663,11 +539,11 @@ class Application(QBaseApplication):
                 endNode = n
         if endNode == startNode: return
 
-        maxLoop = self.saveData.maxLoop
+        max_loops = self.save_data.max_loops
         path = [startNode]
         node = startNode
-        while node != endNode and maxLoop > 0:
-            maxLoop -= 1
+        while node != endNode and max_loops > 0:
+            max_loops -= 1
             allNodes = []
             for n in list(self.graph.node(node).next.keys()):
                 if self.graph.node(n).minTime == self.graph.node(n).maxTime:
@@ -686,275 +562,327 @@ class Application(QBaseApplication):
         self.criticalPathTable.clear()
 
         for n in path:
-            self.criticalPathTable.addItem(items = [n], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
+            self.criticalPathTable.add_item(items = [n], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
 
 
-        if (maxLoop == 0) and not self.saveData.liveGenerateCriticalPath:
-            lang = self.saveData.languageData['QMessageBox']['warning']['generateCriticalPath']
+        if (max_loops == 0) and not self.save_data.live_generate_critical_path:
+            lang = self.save_data.language_data['QMessageBox']['warning']['generate_critical_path']
 
-            label = QLabel(StringUtils.replaceFirst(lang['label'], '%s', str(self.saveData.maxLoop)))
+            label = QLabel(StringUtils.replaceFirst(lang['label'], '%s', str(self.save_data.max_loops)))
 
             dropDownWidget = QDropDownWidget(text = lang['details'], widget = label)
             QMessageBoxWithWidget(
                 app = self,
                 title = lang['title'],
                 text = lang['text'],
-                informativeText = lang['informativeText'],
+                informative_text = lang['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
 
 
-    def createConnectionViewMenu(self):
-        lang = self.saveData.languageData['QDockWidget']['connectionView']['QBetterListWidget']
+    def create_connection_view_menu(self):
+        lang = self.save_data.language_data['QDockWidget']['connectionView']['QBetterListWidget']
 
-        self.connectionTable = QBetterListWidget(headers = [lang['task'], lang['previousTasks'], lang['time']], minimumSectionSize = 100, alignmentFlag = Qt.AlignmentFlag.AlignCenter)
-        self.connectionViewMenu.scrollLayout.addWidget(self.connectionTable, 0, 0)
+        self.connectionTable = QBetterListWidget(headers = [lang['task'], lang['previousTasks'], lang['time']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
+        self.connectionViewMenu.scroll_layout.addWidget(self.connectionTable, 0, 0)
 
-    def createCriticalPathViewMenu(self):
-        lang = self.saveData.languageData['QDockWidget']['criticalPathView']['QBetterListWidget']
+    def create_critical_path_view_menu(self):
+        lang = self.save_data.language_data['QDockWidget']['criticalPathView']['QBetterListWidget']
 
-        self.criticalPathTable = QBetterListWidget(headers = [lang['criticalPath']], minimumSectionSize = 100, alignmentFlag = Qt.AlignmentFlag.AlignCenter)
-        self.criticalPathViewMenu.scrollLayout.addWidget(self.criticalPathTable, 0, 0)
+        self.criticalPathTable = QBetterListWidget(headers = [lang['criticalPath']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
+        self.criticalPathViewMenu.scroll_layout.addWidget(self.criticalPathTable, 0, 0)
 
-    def createGenerationMenu(self):
-        lang = self.saveData.languageData['QDockWidget']['generation']
+    def create_generation_menu(self):
+        lang = self.save_data.language_data['QDockWidget']['generation']
 
-        def rcvValueChanged(value: int):
+        def rcv_value_changed(value: int):
             if value:
-                self.saveData.liveRefreshConnectionView = True
-                self.refreshConnectionView()
-            else: self.saveData.liveRefreshConnectionView = False
+                self.save_data.live_refresh_connection_view = True
+                self.refresh_connection_view()
+            else: self.save_data.live_refresh_connection_view = False
 
-        def mmValueChanged(value: int):
+        def mm_value_changed(value: int):
             if value:
-                self.saveData.liveMinMax = True
-                self.generateMinMaxTime()
-            else: self.saveData.liveMinMax = False
+                self.save_data.live_min_max = True
+                self.generate_min_max_time()
+            else: self.save_data.live_min_max = False
 
-        def gcpValueChanged(value: int):
+        def gcp_value_changed(value: int):
             if value:
-                self.saveData.liveGenerateCriticalPath = True
-                self.generateCriticalPath()
-            else: self.saveData.liveGenerateCriticalPath = False
+                self.save_data.live_generate_critical_path = True
+                self.generate_critical_path()
+            else: self.save_data.live_generate_critical_path = False
 
-        def unniopnValueChanged(value: int):
-            if value: self.useNodeNames = True
-            else: self.useNodeNames = False
+        def unniopn_value_changed(value: int):
+            if value: self.use_node_names = True
+            else: self.use_node_names = False
 
-            if self.saveData.liveRefreshConnectionView: self.refreshConnectionView()
-            if self.saveData.liveMinMax: self.generateMinMaxTime()
-            if self.saveData.liveGenerateCriticalPath: self.generateCriticalPath()
+            if self.save_data.live_refresh_connection_view: self.refresh_connection_view()
+            if self.save_data.live_min_max: self.generate_min_max_time()
+            if self.save_data.live_generate_critical_path: self.generate_critical_path()
 
-        refreshConnectionViewButton = QPushButton(lang['QPushButton']['refreshConnectionView'])
-        refreshConnectionViewButton.clicked.connect(self.refreshConnectionView)
-        liveRefreshConnectionViewCheckbox = QCheckBox(lang['QCheckBox']['liveRefreshConnectionView'])
-        if self.saveData.liveRefreshConnectionView: liveRefreshConnectionViewCheckbox.setCheckState(Qt.CheckState.Checked)
-        liveRefreshConnectionViewCheckbox.stateChanged.connect(rcvValueChanged)
+        live_refresh_connection_view_button = QPushButton(lang['QPushButton']['refreshConnectionView'])
+        live_refresh_connection_view_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        live_refresh_connection_view_button.setProperty('color', 'main')
+        live_refresh_connection_view_button.clicked.connect(self.refresh_connection_view)
+        live_refresh_connection_view_checkbox = QToggleButton()
+        live_refresh_connection_view_checkbox.setText(lang['QToggleButton']['liveRefreshConnectionView'])
+        if self.save_data.live_refresh_connection_view: live_refresh_connection_view_checkbox.setCheckState(Qt.CheckState.Checked)
+        live_refresh_connection_view_checkbox.stateChanged.connect(rcv_value_changed)
 
-        generateMinMaxTimeButton = QPushButton(lang['QPushButton']['generateMinMaxTime'])
-        generateMinMaxTimeButton.clicked.connect(self.generateMinMaxTime)
-        liveGenerateMinMaxCheckbox = QCheckBox(lang['QCheckBox']['liveGenerateMinMax'])
-        if self.saveData.liveMinMax: liveGenerateMinMaxCheckbox.setCheckState(Qt.CheckState.Checked)
-        liveGenerateMinMaxCheckbox.stateChanged.connect(mmValueChanged)
+        generate_min_max_time_button = QPushButton(lang['QPushButton']['generateMinMaxTime'])
+        generate_min_max_time_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        generate_min_max_time_button.setProperty('color', 'main')
+        generate_min_max_time_button.clicked.connect(self.generate_min_max_time)
+        generate_min_max_time_checkbox = QToggleButton()
+        generate_min_max_time_checkbox.setText(lang['QToggleButton']['liveGenerateMinMax'])
+        if self.save_data.live_min_max: generate_min_max_time_checkbox.setCheckState(Qt.CheckState.Checked)
+        generate_min_max_time_checkbox.stateChanged.connect(mm_value_changed)
 
-        generateCriticalPathButton = QPushButton(lang['QPushButton']['generateCriticalPath'])
-        generateCriticalPathButton.clicked.connect(self.generateCriticalPath)
-        liveGenerateCriticalPathCheckbox = QCheckBox(lang['QCheckBox']['liveGenerateCriticalPath'])
-        if self.saveData.liveGenerateCriticalPath: liveGenerateCriticalPathCheckbox.setCheckState(Qt.CheckState.Checked)
-        liveGenerateCriticalPathCheckbox.stateChanged.connect(gcpValueChanged)
+        generate_critical_path_button = QPushButton(lang['QPushButton']['generateCriticalPath'])
+        generate_critical_path_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        generate_critical_path_button.setProperty('color', 'main')
+        generate_critical_path_button.clicked.connect(self.generate_critical_path)
+        live_generate_critical_path_checkbox = QToggleButton()
+        live_generate_critical_path_checkbox.setText(lang['QToggleButton']['liveGenerateCriticalPath'])
+        if self.save_data.live_generate_critical_path: live_generate_critical_path_checkbox.setCheckState(Qt.CheckState.Checked)
+        live_generate_critical_path_checkbox.stateChanged.connect(gcp_value_changed)
 
-        self.useNodeNamesInsteadOfPathNamesCheckbox = QCheckBox(lang['QCheckBox']['useNodeNamesInsteadOfPathNames'])
-        if self.useNodeNames: self.useNodeNamesInsteadOfPathNamesCheckbox.setCheckState(Qt.CheckState.Checked)
-        self.useNodeNamesInsteadOfPathNamesCheckbox.stateChanged.connect(unniopnValueChanged)
+        self.use_node_names_instead_of_path_names_checkbox = QToggleButton()
+        self.use_node_names_instead_of_path_names_checkbox.setText(lang['QToggleButton']['useNodeNamesInsteadOfPathNames'])
+        if self.use_node_names: self.use_node_names_instead_of_path_names_checkbox.setCheckState(Qt.CheckState.Checked)
+        self.use_node_names_instead_of_path_names_checkbox.stateChanged.connect(unniopn_value_changed)
 
 
-        self.generationMenu.scrollLayout.addWidget(refreshConnectionViewButton, 0, 0)
-        self.generationMenu.scrollLayout.addWidget(liveRefreshConnectionViewCheckbox, 0, 1)
-        self.generationMenu.scrollLayout.addWidget(generateMinMaxTimeButton, 1, 0)
-        self.generationMenu.scrollLayout.addWidget(liveGenerateMinMaxCheckbox, 1, 1)
-        self.generationMenu.scrollLayout.addWidget(generateCriticalPathButton, 2, 0)
-        self.generationMenu.scrollLayout.addWidget(liveGenerateCriticalPathCheckbox, 2, 1)
-        self.generationMenu.scrollLayout.addWidget(self.useNodeNamesInsteadOfPathNamesCheckbox, 3, 0, 1, 2)
+        self.generation_menu.scroll_layout.addWidget(live_refresh_connection_view_button, 0, 0)
+        self.generation_menu.scroll_layout.addWidget(live_refresh_connection_view_checkbox, 0, 1)
+        self.generation_menu.scroll_layout.addWidget(generate_min_max_time_button, 1, 0)
+        self.generation_menu.scroll_layout.addWidget(generate_min_max_time_checkbox, 1, 1)
+        self.generation_menu.scroll_layout.addWidget(generate_critical_path_button, 2, 0)
+        self.generation_menu.scroll_layout.addWidget(live_generate_critical_path_checkbox, 2, 1)
+        self.generation_menu.scroll_layout.addWidget(self.use_node_names_instead_of_path_names_checkbox, 3, 0, 1, 2)
 
-        rcvValueChanged(self.saveData.liveRefreshConnectionView)
-        mmValueChanged(self.saveData.liveMinMax)
-        gcpValueChanged(self.saveData.liveGenerateCriticalPath)
-        unniopnValueChanged(self.useNodeNames)
+        rcv_value_changed(self.save_data.live_refresh_connection_view)
+        mm_value_changed(self.save_data.live_min_max)
+        gcp_value_changed(self.save_data.live_generate_critical_path)
+        unniopn_value_changed(self.use_node_names)
 
-    def propertiesMenuLoad(self):
-        lang = self.saveData.languageData['QDockWidget']['properties']
+    def properties_menu_load(self):
+        lang = self.save_data.language_data['QDockWidget']['properties']
 
-        def editName(name: str):
+        def edit_name(name: str):
             if not name: return
             if name in self.graph.nodes: return
-            self.graph.rename(self.selectedItem.name, name)
+            self.graph.rename(self.selected_item.name, name)
             self.canvas.update()
-            self.setUnsaved()
+            self.set_unsaved()
 
-        def editMinTime(value: float):
-            if value.as_integer_ratio()[1] == 1: self.selectedItem.minTime = int(value)
-            else: self.selectedItem.minTime = value
+        def edit_min_time(value: float):
+            if value.as_integer_ratio()[1] == 1: self.selected_item.minTime = int(value)
+            else: self.selected_item.minTime = value
             self.canvas.update()
-            self.setUnsaved()
+            self.set_unsaved()
 
-        def editMaxTime(value: float):
-            if value.as_integer_ratio()[1] == 1: self.selectedItem.maxTime = int(value)
-            else: self.selectedItem.maxTime = value
+        def edit_max_time(value: float):
+            if value.as_integer_ratio()[1] == 1: self.selected_item.maxTime = int(value)
+            else: self.selected_item.maxTime = value
             self.canvas.update()
-            self.setUnsaved()
+            self.set_unsaved()
 
-        for i in reversed(range(self.propertiesMenu.scrollLayout.count())):
-            self.propertiesMenu.scrollLayout.itemAt(i).widget().deleteLater()
-        if not self.selectedItem: return
+        for i in reversed(range(self.properties_menu.scroll_layout.count())):
+            self.properties_menu.scroll_layout.itemAt(i).widget().deleteLater()
+        if not self.selected_item: return
 
-        minTimeSpinbox = QDoubleSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['minTime'])
-        minTimeSpinbox.spinBox.setValue(self.selectedItem.minTime)
-        minTimeSpinbox.spinBox.valueChanged.connect(editMinTime)
+        minTimeSpinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['minTime'])
+        minTimeSpinbox.double_spin_box.setValue(self.selected_item.minTime)
+        minTimeSpinbox.double_spin_box.valueChanged.connect(edit_min_time)
 
-        self.propertiesMenu.scrollLayout.addWidget(minTimeSpinbox, 0, 0)
-        self.propertiesMenu.scrollLayout.setAlignment(minTimeSpinbox, Qt.AlignmentFlag.AlignTop)
-
-
-        maxTimeSpinbox = QDoubleSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['maxTime'])
-        maxTimeSpinbox.spinBox.setValue(self.selectedItem.maxTime)
-        maxTimeSpinbox.spinBox.valueChanged.connect(editMaxTime)
-
-        self.propertiesMenu.scrollLayout.addWidget(maxTimeSpinbox, 0, 1)
-        self.propertiesMenu.scrollLayout.setAlignment(maxTimeSpinbox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.scroll_layout.addWidget(minTimeSpinbox, 0, 0)
+        self.properties_menu.scroll_layout.setAlignment(minTimeSpinbox, Qt.AlignmentFlag.AlignTop)
 
 
-        nameEntry = QLineEditWithLabel(lang['QLineEditWithLabel']['QLabel']['displayName'])
-        nameEntry.lineEdit.setText(self.selectedItem.name)
-        nameEntry.lineEdit.textChanged.connect(editName)
+        maxTimeSpinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['maxTime'])
+        maxTimeSpinbox.double_spin_box.setValue(self.selected_item.maxTime)
+        maxTimeSpinbox.double_spin_box.valueChanged.connect(edit_max_time)
 
-        self.propertiesMenu.scrollLayout.addWidget(nameEntry, 1, 0)
-        self.propertiesMenu.scrollLayout.setAlignment(nameEntry, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.scroll_layout.addWidget(maxTimeSpinbox, 0, 1)
+        self.properties_menu.scroll_layout.setAlignment(maxTimeSpinbox, Qt.AlignmentFlag.AlignTop)
 
 
-        lst = list(self.selectedItem.next.keys())
+        name_entry = QNamedLineEdit(None, '', lang['QNamedLineEdit']['QLabel']['displayName'])
+        name_entry.line_edit.setText(self.selected_item.name)
+        name_entry.line_edit.textChanged.connect(edit_name)
+
+        self.properties_menu.scroll_layout.addWidget(name_entry, 1, 0)
+        self.properties_menu.scroll_layout.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
+
+
+        lst = list(self.selected_item.next.keys())
         if not lst: return
 
-        nodeCombobox = QComboBoxWithLabel(lang['QComboBoxWithLabel']['QLabel']['node'])
+        node_combobox = QNamedComboBox(None, lang['QNamedComboBox']['QLabel']['node'])
 
-        self.propertiesMenu.scrollLayout.addWidget(nodeCombobox, 1, 1)
-        self.propertiesMenu.scrollLayout.setAlignment(nodeCombobox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.scroll_layout.addWidget(node_combobox, 1, 1)
+        self.properties_menu.scroll_layout.setAlignment(node_combobox, Qt.AlignmentFlag.AlignTop)
 
 
-        nodeGroupbox = QGridGroupBox()
+        node_groupbox = QGridGroupBox()
 
-        nodeCombobox.comboBox.addItems(lst)
+        node_combobox.combo_box.addItems(lst)
         if lst:
-            nodeCombobox.comboBox.setCurrentIndex(0)
-            self.propertiesMenuNodeGroupboxLoad(nodeGroupbox, lst[0])
-            self.selectedNode = lst[0]
+            node_combobox.combo_box.setCurrentIndex(0)
+            self.properties_menu_node_groupbox_load(node_groupbox, lst[0])
+            self.selected_node = lst[0]
 
-        nodeCombobox.comboBox.currentIndexChanged.connect(lambda i: self.propertiesMenuNodeGroupboxLoad(nodeGroupbox, lst[i]))
+        node_combobox.combo_box.currentIndexChanged.connect(lambda i: self.properties_menu_node_groupbox_load(node_groupbox, lst[i]))
 
-        self.propertiesMenu.scrollLayout.addWidget(nodeGroupbox, 2, 0, 1, 2)
-        self.propertiesMenu.scrollLayout.setAlignment(nodeGroupbox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.scroll_layout.addWidget(node_groupbox, 2, 0, 1, 2)
+        self.properties_menu.scroll_layout.setAlignment(node_groupbox, Qt.AlignmentFlag.AlignTop)
     
-    def propertiesMenuNodeGroupboxLoad(self, groupbox: QGridGroupBox, key: str):
-        lang = self.saveData.languageData['QDockWidget']['properties']
-        self.selectedNode = key
+    def properties_menu_node_groupbox_load(self, groupbox: QGridGroupBox, key: str):
+        lang = self.save_data.language_data['QDockWidget']['properties']
+        self.selected_node = key
 
-        def editName(name: str):
-            self.selectedItem.next[key].name = name
+        def edit_name(name: str):
+            self.selected_item.next[key].name = name
             self.canvas.update()
-            self.setUnsaved()
+            self.set_unsaved()
 
-        def editValue(value: float):
-            if value.as_integer_ratio()[1] == 1: self.selectedItem.next[key].value = int(value)
-            else: self.selectedItem.next[key].value = value
+        def edit_value(value: float):
+            if value.as_integer_ratio()[1] == 1: self.selected_item.next[key].value = int(value)
+            else: self.selected_item.next[key].value = value
             self.canvas.update()
-            self.setUnsaved()
+            self.set_unsaved()
 
-        def removeConnection(event = None):
-            self.graph.removeConnection(self.selectedItem.name, key)
+        def remove_connection(event = None):
+            self.graph.remove_connection(self.selected_item.name, key)
             self.canvas.update()
-            self.propertiesMenuLoad()
-            self.setUnsaved()
+            self.properties_menu_load()
+            self.set_unsaved()
 
-        for i in reversed(range(groupbox.gridLayout.count())):
-            groupbox.gridLayout.itemAt(i).widget().deleteLater()
+        for i in reversed(range(groupbox.grid_layout.count())):
+            groupbox.grid_layout.itemAt(i).widget().deleteLater()
 
         groupbox.setTitle(lang['QGroupBox']['pathToNodeX'].replace('%s', key))
 
-        nameEntry = QLineEditWithLabel(lang['QLineEditWithLabel']['QLabel']['displayName'])
-        nameEntry.lineEdit.setText(self.selectedItem.next[key].name)
-        nameEntry.lineEdit.textChanged.connect(editName)
-        valueSpinbox = QDoubleSpinBoxWithLabel(lang['QSpinBoxWithLabel']['QLabel']['time'])
-        valueSpinbox.spinBox.setValue(self.selectedItem.next[key].value)
-        valueSpinbox.spinBox.valueChanged.connect(editValue)
+        name_entry = QNamedLineEdit(None, '', lang['QNamedLineEdit']['QLabel']['displayName'])
+        name_entry.line_edit.setText(self.selected_item.next[key].name)
+        name_entry.line_edit.textChanged.connect(edit_name)
+        value_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['time'])
+        value_spinbox.double_spin_box.setValue(self.selected_item.next[key].value)
+        value_spinbox.double_spin_box.valueChanged.connect(edit_value)
 
-        deleteButton = QPushButton(lang['QPushButton']['deleteConnection'])
-        deleteButton.clicked.connect(removeConnection)
+        delete_button = QPushButton(lang['QPushButton']['deleteConnection'])
+        delete_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        delete_button.setProperty('color', 'main')
+        delete_button.clicked.connect(remove_connection)
 
-        groupbox.gridLayout.addWidget(nameEntry, 0, 0)
-        groupbox.gridLayout.setAlignment(nameEntry, Qt.AlignmentFlag.AlignTop)
-        groupbox.gridLayout.addWidget(valueSpinbox, 0, 1)
-        groupbox.gridLayout.setAlignment(valueSpinbox, Qt.AlignmentFlag.AlignTop)
-        groupbox.gridLayout.addWidget(deleteButton, 1, 0, 1, 2)
-        groupbox.gridLayout.setAlignment(deleteButton, Qt.AlignmentFlag.AlignTop)
+        groupbox.grid_layout.addWidget(name_entry, 0, 0)
+        groupbox.grid_layout.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
+        groupbox.grid_layout.addWidget(value_spinbox, 0, 1)
+        groupbox.grid_layout.setAlignment(value_spinbox, Qt.AlignmentFlag.AlignTop)
+        groupbox.grid_layout.addWidget(delete_button, 1, 0, 1, 2)
+        groupbox.grid_layout.setAlignment(delete_button, Qt.AlignmentFlag.AlignTop)
 
         self.canvas.update()
 
-    def loadColors(self):
-        def find(keyWord: str = ''):
-            keyWord += '{'
+    def load_color(self, data: str, element: str, var: str):
+        def find(keyword: str = ''):
+            keyword += '{'
 
-            start = data.find(keyWord)
+            start = data.find(keyword)
             if start == -1: return ''
 
             end = data[start:].find('}')
             if end == -1: return ''
+            return data[start + len(keyword) : start + end]
 
-            return data[start + len(keyWord) : start + end]
 
+        def get_variable(qss: str = '', var_name: str = ''):
+            var_name += ':'
 
-        def getVariable(qss: str = '', varName: str = ''):
-            varName += ':'
-
-            start = qss.find(f'{varName}')
+            start = qss.find(f'{var_name}')
             if start == -1: return ''
 
             end = qss[start:].find(';')
             if end == -1: return ''
 
-            return qss[start + len(varName) : start + end]
+            if qss[start - 1] == '-': return get_variable(qss[start + end + 1 :], var_name)
 
+            return qss[start + len(var_name) : start + end]
 
+        return get_variable(find(element), var)
+
+    def load_colors(self):
         data = (
-            self.saveData.getStyleSheet(app = self, mode = QSaveData.StyleSheetMode.Local) + '\n' +
-            self.saveData.getStyleSheet(app = self, mode = QSaveData.StyleSheetMode.Global)
+            self.save_data.getStyleSheet(app = self, mode = QSaveData.StyleSheetMode.Local) + '\n' +
+            self.save_data.getStyleSheet(app = self, mode = QSaveData.StyleSheetMode.Global)
         ).replace(' ', '').replace('\t', '').replace('\n', '')
 
-        normalColor = getVariable(find('QPen'), 'color')
-        focusColor = getVariable(find('QPen:focus'), 'color')
-        selectedColor = getVariable(find('QPen:selected'), 'color')
-        gridColor = getVariable(find('QPen::grid'), 'color')
-        linkColor = getVariable(find('QLabel::link'), 'color')
+        link_color = self.load_color(data, f'QLabel[color=\'{self.window.property("color")}\']::link', 'color')
+        if link_color:
+            self.COLOR_LINK = QUtilsColor(link_color)
+            SaveData.COLOR_LINK = self.COLOR_LINK
 
-        if normalColor: self.COLOR_NORMAL = Color(normalColor)
-        if focusColor: self.COLOR_FOCUS = Color(focusColor)
-        if selectedColor: self.COLOR_SELECTED = Color(selectedColor)
-        if gridColor: self.COLOR_GRID = Color(gridColor)
-        if linkColor: self.COLOR_LINK = Color(linkColor)
+        normal_color = self.load_color(data, f'QPen', 'color')
+        if normal_color:
+            self.COLOR_NORMAL = QUtilsColor(normal_color)
+
+        focus_color = self.load_color(data, f'QPen:focus', 'color')
+        if focus_color:
+            self.COLOR_FOCUS = QUtilsColor(focus_color)
+
+        selected_color = self.load_color(data, f'QPen:selected', 'color')
+        if selected_color:
+            self.COLOR_SELECTED = QUtilsColor(selected_color)
+
+        grid_color = self.load_color(data, f'QPen::grid', 'color')
+        if grid_color:
+            self.COLOR_GRID = QUtilsColor(grid_color)
+
+        QNamedLineEdit.normal_color = self.load_color(data, 'QWidget[QNamedLineEdit=true]QLabel', 'color')
+        QNamedLineEdit.hover_color = self.load_color(data, 'QWidget[QNamedLineEdit=true]QLabel[hover=true]', 'color')
+        QNamedLineEdit.focus_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QNamedLineEdit=true][color=\'main\']QLabel[focus=true]', 'color')
+
+        QNamedTextEdit.normal_color = self.load_color(data, 'QWidget[QNamedTextEdit=true]QLabel', 'color')
+        QNamedTextEdit.hover_color = self.load_color(data, 'QWidget[QNamedTextEdit=true]QLabel[hover=true]', 'color')
+        QNamedTextEdit.focus_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QNamedTextEdit=true][color=\'main\']QLabel[focus=true]', 'color')
+
+        QNamedComboBox.normal_color = self.load_color(data, 'QWidget[QNamedComboBox=true]QLabel', 'color')
+        QNamedComboBox.hover_color = self.load_color(data, 'QWidget[QNamedComboBox=true]QLabel[hover=true]', 'color')
+        QNamedComboBox.focus_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QNamedComboBox=true][color=\'main\']QLabel[focus=true]', 'color')
+
+        QNamedSpinBox.normal_color = self.load_color(data, 'QWidget[QNamedSpinBox=true]QLabel', 'color')
+        QNamedSpinBox.hover_color = self.load_color(data, 'QWidget[QNamedSpinBox=true]QLabel[hover=true]', 'color')
+        QNamedSpinBox.focus_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QNamedSpinBox=true][color=\'main\']QLabel[focus=true]', 'color')
+
+        QNamedDoubleSpinBox.normal_color = self.load_color(data, 'QWidget[QNamedDoubleSpinBox=true]QLabel', 'color')
+        QNamedDoubleSpinBox.hover_color = self.load_color(data, 'QWidget[QNamedDoubleSpinBox=true]QLabel[hover=true]', 'color')
+        QNamedDoubleSpinBox.focus_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QNamedDoubleSpinBox=true][color=\'main\']QLabel[focus=true]', 'color')
+
+        QFileButton.normal_color = self.load_color(data, 'QWidget[QFileButton=true]QLabel', 'color')
+        QFileButton.hover_color = self.load_color(data, 'QWidget[QFileButton=true]QLabel[hover=true]', 'color')
+
+        QToggleButton.normal_color = self.load_color(data, f'QWidget[QToggleButton=true]QCheckBox', 'color')
+        QToggleButton.normal_color_handle = self.load_color(data, f'QWidget[QToggleButton=true]QCheckBox::handle', 'color')
+        QToggleButton.checked_color = self.load_color(data, f'QWidget[color=\'{self.window.property("color")}\']QWidget[QToggleButton=true]QCheckBox:checked', 'color')
+        QToggleButton.checked_color_handle = self.load_color(data, f'QWidget[QToggleButton=true]QCheckBox:checked::handle', 'color')
 
 
-    def setUnsaved(self):
+    def set_unsaved(self):
         self.unsaved = True
-        self.updateTitle()
+        self.update_title()
 
-    def setSaved(self):
+    def set_saved(self):
         self.unsaved = False
-        self.updateTitle()
+        self.update_title()
 
-    def updateTitle(self):
+    def update_title(self):
         s = ''
         if self.unsaved: s = '*'
-        if self.SAVE_PATH: self.window.setWindowTitle(self.saveData.languageData['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - {self.SAVE_PATH}{s}')
-        else: self.window.setWindowTitle(self.saveData.languageData['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - NewPERT{s}')
+        if self.SAVE_PATH: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - {self.SAVE_PATH}{s}')
+        else: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - NewPERT{s}')
 
 
 
@@ -962,148 +890,148 @@ class Application(QBaseApplication):
         if source is self.canvas:
             match event.type():
                 case QEvent.Type.MouseButtonPress:
-                    if event.button() == Qt.MouseButton.LeftButton: self.canvasLMBPressEvent(event)
-                    elif event.button() == Qt.MouseButton.RightButton: self.canvasRMBPressEvent(event)
-                    elif event.button() == Qt.MouseButton.MiddleButton: self.canvasMMBPressEvent(event)
+                    if event.button() == Qt.MouseButton.LeftButton: self.canvas_LMB_press_event(event)
+                    elif event.button() == Qt.MouseButton.RightButton: self.canvas_RMB_press_event(event)
+                    elif event.button() == Qt.MouseButton.MiddleButton: self.canvas_MMB_press_event(event)
 
                 case QEvent.Type.MouseMove:
-                    if event.buttons() == Qt.MouseButton.LeftButton: self.canvasLMBMoveEvent(event)
-                    #elif event.buttons() == Qt.MouseButton.RightButton: self.canvasRMBMoveEvent(event)
-                    elif event.buttons() == Qt.MouseButton.MiddleButton: self.canvasMMBMoveEvent(event)
-                    elif event.buttons() == Qt.MouseButton.NoButton: self.canvasNoButtonMoveEvent(event)
+                    if event.buttons() == Qt.MouseButton.LeftButton: self.canvas_LMB_move_event(event)
+                    #elif event.buttons() == Qt.MouseButton.RightButton: self.canvas_RMB_move_event(event)
+                    elif event.buttons() == Qt.MouseButton.MiddleButton: self.canvas_MMB_move_event(event)
+                    elif event.buttons() == Qt.MouseButton.NoButton: self.canvas_no_button_move_event(event)
 
                 case QEvent.Type.MouseButtonRelease:
-                    #if event.button() == Qt.MouseButton.LeftButton: self.canvasLMBReleaseEvent(event)
-                    #elif event.button() == Qt.MouseButton.RightButton: self.canvasRMBReleaseEvent(event)
-                    if event.button() == Qt.MouseButton.MiddleButton: self.canvasMMBReleaseEvent(event)
+                    #if event.button() == Qt.MouseButton.LeftButton: self.canvas_LMB_release_event(event)
+                    #elif event.button() == Qt.MouseButton.RightButton: self.canvas_RMB_release_event(event)
+                    if event.button() == Qt.MouseButton.MiddleButton: self.canvas_MMB_release_event(event)
 
-                case QEvent.Type.Paint: self.canvasPaintEvent(event)
+                case QEvent.Type.Paint: self.canvas_paint_event(event)
 
-                case QEvent.Type.Wheel: self.canvasWheelEvent(event)
+                case QEvent.Type.Wheel: self.canvas_wheel_event(event)
             
 
         return super(Application, self).eventFilter(source, event)
 
-    def keyPressEvent(self, event: QKeyEvent):
+    def key_press_event(self, event: QKeyEvent):
         if event.key() == Qt.Key.Key_Delete:
-            if self.selectedItem:
-                self.graph.removeNode(self.selectedItem.name)
-                self.selectedItem = None
-                self.selectedNode = None
-                self.propertiesMenuLoad()
+            if self.selected_item:
+                self.graph.remove_node(self.selected_item.name)
+                self.selected_item = None
+                self.selected_node = None
+                self.properties_menu_load()
                 self.canvas.update()
 
         elif event.key() == Qt.Key.Key_Shift:
-            self.shiftKey = True
+            self.shift_key = True
 
         elif event.key() == Qt.Key.Key_Control:
-            self.controlKey = True
+            self.control_key = True
 
         elif event.key() == Qt.Key.Key_Right:
-            self.cameraPos += Vector2(-self.saveData.arrowMoveSpeed, 0)
+            self.camera_pos += Vector2(-self.save_data.arrowMoveSpeed, 0)
             self.canvas.update()
         elif event.key() == Qt.Key.Key_Left:
-            self.cameraPos += Vector2(self.saveData.arrowMoveSpeed, 0)
+            self.camera_pos += Vector2(self.save_data.arrowMoveSpeed, 0)
             self.canvas.update()
         elif event.key() == Qt.Key.Key_Down:
-            self.cameraPos += Vector2(0, -self.saveData.arrowMoveSpeed)
+            self.camera_pos += Vector2(0, -self.save_data.arrowMoveSpeed)
             self.canvas.update()
         elif event.key() == Qt.Key.Key_Up:
-            self.cameraPos += Vector2(0, self.saveData.arrowMoveSpeed)
+            self.camera_pos += Vector2(0, self.save_data.arrowMoveSpeed)
             self.canvas.update()
 
-    def keyReleaseEvent(self, event: QKeyEvent):
+    def key_release_event(self, event: QKeyEvent):
         if event.key() == Qt.Key.Key_Shift:
-            self.shiftKey = False
+            self.shift_key = False
 
         elif event.key() == Qt.Key.Key_Control:
-            self.controlKey = False
+            self.control_key = False
 
 
 
-    def Vector2ToQPoint(self, vect2: Vector2 = Vector2()):
+    def Vector2_to_QPoint(self, vect2: Vector2 = Vector2()):
         return QPoint(int(vect2.x), int(vect2.y))
 
-    def canvasPaintEvent(self, event: QMouseEvent):
+    def canvas_paint_event(self, event: QMouseEvent):
         qp = QPainter()
         qp.begin(self.canvas)
-        self.canvasDrawPoints(qp)
+        self.canvas_draw_points(qp)
         qp.end()
 
-    def canvasDrawPoints(self, qp: QPainter):
-        lineSpace = int(self.saveData.gridSize / 10)
+    def canvas_draw_points(self, qp: QPainter):
+        lineSpace = int(self.save_data.grid_size / 10)
 
-        if self.saveData.gridMode > 0:
+        if self.save_data.grid_mode > 0:
             size = Vector2(self.canvas.size().width(), self.canvas.size().height()) * (1 / self.zoom)
-            startPos = self.cameraPos % self.saveData.gridSize
-            nb = (size // self.saveData.gridSize) + 1
+            startPos = self.camera_pos % self.save_data.grid_size
+            nb = (size // self.save_data.grid_size) + 1
 
-            if self.saveData.gridMode == 1:
-                offset = self.cameraPos // self.saveData.gridSize
-                lineOffset = (self.cameraPos % ((lineSpace * 2) * self.zoom)) - (Vector2(lineSpace, lineSpace) * self.zoom)
+            if self.save_data.grid_mode == 1:
+                offset = self.camera_pos // self.save_data.grid_size
+                lineOffset = (self.camera_pos % ((lineSpace * 2) * self.zoom)) - (Vector2(lineSpace, lineSpace) * self.zoom)
 
                 for n in range(int(nb.x)):
                     if (n - offset.x) % 5 == 0:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2 * self.zoom))
+                        qp.setPen(QPen(self.COLOR_GRID.QColor, 2 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y) * self.zoom),
-                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, size.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, 0) * self.zoom)
                         )
                     else:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
+                        qp.setPen(QPen(self.COLOR_GRID.QColor, 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
                         pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, size.y + lineOffset.y) * self.zoom),
-                            self.Vector2ToQPoint(Vector2((n * self.saveData.gridSize) + startPos.x, 0) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, size.y + lineOffset.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, 0) * self.zoom),
                         )
 
                 for n in range(int(nb.y)):
                     if (n - offset.y) % 5 == 0:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 2 * self.zoom))
+                        qp.setPen(QPen(self.COLOR_GRID.QColor, 2 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2ToQPoint(Vector2(size.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
-                            self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2(size.x, (n * self.save_data.grid_size) + startPos.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + startPos.y) * self.zoom)
                         )
                     else:
-                        qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
+                        qp.setPen(QPen(self.COLOR_GRID.QColor, 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
                         pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2ToQPoint(Vector2(size.x + lineOffset.x, (n * self.saveData.gridSize) + startPos.y) * self.zoom),
-                            self.Vector2ToQPoint(Vector2(0, (n * self.saveData.gridSize) + startPos.y) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2(size.x + lineOffset.x, (n * self.save_data.grid_size) + startPos.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + startPos.y) * self.zoom)
                         )
 
-            elif self.saveData.gridMode == 2:
-                offset = (self.cameraPos // self.saveData.gridSize) % 2
+            elif self.save_data.grid_mode == 2:
+                offset = (self.camera_pos // self.save_data.grid_size) % 2
 
-                qp.setPen(QPen(self.COLOR_GRID.toQColor(), 1 * self.zoom))
-                brush = QBrush(self.COLOR_GRID.toQColor())
+                qp.setPen(QPen(self.COLOR_GRID.QColor, 1 * self.zoom))
+                brush = QBrush(self.COLOR_GRID.QColor)
                 brush.setStyle(Qt.BrushStyle.SolidPattern)
                 qp.setBrush(brush)
                 for x in range(-int(offset.x), int(nb.x) + 1, 2):
                     for y in range(-1, int(nb.y) + 1):
-                        rectPos = Vector2((x * self.saveData.gridSize) + startPos.x - self.saveData.gridSize, (y * self.saveData.gridSize) + startPos.y - self.saveData.gridSize)
-                        if (y % 2) == 0: rectPos.x += self.saveData.gridSize
-                        if offset.y: rectPos.y += self.saveData.gridSize
-                        qp.drawRect(int(rectPos.x * self.zoom), int(rectPos.y * self.zoom), int(self.saveData.gridSize * self.zoom), int(self.saveData.gridSize * self.zoom))
+                        rectPos = Vector2((x * self.save_data.grid_size) + startPos.x - self.save_data.grid_size, (y * self.save_data.grid_size) + startPos.y - self.save_data.grid_size)
+                        if (y % 2) == 0: rectPos.x += self.save_data.grid_size
+                        if offset.y: rectPos.y += self.save_data.grid_size
+                        qp.drawRect(int(rectPos.x * self.zoom), int(rectPos.y * self.zoom), int(self.save_data.grid_size * self.zoom), int(self.save_data.grid_size * self.zoom))
 
 
 
 
-        if self.saveData.liveRefreshConnectionView: self.refreshConnectionView()
-        if self.saveData.liveGenerateCriticalPath: self.generateCriticalPath()
-        if self.saveData.liveMinMax: self.generateMinMaxTime()
+        if self.save_data.live_refresh_connection_view: self.refresh_connection_view()
+        if self.save_data.live_generate_critical_path: self.generate_critical_path()
+        if self.save_data.live_min_max: self.generate_min_max_time()
 
         f = qp.font()
         f.setPointSizeF(f.pointSizeF() * self.zoom)
@@ -1111,19 +1039,19 @@ class Application(QBaseApplication):
 
         for k in self.graph.nodes:
             p = self.graph.node(k)
-            if p == self.selectedItem: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3 * self.zoom))
-            else: qp.setPen(QPen(self.COLOR_NORMAL.toQColor(), 2 * self.zoom))
-            qp.drawEllipse(int(((self.cameraPos.x + p.pos.x) - (self.DELTA / 2)) * self.zoom), int(((self.cameraPos.y + p.pos.y) - (self.DELTA / 2)) * self.zoom), int(self.DELTA * self.zoom), int(self.DELTA * self.zoom))
-            qp.drawLine(self.Vector2ToQPoint((self.cameraPos + p.pos) * self.zoom), self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x, p.pos.y - (self.DELTA / 2))) * self.zoom))
-            qp.drawLine(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (self.DELTA / 2), p.pos.y)) * self.zoom), self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x + (self.DELTA / 2), p.pos.y)) * self.zoom))
-            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (qp.font().weight() / 135 * len(p.name)), p.pos.y + (self.DELTA / 4))) * self.zoom), p.name)
-            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.minTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
-            qp.drawText(self.Vector2ToQPoint((self.cameraPos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.maxTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
+            if p == self.selected_item: qp.setPen(QPen(self.COLOR_FOCUS.QColor, 3 * self.zoom))
+            else: qp.setPen(QPen(self.COLOR_NORMAL.QColor, 2 * self.zoom))
+            qp.drawEllipse(int(((self.camera_pos.x + p.pos.x) - (self.DELTA / 2)) * self.zoom), int(((self.camera_pos.y + p.pos.y) - (self.DELTA / 2)) * self.zoom), int(self.DELTA * self.zoom), int(self.DELTA * self.zoom))
+            qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + p.pos) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x, p.pos.y - (self.DELTA / 2))) * self.zoom))
+            qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 2), p.pos.y)) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 2), p.pos.y)) * self.zoom))
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (qp.font().weight() / 135 * len(p.name)), p.pos.y + (self.DELTA / 4))) * self.zoom), p.name)
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.minTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.maxTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
 
             for pathKey in list(p.next.keys()):
-                if p == self.selectedItem:
-                    if pathKey == self.selectedNode: qp.setPen(QPen(self.COLOR_SELECTED.toQColor(), 3 * self.zoom))
-                    else: qp.setPen(QPen(self.COLOR_FOCUS.toQColor(), 3 * self.zoom))
+                if p == self.selected_item:
+                    if pathKey == self.selected_node: qp.setPen(QPen(self.COLOR_SELECTED.QColor, 3 * self.zoom))
+                    else: qp.setPen(QPen(self.COLOR_FOCUS.QColor, 3 * self.zoom))
                 path = p.next[pathKey]
                 if (path.value == 0 and path.name == ''):
                     pen = qp.pen()
@@ -1132,21 +1060,21 @@ class Application(QBaseApplication):
                     qp.setPen(pen)
 
                 vect2 = (path.node.pos - p.pos).normalized * (self.DELTA // 2)
-                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + p.pos + vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom))
+                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + p.pos + vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom))
 
                 pen = qp.pen()
                 pen.setStyle(Qt.PenStyle.SolidLine)
                 qp.setPen(pen)
 
-                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 25)) * 10)) * self.zoom))
-                qp.drawLine(self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2) * self.zoom), self.Vector2ToQPoint((self.cameraPos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg - 25)) * 10)) * self.zoom))
-                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2ToQPoint((self.cameraPos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)) * self.zoom), f'{path.name} {path.value}')
+                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 25)) * 10)) * self.zoom))
+                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg - 25)) * 10)) * self.zoom))
+                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)) * self.zoom), f'{path.name} {path.value}')
 
-    def canvasGetPoint(self, event: QMouseEvent):
+    def canvas_get_point(self, event: QMouseEvent):
         return Vector2(event.pos().x(), event.pos().y())
 
-    def canvasGetNode(self, event: QMouseEvent):
-        point = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
+    def canvas_get_node(self, event: QMouseEvent):
+        point = (self.canvas_get_point(event) / self.zoom) - self.camera_pos
 
         nodeLst = self.graph.nodes
         dist = nodeLst[0]
@@ -1156,99 +1084,99 @@ class Application(QBaseApplication):
         if (self.graph.node(dist).pos - point).magnitude <= (self.DELTA // 2):
             return self.graph.node(dist)
 
-    def canvasRMBPressEvent(self, event: QMouseEvent):
-        if self.selectedItem:
-            node = self.canvasGetNode(event)
-            if node: self.graph.addConnection(self.selectedItem.name, node.name)
-            else: self.canvasCreateNode(event)
-        else: self.canvasCreateNode(event)
-        self.propertiesMenuLoad()
+    def canvas_RMB_press_event(self, event: QMouseEvent):
+        if self.selected_item:
+            node = self.canvas_get_node(event)
+            if node: self.graph.add_connection(self.selected_item.name, node.name)
+            else: self.canvas_create_node(event)
+        else: self.canvas_create_node(event)
+        self.properties_menu_load()
         self.canvas.update()
-        self.setUnsaved()
+        self.set_unsaved()
 
-    def canvasCreateNode(self, event: QMouseEvent):
+    def canvas_create_node(self, event: QMouseEvent):
         s = '0'
         while s in self.graph.nodes:
             s = str(int(s) + 1)
-        self.graph.addNode(name = s, pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos)
-        if self.selectedItem: self.graph.addConnection(self.selectedItem.name, s)
-        self.selectedItem = self.graph.node(s)
-        if self.saveData.alignToGrid:
-            pos = self.selectedItem.pos % self.saveData.gridSize
-            halfGridSize = self.saveData.gridSize / 2
-            self.selectedItem.pos -= Vector2(
-                pos.x - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.x < halfGridSize))),
-                pos.y - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.y < halfGridSize)))
+        self.graph.add_node(name = s, pos = (self.canvas_get_point(event) / self.zoom) - self.camera_pos)
+        if self.selected_item: self.graph.add_connection(self.selected_item.name, s)
+        self.selected_item = self.graph.node(s)
+        if self.save_data.align_to_grid:
+            pos = self.selected_item.pos % self.save_data.grid_size
+            halfGridSize = self.save_data.grid_size / 2
+            self.selected_item.pos -= Vector2(
+                pos.x - ((self.save_data.grid_size * self.zoom) * int(not bool(pos.x < halfGridSize))),
+                pos.y - ((self.save_data.grid_size * self.zoom) * int(not bool(pos.y < halfGridSize)))
             )
 
-    def canvasLMBPressEvent(self, event: QMouseEvent):
-        self.selectedItem = None
-        self.selectedNode = None
+    def canvas_LMB_press_event(self, event: QMouseEvent):
+        self.selected_item = None
+        self.selected_node = None
         if not self.graph.nodes:
-            self.propertiesMenuLoad()
+            self.properties_menu_load()
             return self.canvas.update()
 
-        self.selectedItem = self.canvasGetNode(event)
+        self.selected_item = self.canvas_get_node(event)
 
-        self.propertiesMenuLoad()
+        self.properties_menu_load()
         self.canvas.update()
 
-    def canvasLMBMoveEvent(self, event: QMouseEvent):
-        if not self.selectedItem: return
-        self.selectedItem.pos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
-        if self.saveData.alignToGrid:
-            pos = self.selectedItem.pos % self.saveData.gridSize
-            halfGridSize = self.saveData.gridSize / 2
-            self.selectedItem.pos -= Vector2(
-                pos.x - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.x < halfGridSize))),
-                pos.y - ((self.saveData.gridSize * self.zoom) * int(not bool(pos.y < halfGridSize)))
+    def canvas_LMB_move_event(self, event: QMouseEvent):
+        if not self.selected_item: return
+        self.selected_item.pos = (self.canvas_get_point(event) / self.zoom) - self.camera_pos
+        if self.save_data.align_to_grid:
+            pos = self.selected_item.pos % self.save_data.grid_size
+            halfGridSize = self.save_data.grid_size / 2
+            self.selected_item.pos -= Vector2(
+                pos.x - ((self.save_data.grid_size * self.zoom) * int(not bool(pos.x < halfGridSize))),
+                pos.y - ((self.save_data.grid_size * self.zoom) * int(not bool(pos.y < halfGridSize)))
             )
 
         self.canvas.update()
-        self.setUnsaved()
+        self.set_unsaved()
 
-    def canvasNoButtonMoveEvent(self, event: QMouseEvent):
-        mousePos = (self.canvasGetPoint(event) / self.zoom) - self.cameraPos
-        self.statusBar.coordinatesLabel.setText(f'({floor(mousePos.x / (self.saveData.gridSize))}, {floor(mousePos.y / (self.saveData.gridSize))}) - ({floor(mousePos.x)}, {floor(mousePos.y)})')
+    def canvas_no_button_move_event(self, event: QMouseEvent):
+        mousePos = (self.canvas_get_point(event) / self.zoom) - self.camera_pos
+        self.status_bar.coordinates_label.setText(f'({floor(mousePos.x / (self.save_data.grid_size))}, {floor(mousePos.y / (self.save_data.grid_size))}) - ({floor(mousePos.x)}, {floor(mousePos.y)})')
 
-    def canvasMMBPressEvent(self, event: QMouseEvent):
+    def canvas_MMB_press_event(self, event: QMouseEvent):
         self.setOverrideCursor(Qt.CursorShape.SizeAllCursor)
-        self.oldMousePos = self.canvasGetPoint(event)
+        self.old_mouse_pos = self.canvas_get_point(event)
 
-    def canvasMMBMoveEvent(self, event: QMouseEvent):
-        pos = self.canvasGetPoint(event)
-        self.cameraPos += (pos - self.oldMousePos) / self.zoom
-        self.oldMousePos = pos
+    def canvas_MMB_move_event(self, event: QMouseEvent):
+        pos = self.canvas_get_point(event)
+        self.camera_pos += (pos - self.old_mouse_pos) / self.zoom
+        self.old_mouse_pos = pos
 
         self.canvas.update()
 
-    def canvasMMBReleaseEvent(self, event: QMouseEvent):
+    def canvas_MMB_release_event(self, event: QMouseEvent):
         self.setOverrideCursor(Qt.CursorShape.ArrowCursor)
 
-    def canvasWheelEvent(self, event: QWheelEvent):
-        if self.controlKey:
-            self.editZoom(self.zoom + ((event.angleDelta().y() / 120) * self.saveData.zoomSpeed))
+    def canvas_wheel_event(self, event: QWheelEvent):
+        if self.control_key:
+            self.edit_zoom(self.zoom + ((event.angleDelta().y() / 120) * self.save_data.zoom_speed))
 
         else:
-            if self.shiftKey: self.cameraPos += Vector2(event.angleDelta().y(), event.angleDelta().x())
-            else: self.cameraPos += Vector2(event.angleDelta().x(), event.angleDelta().y())
+            if self.shift_key: self.camera_pos += Vector2(event.angleDelta().y(), event.angleDelta().x())
+            else: self.camera_pos += Vector2(event.angleDelta().x(), event.angleDelta().y())
 
             self.canvas.update()
 
 
-    def fileMenu_newAction(self):
-        self.selectedItem = None
-        self.selectedNode = None
+    def file_menu_new_action(self):
+        self.selected_item = None
+        self.selected_node = None
         del self.graph
         self.graph = Graph()
         self.SAVE_PATH = None
 
-        self.propertiesMenuLoad()
+        self.properties_menu_load()
         self.canvas.update()
-        self.setUnsaved()
+        self.set_unsaved()
 
-    def fileMenu_openAction(self):
-        lang = self.saveData.languageData['QFileDialog']['open']
+    def file_menu_open_action(self):
+        lang = self.save_data.language_data['QFileDialog']['open']
 
         path = QFileDialog.getOpenFileName(
             parent = self.window,
@@ -1259,46 +1187,46 @@ class Application(QBaseApplication):
 
         if not path: return
         self.SAVE_PATH = path
-        self.selectedNode = None
-        self.selectedItem = None
+        self.selected_node = None
+        self.selected_item = None
 
         with open(self.SAVE_PATH, 'r', encoding = 'utf-8') as infile:
             data = json.load(infile)
             if 'data' in list(data.keys()) and 'info' in list(data.keys()):
-                self.graph.loadFromDict(data['data'])
-                self.useNodeNames = bool(data['info']['useNodeNames'])
+                self.graph.load_from_dict(data['data'])
+                self.use_node_names = bool(data['info']['useNodeNames'])
             else:
-                self.graph.loadFromDict(data)
-                self.useNodeNames = False
-            self.useNodeNamesInsteadOfPathNamesCheckbox.setChecked(self.useNodeNames)
+                self.graph.load_from_dict(data)
+                self.use_node_names = False
+            self.use_node_names_instead_of_path_names_checkbox.setChecked(self.use_node_names)
 
-        self.propertiesMenuLoad()
+        self.properties_menu_load()
         self.canvas.update()
 
-        self.setSaved()
+        self.set_saved()
 
-    def fileMenu_saveAction(self):
+    def file_menu_save_action(self):
         if not self.SAVE_PATH:
-            return self.fileMenu_saveAsAction()
+            return self.file_menu_save_as_action()
 
         with open(self.SAVE_PATH, 'w', encoding = 'utf-8') as outfile:
             json.dump(
                 {
                     'info': {
                         'comment': 'Data file generated with PERT Maker.',
-                        'useNodeNames': self.useNodeNames
+                        'useNodeNames': self.use_node_names
                     },
-                    'data': self.graph.toDict()
+                    'data': self.graph.to_dict()
                 },
                 outfile,
                 sort_keys = True,
                 ensure_ascii = False
             )
 
-        self.setSaved()
+        self.set_saved()
 
-    def fileMenu_saveAsAction(self):
-        lang = self.saveData.languageData['QFileDialog']['saveAs']
+    def file_menu_save_as_action(self):
+        lang = self.save_data.language_data['QFileDialog']['saveAs']
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
@@ -1309,124 +1237,124 @@ class Application(QBaseApplication):
 
         if not path: return
         self.SAVE_PATH = path
-        self.fileMenu_saveAction()
+        self.file_menu_save_action()
 
-    def fileMenu_settingsAction(self):
-        self.saveData.settingsMenu(self)
-        self.loadColors()
+    def file_menu_settings_action(self):
+        self.save_data.settings_menu(self)
+        self.load_colors()
 
 
-    def viewMenu_gridSwitchAction(self):
-        self.saveData.gridMode += 1
-        if self.saveData.gridMode > 2: self.saveData.gridMode = 0
-        self.saveData.save()
+    def view_menu_grid_switch_action(self):
+        self.save_data.grid_mode += 1
+        if self.save_data.grid_mode > 2: self.save_data.grid_mode = 0
+        self.save_data.save()
 
         self.canvas.update()
 
-    def viewMenu_gridAlignAction(self):
-        self.saveData.alignToGrid = not self.saveData.alignToGrid
-        self.saveData.save()
+    def view_menu_grid_align_action(self):
+        self.save_data.align_to_grid = not self.save_data.align_to_grid
+        self.save_data.save()
 
 
-    def helpMenu_aboutAction(self):
-        lang = self.saveData.languageData['QAbout']['pertMaker']
+    def help_menu_about_action(self):
+        lang = self.save_data.language_data['QAbout']['pertMaker']
         QAboutBox(
             app = self,
-            windowTitle = lang['title'],
+            title = lang['title'],
             logo = './data/themes/logoNoBg.ico',
             texts = [
-                QLabel(lang['texts'][0]),
-                QLabel(lang['texts'][1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.toHex()};\">Synel</a>')),
-                QLabel(lang['texts'][2].replace('%s', f'<a href=\"https://github.com/Synell/PERT-Maker\" style=\"color: {self.COLOR_LINK.toHex()};\">PERT Maker Github</a>'))
+                lang['texts'][0],
+                lang['texts'][1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.toHex()};\">Synel</a>'),
+                lang['texts'][2].replace('%s', f'<a href=\"https://github.com/Synell/PERT-Maker\" style=\"color: {self.COLOR_LINK.toHex()};\">PERT Maker Github</a>')
             ]
         ).exec()
 
-    def helpMenu_tipsAction(self):
+    def help_menu_tips_action(self):
         QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md'))
 
-    def helpMenu_aboutQtAction(self):
+    def help_menu_about_qt_action(self):
         self.aboutQt()
 
 
-    def fileMenu_importMenu_tableAction(self):
-        data = QImportTableDialog(self.window, self.saveData.languageData['QImportTableDialog'], int(self.useNodeNames)).exec()
+    def file_menu_import_menu_table_action(self):
+        data = QImportTableDialog(self.window, self.save_data.language_data['QImportTableDialog'], int(self.use_node_names)).exec()
         if not data: return
 
-        self.statusBar.progressBar.setHidden(False)
-        self.statusBar.progressBar.setRange(0, 8)
-        self.statusBar.progressBar.setValue(0)
-        self.fileMenu_newAction()
-        nodeData = data[0]
-        nodeOrder = []
-        maxLevel = 0
+        self.status_bar.progress_bar.setHidden(False)
+        self.status_bar.progress_bar.setRange(0, 8)
+        self.status_bar.progress_bar.setValue(0)
+        self.file_menu_new_action()
+        node_data = data[0]
+        node_order = []
+        max_level = 0
         data = bool(data[1])
 
-        self.statusBar.progressBar.setValue(1)
-        nodeDct = {}
-        for row in range(len(nodeData)):
-            nodeDct[nodeData[row][0]] = [0, nodeData[row][0], nodeData[row][1].replace(', ', ',').split(','), nodeData[row][2]]
-            if [''] == nodeDct[nodeData[row][0]][2]: nodeDct[nodeData[row][0]][2] = []
-            nodeOrder.append(nodeData[row][0])
-            if len(nodeDct[nodeData[row][0]][2]) > maxLevel: maxLevel = len(nodeDct[nodeData[row][0]][2])
+        self.status_bar.progress_bar.setValue(1)
+        node_dct = {}
+        for row in range(len(node_data)):
+            node_dct[node_data[row][0]] = [0, node_data[row][0], node_data[row][1].replace(', ', ',').split(','), node_data[row][2]]
+            if [''] == node_dct[node_data[row][0]][2]: node_dct[node_data[row][0]][2] = []
+            node_order.append(node_data[row][0])
+            if len(node_dct[node_data[row][0]][2]) > max_level: max_level = len(node_dct[node_data[row][0]][2])
 
-        self.statusBar.progressBar.setValue(2)
-        newMaxLvl = 0
-        for lvl in range(maxLevel + 1):
-            for node in list(nodeDct.keys()):
-                for previousNode in nodeDct[node][2]:
-                    if nodeDct[previousNode][0] >= nodeDct[node][0]:
-                        nodeDct[node][0] = nodeDct[previousNode][0] + 1
-                        if newMaxLvl < nodeDct[node][0]: newMaxLvl = nodeDct[node][0]
+        self.status_bar.progress_bar.setValue(2)
+        new_max_lvl = 0
+        for lvl in range(max_level + 1):
+            for node in list(node_dct.keys()):
+                for previous_node in node_dct[node][2]:
+                    if node_dct[previous_node][0] >= node_dct[node][0]:
+                        node_dct[node][0] = node_dct[previous_node][0] + 1
+                        if new_max_lvl < node_dct[node][0]: new_max_lvl = node_dct[node][0]
 
-        self.statusBar.progressBar.setValue(3)
-        newNodeLst = []
-        for lvl in range(newMaxLvl + 1):
-            newNodeLst.append([])
+        self.status_bar.progress_bar.setValue(3)
+        new_node_lst = []
+        for lvl in range(new_max_lvl + 1):
+            new_node_lst.append([])
 
-            for node in list(nodeDct.keys()):
-                if nodeDct[node][0] == lvl:
-                    newNodeLst[lvl].append((nodeOrder.index(nodeDct[node][1]), nodeDct[node][1], nodeDct[node][2], nodeDct[node][3]))
+            for node in list(node_dct.keys()):
+                if node_dct[node][0] == lvl:
+                    new_node_lst[lvl].append((node_order.index(node_dct[node][1]), node_dct[node][1], node_dct[node][2], node_dct[node][3]))
 
-        self.statusBar.progressBar.setValue(4)
-        nodeValuesDct = {}
-        for x in range(len(newNodeLst)):
-            for y in range(len(newNodeLst[x])):
-                self.graph.addNode(name = newNodeLst[x][y][1], pos = Vector2((x * (self.saveData.gridSize * 3)) + self.saveData.gridSize, (y * (self.saveData.gridSize * 3)) + self.saveData.gridSize))
-                nodeValuesDct[newNodeLst[x][y][1]] = newNodeLst[x][y][3]
+        self.status_bar.progress_bar.setValue(4)
+        node_values_dct = {}
+        for x in range(len(new_node_lst)):
+            for y in range(len(new_node_lst[x])):
+                self.graph.add_node(name = new_node_lst[x][y][1], pos = Vector2((x * (self.save_data.grid_size * 3)) + self.save_data.grid_size, (y * (self.save_data.grid_size * 3)) + self.save_data.grid_size))
+                node_values_dct[new_node_lst[x][y][1]] = new_node_lst[x][y][3]
 
-        self.statusBar.progressBar.setValue(5)
-        for x in range(len(newNodeLst)):
-            for y in range(len(newNodeLst[x])):
-                for prev in newNodeLst[x][y][2]:
+        self.status_bar.progress_bar.setValue(5)
+        for x in range(len(new_node_lst)):
+            for y in range(len(new_node_lst[x])):
+                for prev in new_node_lst[x][y][2]:
                     if data == 0:
-                        self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = newNodeLst[x][y][1], value = nodeValuesDct[newNodeLst[x][y][1]])
+                        self.graph.add_connection(from_ = prev, to_ = new_node_lst[x][y][1], name = new_node_lst[x][y][1], value = node_values_dct[new_node_lst[x][y][1]])
                     elif data == 1:
-                        self.graph.addConnection(from_ = prev, to_ = newNodeLst[x][y][1], name = '', value = nodeValuesDct[prev])
+                        self.graph.add_connection(from_ = prev, to_ = new_node_lst[x][y][1], name = '', value = node_values_dct[prev])
 
-        self.statusBar.progressBar.setValue(6)
-        self.graph.addNode(name = '-2', pos = Vector2(((x + 1) * (self.saveData.gridSize * 3)) + self.saveData.gridSize, self.saveData.gridSize))
+        self.status_bar.progress_bar.setValue(6)
+        self.graph.add_node(name = '-2', pos = Vector2(((x + 1) * (self.save_data.grid_size * 3)) + self.save_data.grid_size, self.save_data.grid_size))
         for node in self.graph.nodes:
             if self.graph.node(node).next == {} and self.graph.node(node).name != '-2':
-                self.graph.addConnection(from_ = self.graph.node(node).name, to_ = '-2', name = '', value = nodeValuesDct[self.graph.node(node).name])
+                self.graph.add_connection(from_ = self.graph.node(node).name, to_ = '-2', name = '', value = node_values_dct[self.graph.node(node).name])
 
-        self.statusBar.progressBar.setValue(7)
+        self.status_bar.progress_bar.setValue(7)
         if not data:
-            for x in range(len(newNodeLst)):
-                for y in range(len(newNodeLst[x])):
-                    self.graph.rename(newNodeLst[x][y][1], self.graph.__TEMP_PATH_NAME__ + newNodeLst[x][y][1])
+            for x in range(len(new_node_lst)):
+                for y in range(len(new_node_lst[x])):
+                    self.graph.rename(new_node_lst[x][y][1], self.graph.__TEMP_PATH_NAME__ + new_node_lst[x][y][1])
 
-            for x in range(len(newNodeLst)):
-                for y in range(len(newNodeLst[x])):
-                    self.graph.rename(self.graph.__TEMP_PATH_NAME__ + newNodeLst[x][y][1], str(newNodeLst[x][y][0]))
+            for x in range(len(new_node_lst)):
+                for y in range(len(new_node_lst[x])):
+                    self.graph.rename(self.graph.__TEMP_PATH_NAME__ + new_node_lst[x][y][1], str(new_node_lst[x][y][0]))
 
-                    for node in list(self.graph.node(str(newNodeLst[x][y][0])).previous.keys()):
-                        for nextNode in list(self.graph.node(node).next.keys()):
-                            if nextNode == str(newNodeLst[x][y][0]):
-                                self.graph.node(node).next[nextNode].name = newNodeLst[x][y][1]
+                    for node in list(self.graph.node(str(new_node_lst[x][y][0])).previous.keys()):
+                        for next_node in list(self.graph.node(node).next.keys()):
+                            if next_node == str(new_node_lst[x][y][0]):
+                                self.graph.node(node).next[next_node].name = new_node_lst[x][y][1]
 
-        self.statusBar.progressBar.setValue(8)
-        self.useNodeNames = data
-        self.useNodeNamesInsteadOfPathNamesCheckbox.setChecked(data)
+        self.status_bar.progress_bar.setValue(8)
+        self.use_node_names = data
+        self.use_node_names_instead_of_path_names_checkbox.setChecked(data)
 
         if '-1' in self.graph.nodes:
             self.graph.rename('-1', 'Start')
@@ -1434,24 +1362,24 @@ class Application(QBaseApplication):
         if '-2' in self.graph.nodes:
             self.graph.rename('-2', 'End')
 
-        self.statusBar.progressBar.setHidden(True)
+        self.status_bar.progress_bar.setHidden(True)
 
         self.canvas.update()
 
-    def fileMenu_exportMenu_tableAction(self):
-        if not self.connectionTable.getItems():
-            self.refreshConnectionView()
+    def file_menu_export_menu_table_action(self):
+        if not self.connectionTable.get_items():
+            self.refresh_connection_view()
 
-        if not self.connectionTable.getItems():
+        if not self.connectionTable.get_items():
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.saveData.languageData['QMessageBox']['warning']['exportTable']['title'],
-                text = self.saveData.languageData['QMessageBox']['warning']['exportTable']['text'],
-                informativeText = self.saveData.languageData['QMessageBox']['warning']['exportTable']['informativeText'],
+                title = self.save_data.language_data['QMessageBox']['warning']['exportTable']['title'],
+                text = self.save_data.language_data['QMessageBox']['warning']['exportTable']['text'],
+                informative_text = self.save_data.language_data['QMessageBox']['warning']['exportTable']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
-        langData = self.saveData.languageData['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']
+        langData = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
@@ -1463,46 +1391,46 @@ class Application(QBaseApplication):
         if not path: return
 
         with open(path, 'w', encoding = 'utf-8') as outfile:
-            outfile.write('Task;Previous Tasks;Time\n' + '\n'.join(list(';'.join(item) for item in self.connectionTable.getItems())))
+            outfile.write('Task;Previous Tasks;Time\n' + '\n'.join(list(';'.join(item) for item in self.connectionTable.get_items())))
 
-    def fileMenu_exportMenu_imageAction(self):
+    def file_menu_export_menu_image_action(self):
         if not self.graph.nodes:
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.saveData.languageData['QMessageBox']['warning']['exportImage']['title'],
-                text = self.saveData.languageData['QMessageBox']['warning']['exportImage']['text'],
-                informativeText = self.saveData.languageData['QMessageBox']['warning']['exportImage']['informativeText'],
+                title = self.save_data.language_data['QMessageBox']['warning']['exportImage']['title'],
+                text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['text'],
+                informative_text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
         image = self.generateCanvasPixmap().toImage()
         if image.bits():
-            result = QExportImageDialog(self.window, self.saveData.languageData['QExportImageDialog'], self.saveData.exportImageBgMode, self.saveData.exportImageBgColor, image, self.statusBar.progressBar).exec()
+            result = QExportImageDialog(self.window, self.save_data.language_data['QExportImageDialog'], self.save_data.export_image_bg_mode, self.save_data.export_image_bg_color, image, self.status_bar.progress_bar).exec()
             if result:
-                self.saveData.exportImageBgMode = result[0]
-                self.saveData.exportImageBgColor = result[1]
-                self.saveData.save()
+                self.save_data.export_image_bg_mode = result[0]
+                self.save_data.export_image_bg_color = result[1]
+                self.save_data.save()
 
         else:
             QMessageBoxWithWidget(
                 app = self,
-                title = self.saveData.languageData['QMessageBox']['critical']['exportImage']['title'],
-                text = self.saveData.languageData['QMessageBox']['critical']['exportImage']['text'],
-                informativeText = self.saveData.languageData['QMessageBox']['critical']['exportImage']['informativeText'],
+                title = self.save_data.language_data['QMessageBox']['critical']['exportImage']['title'],
+                text = self.save_data.language_data['QMessageBox']['critical']['exportImage']['text'],
+                informative_text = self.save_data.language_data['QMessageBox']['critical']['exportImage']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Critical
             ).exec()
 
-    def fileMenu_exportMenu_svgAction(self):
+    def file_menu_export_menu_svg_action(self):
         if not self.graph.nodes:
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['title'],
-                text = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['text'],
-                informativeText = self.saveData.languageData['QMessageBox']['critical']['exportSVG']['informativeText'],
+                title = self.save_data.language_data['QMessageBox']['critical']['exportSVG']['title'],
+                text = self.save_data.language_data['QMessageBox']['critical']['exportSVG']['text'],
+                informative_text = self.save_data.language_data['QMessageBox']['critical']['exportSVG']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Critical
             ).exec()
 
-        lang = self.saveData.languageData['QFileDialog']['exportSVG']
+        lang = self.save_data.language_data['QFileDialog']['exportSVG']
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
@@ -1522,45 +1450,45 @@ class Application(QBaseApplication):
 
 
     def generateCanvasPixmap(self, obj: QSvgGenerator = None) -> QPixmap|None:
-        gridMode = self.saveData.gridMode
-        self.saveData.gridMode = 0
+        grid_mode = self.save_data.grid_mode
+        self.save_data.grid_mode = 0
         zoom = self.zoom
-        self.zoom = self.saveData.exportImageScale
-        self.selectedItem = None
+        self.zoom = self.save_data.export_image_scale
+        self.selected_item = None
         self.canvas.update()
 
 
         nodes = self.graph.nodes
 
-        minPoint = self.graph.node(nodes[0]).pos.copy
-        maxPoint = minPoint.copy
+        min_point = self.graph.node(nodes[0]).pos.copy
+        max_point = min_point.copy
         for k in nodes[1:]:
             p = self.graph.node(k)
 
-            if p.pos.x < minPoint.x: minPoint.x = p.pos.x
-            elif p.pos.x > maxPoint.x: maxPoint.x = p.pos.x
+            if p.pos.x < min_point.x: min_point.x = p.pos.x
+            elif p.pos.x > max_point.x: max_point.x = p.pos.x
 
-            if p.pos.y < minPoint.y: minPoint.y = p.pos.y
-            elif p.pos.y > maxPoint.y: maxPoint.y = p.pos.y
+            if p.pos.y < min_point.y: min_point.y = p.pos.y
+            elif p.pos.y > max_point.y: max_point.y = p.pos.y
 
-        minPoint -= self.DELTA
-        maxPoint += self.DELTA
+        min_point -= self.DELTA
+        max_point += self.DELTA
 
-        minPoint += self.cameraPos
-        maxPoint += self.cameraPos
+        min_point += self.camera_pos
+        max_point += self.camera_pos
 
-        minPoint *= self.zoom
-        maxPoint *= self.zoom
+        min_point *= self.zoom
+        max_point *= self.zoom
 
 
         result = None
         if type(obj) is QSvgGenerator:
-            obj.setViewBox(QRectF(minPoint.x, minPoint.y, maxPoint.x - minPoint.x, maxPoint.y - minPoint.y))
+            obj.setViewBox(QRectF(min_point.x, min_point.y, max_point.x - min_point.x, max_point.y - min_point.y))
             self.canvas.render(obj, flags = QWidget.RenderFlag.DrawWindowBackground)
 
-        else: result = self.canvas.grab(QRect(int(minPoint.x), int(minPoint.y), int(maxPoint.x - minPoint.x), int(maxPoint.y - minPoint.y)))
+        else: result = self.canvas.grab(QRect(int(min_point.x), int(min_point.y), int(max_point.x - min_point.x), int(max_point.y - min_point.y)))
 
-        self.saveData.gridMode = gridMode
+        self.save_data.grid_mode = grid_mode
         self.zoom = zoom
         self.canvas.update()
 
@@ -1568,29 +1496,29 @@ class Application(QBaseApplication):
 
 
 
-    def editZoom(self, zoom):
+    def edit_zoom(self, zoom):
         if (zoom) >= self.ZOOM_MIN and (zoom) <= self.ZOOM_MAX:
             self.zoom = zoom
-            self.updateZoom()
+            self.update_zoom()
 
-    def zoomIn(self, event = None):
-        self.editZoom(self.zoom + self.saveData.zoomSpeed)
+    def zoom_in(self, event = None):
+        self.edit_zoom(self.zoom + self.save_data.zoom_speed)
 
-    def zoomOut(self, event = None):
-        self.editZoom(self.zoom - self.saveData.zoomSpeed)
+    def zoom_out(self, event = None):
+        self.edit_zoom(self.zoom - self.save_data.zoom_speed)
 
-    def zoomMin(self, event = None):
-        self.editZoom(self.ZOOM_MIN)
+    def zoom_min(self, event = None):
+        self.edit_zoom(self.ZOOM_MIN)
 
-    def zoomMax(self, event = None):
-        self.editZoom(self.ZOOM_MAX)
+    def zoom_max(self, event = None):
+        self.edit_zoom(self.ZOOM_MAX)
 
-    def zoomSliderValueChanged(self, event = None):
-        self.editZoom(self.statusBar.zoom.zoomSlider.value() / 100)
+    def zoom_slider_value_changed(self, event = None):
+        self.edit_zoom(self.status_bar.zoom.zoom_slider.value() / 100)
 
-    def updateZoom(self):
-        self.statusBar.zoom.zoomSlider.setValue(int(self.zoom * 100))
-        self.statusBar.zoom.zoomLevel.setText(f' {int(self.zoom * 100)}%\t')
+    def update_zoom(self):
+        self.status_bar.zoom.zoom_slider.setValue(int(self.zoom * 100))
+        self.status_bar.zoom.zoom_level.setText(f' {int(self.zoom * 100)}%\t')
         self.canvas.update()
 
 
@@ -1607,19 +1535,23 @@ class ApplicationError(QApplication):
             app = self,
             title = 'PERT Maker - Error',
             text = 'Oups, something went wrong...',
-            informativeText = str(err),
+            informative_text = str(err),
             icon = QMessageBoxWithWidget.Icon.Critical
         ).exec()
         exit(argv)
 
 
 
-try:
-    app = Application()
-    app.window.showMaximized()
+# try:
+#     app = Application()
+#     app.window.showMaximized()
 
-    exit(app.exec())
+#     exit(app.exec())
 
-except Exception as err:
-    print(err)
-    app = ApplicationError(err)
+# except Exception as err:
+#     print(err)
+#     app = ApplicationError(err)
+app = Application()
+app.window.showMaximized()
+
+exit(app.exec())

@@ -22,49 +22,49 @@ class __verification__:
 
 
 class QBetterListWidget(QTreeView):
-    def __new__(cls, headers = ['column'], minimumSectionSize: int = 50, alignmentFlag = Qt.AlignmentFlag.AlignCenter):
+    def __new__(cls, headers = ['column'], minimum_section_size: int = 50, alignment_flag = Qt.AlignmentFlag.AlignCenter):
         if not __verification__.goodHeaders(headers):
             print(colorama.Fore.YELLOW + '[Warning]' + colorama.Style.RESET_ALL + f' Headers must be a list of strings!')
             return None
-        return super().__new__(cls)
+        return super().__new__(cls, headers, minimum_section_size, alignment_flag)
 
-    def __init__(self, headers: list[str] = None, minimumSectionSize: int = 50, alignmentFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
+    def __init__(self, headers: list[str] = None, minimum_section_size: int = 50, alignment_flag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
         super().__init__()
         self.headers = headers
-        self.treeViewModel = QStandardItemModel()
-        self.treeViewModel.setHorizontalHeaderLabels(self.headers)
-        self.setModel(self.treeViewModel)
+        self.tree_view_model = QStandardItemModel()
+        self.tree_view_model.setHorizontalHeaderLabels(self.headers)
+        self.setModel(self.tree_view_model)
         self.setUniformRowHeights(True)
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.setRootIsDecorated(False)
-        self.header().setDefaultAlignment(alignmentFlag)
+        self.header().setDefaultAlignment(alignment_flag)
         self.header().resizeSections(QHeaderView.ResizeMode.ResizeToContents)
         self.header().setStretchLastSection(True)
         self.header().setCascadingSectionResizes(True)
-        self.header().setMinimumSectionSize(minimumSectionSize)
+        self.header().setMinimumSectionSize(minimum_section_size)
         self.setIconSize(QSize(16, 16))
 
-    def setHeaders(self, headers = ['column']):
+    def set_headers(self, headers = ['column']):
         if not __verification__.goodHeaders(headers): return
         self.headers = headers
-        self.treeViewModel.setHorizontalHeaderLabels(self.headers)
+        self.tree_view_model.setHorizontalHeaderLabels(self.headers)
 
-    def addHeader(self, header = 'column'):
+    def add_header(self, header = 'column'):
         if not __verification__.goodHeaders([header]): return
         self.headers.append(header)
 
-    def setHeaderAlignment(self, alignmentFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
-        self.header().setDefaultAlignment(alignmentFlag)
+    def set_header_alignment(self, alignment_flag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
+        self.header().setDefaultAlignment(alignment_flag)
 
-    def setMinimumSectionSize(self, minimumSectionSize: int = 50):
-        self.header().setMinimumSectionSize(minimumSectionSize)
+    def set_minimum_section_size(self, minimum_section_size: int = 50):
+        self.header().setMinimumSectionSize(minimum_section_size)
 
-    def getHeaders(self):
+    def get_headers(self):
         return self.headers
 
-    def getItems(self):
+    def get_items(self):
         l = []
-        root = self.treeViewModel.invisibleRootItem()
+        root = self.tree_view_model.invisibleRootItem()
         for i in range(root.rowCount()):
             subL = []
             for j in range(root.columnCount()):
@@ -73,18 +73,18 @@ class QBetterListWidget(QTreeView):
 
         return tuple(l)
 
-    def getItem(self, index: int = 0):
+    def get_item(self, index: int = 0):
         l = []
-        root = self.treeViewModel.invisibleRootItem()
+        root = self.tree_view_model.invisibleRootItem()
         for j in range(root.columnCount()):
             l.append(root.child(index, j).text())
 
         return tuple(l)
 
     def count(self):
-        return len(self.getItems())
+        return len(self.get_items())
 
-    def addItem(self, items: list[str], icon = None, alignmentFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
+    def add_item(self, items: list[str], icon = None, alignmentFlag: Qt.AlignmentFlag = Qt.AlignmentFlag.AlignLeft):
         if not __verification__.goodHeaders(items):
             print(colorama.Fore.YELLOW + '[Warning]' + colorama.Style.RESET_ALL + f' Items must be strings!')
             return None
@@ -99,33 +99,33 @@ class QBetterListWidget(QTreeView):
         if icon != None:
             items[0].setIcon(QIcon(icon))
 
-        self.treeViewModel.appendRow(items)
+        self.tree_view_model.appendRow(items)
 
-    def removeItem(self, index: int = 0):
-        self.treeViewModel.removeRow(index)
+    def remove_item(self, index: int = 0):
+        self.tree_view_model.removeRow(index)
     
-    def removeItems(self, startIndex: int = 0, endIndex: int = 1):
-        self.treeViewModel.removeRows(startIndex, endIndex)
+    def remove_items(self, startIndex: int = 0, endIndex: int = 1):
+        self.tree_view_model.removeRows(startIndex, endIndex)
 
     def clear(self):
-        self.treeViewModel.removeRows(0, self.treeViewModel.invisibleRootItem().rowCount())
+        self.tree_view_model.removeRows(0, self.tree_view_model.invisibleRootItem().rowCount())
 
     def select(self, index: int = 0):
-        self.deselectAll()
-        self.selectionModel().select(self.treeViewModel.index(index, 0, QModelIndex()), QItemSelectionModel.SelectionFlag.Select|QItemSelectionModel.SelectionFlag.Rows)
+        self.deselect_all()
+        self.selectionModel().select(self.tree_view_model.index(index, 0, QModelIndex()), QItemSelectionModel.SelectionFlag.Select|QItemSelectionModel.SelectionFlag.Rows)
 
-    def deselectAll(self):
+    def deselect_all(self):
         self.clearSelection()
 
-    def isSelection(self):
+    def is_selection(self):
         return bool(len(self.selectedIndexes()))
 
-    def getSelectedRow(self):
+    def get_selected_row(self):
         return self.selectedIndexes()[0].row()
 
-    def getSelectedItem(self):
-        return tuple(self.treeViewModel.data(self.selectedIndexes()[item]) for item in range(len(self.headers)))
+    def get_selected_item(self):
+        return tuple(self.tree_view_model.data(self.selectedIndexes()[item]) for item in range(len(self.headers)))
 
-    def getSelectedItemIndex(self):
+    def get_selected_item_index(self):
         return self.selectedIndexes()[0].row()
 #----------------------------------------------------------------------

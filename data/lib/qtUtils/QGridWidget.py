@@ -8,6 +8,6 @@ from PyQt6.QtWidgets import QWidget, QGridLayout
 class QGridWidget(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
-        self.gridLayout = QGridLayout()
-        self.setLayout(self.gridLayout)
+        self.grid_layout = QGridLayout()
+        self.setLayout(self.grid_layout)
 #----------------------------------------------------------------------

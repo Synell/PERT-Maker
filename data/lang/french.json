@@ -58,38 +58,49 @@
             }
         },
         "QSettingsDialog": {
-            "title": "PERT Maker > Paramètres",
-            "langTab": {
-                "title": "Langage",
-                "QLabel": {
-                    "lang": "Choisir un Langage:"
-                }
-            },
-            "themesTab": {
-                "title": "Thème",
-                "QLabel": {
-                    "themes": "Choisir un Thème:",
-                    "themeVariants": "Choisir une Variante:"
-                }
-            },
-            "editorTab": {
-                "title": "Editeur",
-                "QSpinBoxWithLabel": {
+            "title": "App Manager > Paramètres",
+            "QSidePanel": {
+                "appearance": {
+                    "title": "Apparence",
                     "QLabel": {
-                        "maxLoop": "Maximum de Boucles:",
-                        "gridSize": "Taille de la Grille:",
-                        "arrowMoveSpeed": "Vitesse de Déplacement (Flèches):",
-                        "zoomSpeed": "Vitesse de Zoom:"
+                        "language": {
+                            "title": "Langage",
+                            "description": "Sélectionnez un langage à afficher pour App Manager."
+                        },
+                        "theme": {
+                            "title": "Thème",
+                            "description": "Sélectionnez un thème à afficher pour App Manager."
+                        }
+                    },
+                    "QNamedComboBox": {
+                        "language": "Langage",
+                        "theme": "Thème",
+                        "themeVariant": "Variante du Thème"
+                    }
+                },
+                "editor": {
+                    "title": "Éditeur",
+                    "QNamedSpinBox": {
+                        "QLabel": {
+                            "maxLoop": "Maximum de Boucles:",
+                            "gridSize": "Taille de la Grille:",
+                            "arrowMoveSpeed": "Vitesse de Déplacement (Flèches):",
+                            "zoomSpeed": "Vitesse de Zoom:"
+                        }
+                    }
+                },
+                "export": {
+                    "title": "Exporter",
+                    "QNamedSpinBox": {
+                        "QLabel": {
+                            "exportImageScale": "Échelle d'Image (Affecte la Qualité):"
+                        }
                     }
                 }
             },
-            "exportTab": {
-                "title": "Exporter",
-                "QSpinBoxWithLabel": {
-                    "QLabel": {
-                        "exportImageScale": "Échelle d'Image (Affecte la Qualité):"
-                    }
-                }
+            "QPushButton": {
+                "cancel": "Annuler",
+                "apply": "Appliquer"
             }
         },
         "QMessageBox": {
@@ -170,19 +181,19 @@
         "QDockWidget": {
             "properties": {
                 "title": "Propriétés",
-                "QSpinBoxWithLabel": {
+                "QNamedSpinBox": {
                     "QLabel": {
                         "minTime": "Temps Minimum:",
                         "maxTime": "Temps Maximum:",
                         "time": "Temps:"
                     }
                 },
-                "QComboBoxWithLabel": {
+                "QNamedComboBox": {
                     "QLabel": {
                         "node": "Nœud:"
                     }
                 },
-                "QLineEditWithLabel": {
+                "QNamedLineEdit": {
                     "QLabel": {
                         "displayName": "Nom d'Affichage:"
                     }
@@ -215,7 +226,7 @@
                     "generateMinMaxTime": "Générer les Temps Min et Max",
                     "generateCriticalPath": "Générer le Chemin Critique"
                 },
-                "QCheckBox": {
+                "QToggleButton": {
                     "liveRefreshConnectionView": "Actualiser la vue des Connexion en Direct",
                     "liveGenerateMinMax": "Générer les Temps Min et Max en Direct",
                     "liveGenerateCriticalPath": "Auto-Générer le Chemin Critique en Direct",
@@ -255,7 +266,7 @@
         },
         "QExportImageDialog": {
             "title": "PERT Maker > Exporter > Image",
-            "QComboBoxWithLabel": {
+            "QNamedComboBox": {
                 "QLabel": {
                     "bgMode": "Mode d'Arrière-Plan:"
                 },
@@ -265,17 +276,9 @@
                     "transparent": "Transparent"
                 }
             },
-            "QFilePicker": {
+            "QFileButton": {
                 "title": "Fichier Sortant",
-                "QPushButton": {
-                    "selectFile": "Sélectionner un fichier sortant..."
-                },
-                "QFileDialog": {
-                    "title": "PERT Maker > Exporter > Image > Fichier Sortant"
-                },
-                "QLabel": {
-                    "noFile": "Aucun Fichier"
-                }
+                "dialog": "PERT Maker > Exporter > Image > Fichier Sortant"
             },
             "QColorButton": {
                 "bg": "Arrière-Plan"

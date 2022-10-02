@@ -1,0 +1,33 @@
+
+/* QProgressBar */
+
+QProgressBar
+{
+	border-radius: 4px;
+	color: #ffffff;
+	background-color: #1A1A1A;
+	height: 12px;
+	text-align: center;
+}
+QProgressBar::chunk
+{
+	background-color: #05b8cc;
+	border-radius: 4px;
+}
+
+QProgressBar[small=true]
+{
+	height: 6px;
+	/* border-radius: 3px; */
+	border-radius: 0px;
+}
+QProgressBar::chunk[small=true]
+{
+	/* border-radius: 3px; */
+	border-radius: 0px;
+}
+
+QProgressBar[light=true]
+{
+	background-color: #808080;
+}

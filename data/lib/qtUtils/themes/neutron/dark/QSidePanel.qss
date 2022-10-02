@@ -1,0 +1,75 @@
+
+/* QSidePanel */
+
+QWidget[QSidePanel=true], QWidget[QSidePanel=true] QWidget {
+	background-color: #262626;
+	border: none;
+	margin: 0 0 0 0;
+	spacing: 0;
+}
+
+QWidget[QSidePanel=true] QPushButton {
+	background-color: transparent;
+	color: #848484;
+	border: none;
+	border-radius: 5px;
+	height: 28px;
+	text-align: left;
+	font-size: 14px;
+	qproperty-iconSize: 28px;
+	padding-left: 8px;
+}
+
+QWidget[QSidePanel=true] QPushButton[selected=true] {
+	background-color: #404040;
+	color: #FFFFFF;
+	border: none;
+	border-radius: 5px;
+	height: 28px;
+	text-align: left;
+	font-size: 14px;
+	qproperty-iconSize: 28px;
+	padding-left: 8px;
+}
+
+QWidget[QSidePanel=true] QPushButton:hover {
+	color: #B8B8B8;
+}
+
+QWidget[QSidePanel=true] QPushButton:pressed {
+	color: #B8B8B8;
+}
+
+QWidget[QSidePanel=true] QPushButton:focus {
+	border: none;
+}
+
+QWidget[QSidePanel=true] QPushButton[selected=true]:hover {
+	background-color: #404040;
+	color: #FFFFFF;
+}
+
+QWidget[QSidePanel=true] QPushButton[selected=true]:pressed {
+	background-color: #404040;
+	color: #FFFFFF;
+}
+
+QWidget[QSidePanel=true] QPushButton[selected=true]:focus {
+	border: none;
+}
+
+QWidget[QSidePanel=true][transparent=true], QWidget[QSidePanel=true][transparent=true] QWidget {
+	background-color: transparent;
+}
+
+QWidget[QSidePanel=true][transparent=true] QPushButton[selected=true] {
+	background-color: #2D2D2D;
+}
+
+QWidget[QSidePanel=true][transparent=true] QPushButton[selected=true]:hover {
+	background-color: #2D2D2D;
+}
+
+QWidget[QSidePanel=true][transparent=true] QPushButton[selected=true]:pressed {
+	background-color: #2D2D2D;
+}

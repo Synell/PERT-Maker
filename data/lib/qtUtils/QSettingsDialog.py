@@ -1,8 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QDialog, QTabWidget, QLabel, QComboBox, QDialogButtonBox, QGridLayout, QWidget
+from PyQt6.QtWidgets import QDialog, QFrame, QLabel, QDialogButtonBox, QGridLayout, QWidget, QPushButton
 from PyQt6.QtCore import Qt
+from data.lib.qtUtils.QGridFrame import QGridFrame
 
 from data.lib.qtUtils.QGridWidget import QGridWidget
 
@@ -10,159 +11,209 @@ from .QScrollableGridWidget import QScrollableGridWidget
 import json
 
 from .QSidePanelWidget import QSidePanelWidget
-from .QSidePanel import QSidePanel, QSidePanelItem
-
-from data.lib.customOS import *
+from .QSidePanel import QSidePanelItem
+from .QNamedComboBox import QNamedComboBox
+from .QFileExplorer import QFileExplorer
 #----------------------------------------------------------------------
 
     # Class
 class __QData__:
     class __QLang__:
-        def __init__(self, langFolder = '', langPath = ''):
-            with open(f'{langFolder}/{langPath}', encoding = 'utf-8') as infile:
+        def __init__(self, lang_folder = '', lang_path = ''):
+            with open(f'{lang_folder}/{lang_path}', encoding = 'utf-8') as infile:
                 data = json.load(infile)
-                self.displayName = data['info']['name']
+                self.display_name = data['info']['name']
                 self.version = data['info']['version']
                 self.desc = data['info']['description']
-                self.filename = '.'.join(langPath.split('.')[:-1])
+                self.filename = '.'.join(lang_path.split('.')[:-1])
 
 
     class __QTheme__:
-        def __init__(self, themesFolder = '', themePath = ''):
-            with open(f'{themesFolder}/{themePath}', encoding = 'utf-8') as infile:
+        def __init__(self, themes_folder = '', themePath = ''):
+            with open(f'{themes_folder}/{themePath}', encoding = 'utf-8') as infile:
                 data = json.load(infile)
-                self.displayName = data['info']['name']
+                self.display_name = data['info']['name']
                 self.version = data['info']['version']
                 self.desc = data['info']['description']
                 self.filename = '.'.join(themePath.split('.')[:-1])
                 self.variants = data['qss']
 
 
-    def __init__(self, langFolder = '', themesFolder = ''):
+    def __init__(self, lang_folder = '', themes_folder = ''):
         self.lang = []
-        for file in get.files.extensions(langFolder, ['.json'], False, True):
-            self.lang.append(self.__QLang__(langFolder, file))
+        for file in QFileExplorer.get_files(lang_folder, ['json'], False, True):
+            self.lang.append(self.__QLang__(lang_folder, file))
 
         self.themes = []
-        for file in get.files.extensions(themesFolder, ['.json'], False, True):
-            self.themes.append(self.__QTheme__(themesFolder, file))
+        for file in QFileExplorer.get_files(themes_folder, ['json'], False, True):
+            self.themes.append(self.__QTheme__(themes_folder, file))
 
 
 class QSettingsDialog(QDialog):
-    def __init__(self, parent = None, settingsData = {}, langFolder = '', themesFolder = '', currentLang = '', currentTheme = '', currentThemeVariant = '', extraTabs: dict[str: QWidget] = {}, getFunction = None):
+    def __init__(self, parent = None, settings_data = {}, lang_folder = '', themes_folder = '', current_lang = '', current_theme = '', current_theme_variant = '', extra_tabs: dict[str: QWidget] = {}, get_function = None):
         super().__init__(parent)
 
         self.layout = QGridLayout()
+        self.layout.setSpacing(0)
+        self.layout.setContentsMargins(0, 0, 0, 0)
 
-        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        extra_icons = {k: extra_tabs[k][1] for k in list(extra_tabs.keys())}
+        extra_tabs = {k: extra_tabs[k][0] for k in list(extra_tabs.keys())}
 
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.accept)
-        self.buttonBox.rejected.connect(self.reject)
+        right_buttons = QGridWidget()
+        right_buttons.grid_layout.setSpacing(16)
+        right_buttons.grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.setWindowTitle(settingsData['title'])
+        button = QPushButton(settings_data['QPushButton']['cancel'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.reject)
+        button.setProperty('color', 'white')
+        button.setProperty('transparent', True)
+        right_buttons.grid_layout.addWidget(button, 0, 0)
 
-        self.root = QSidePanelWidget(widget = QGridWidget())
+        button = QPushButton(settings_data['QPushButton']['apply'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.accept)
+        button.setProperty('color', 'main')
+        right_buttons.grid_layout.addWidget(button, 0, 1)
 
-        self.__data__ = __QData__(langFolder, themesFolder)
-        def clearRootWidget(widget: QWidget):
+        self.setWindowTitle(settings_data['title'])
+
+        self.frame = QGridFrame()
+        self.frame.grid_layout.addWidget(right_buttons, 0, 0)
+        self.frame.grid_layout.setAlignment(right_buttons, Qt.AlignmentFlag.AlignRight)
+        self.frame.grid_layout.setSpacing(0)
+        self.frame.grid_layout.setContentsMargins(16, 16, 16, 16)
+        self.frame.setProperty('border-top', True)
+        self.frame.setProperty('border-bottom', True)
+        self.frame.setProperty('border-left', True)
+        self.frame.setProperty('border-right', True)
+
+        self.root = QSidePanelWidget(widget = QGridWidget(), width = 220)
+        self.root.widget.layout().setSpacing(0)
+        self.root.widget.layout().setContentsMargins(16, 16, 16, 16)
+
+        self.__data__ = __QData__(lang_folder, themes_folder)
+        def clear_root_widget(widget: QWidget):
             for i in reversed(range(self.root.widget.layout().count())):
                 self.root.widget.layout().itemAt(i).widget().setHidden(True)
             widget.setHidden(False)
 
-        def showLangTab():
-            clearRootWidget(self.langTab)
-            self.root.sidepanel.setSelectedItem(0)
+        def show_appearance_tab():
+            clear_root_widget(self.appearanceTab)
+            self.root.sidepanel.set_current_index(0)
 
-        def showThemeTab():
-            clearRootWidget(self.themesTab)
-            self.root.sidepanel.setSelectedItem(1)
+        def show_extra_tab(widget, index):
+            clear_root_widget(widget)
+            self.root.sidepanel.set_current_index(index)
 
-        def showExtraTab(widget, index):
-            clearRootWidget(widget)
-            self.root.sidepanel.setSelectedItem(index)
+        self.appearanceTab = self.__appearance_tab_widget__(settings_data['QSidePanel']['appearance'], current_lang, current_theme, current_theme_variant)
+        self.root.widget.layout().addWidget(self.appearanceTab)
+        self.root.sidepanel.add_item(QSidePanelItem(settings_data['QSidePanel']['appearance']['title'], f'{themes_folder}{current_theme}/{current_theme_variant}/icons/sidepanel/appearance.png', show_appearance_tab))
 
-        self.langTab = self.__langTabWidget__(settingsData['langTab'], currentLang)
-        self.root.widget.layout().addWidget(self.langTab)
-        self.root.sidepanel.addItem(QSidePanelItem(settingsData['langTab']['title'], None, showLangTab))
+        self.extra_tabs = extra_tabs
 
-        self.themesTab = self.__themesTabWidget__(settingsData['themesTab'], currentTheme, currentThemeVariant)
-        self.root.widget.layout().addWidget(self.themesTab)
-        self.root.sidepanel.addItem(QSidePanelItem(settingsData['themesTab']['title'], None, showThemeTab))
-
-        self.extraTabs = extraTabs
-
-        kLst = list(extraTabs.keys())
-        sendParam = lambda w, i: lambda: showExtraTab(w, i)
+        kLst = list(extra_tabs.keys())
+        send_param = lambda w, i: lambda: show_extra_tab(w, i)
         for k in range(len(kLst)):
-            self.root.widget.layout().addWidget(self.extraTabs[kLst[k]])
-            self.root.sidepanel.addItem(QSidePanelItem(kLst[k], None, sendParam(self.extraTabs[kLst[k]], k + 2)))
+            self.root.widget.layout().addWidget(self.extra_tabs[kLst[k]])
+            self.root.sidepanel.add_item(QSidePanelItem(kLst[k], extra_icons[kLst[k]], send_param(self.extra_tabs[kLst[k]], k + 1)))
 
-        showLangTab()
+        show_appearance_tab()
 
-        self.setMinimumWidth(480)
-        self.setMinimumHeight(max(len(self.root.sidepanel.items) * 30 + 50, 240))
-
-        self.getFunction = getFunction
+        self.get_function = get_function
 
         self.layout.addWidget(self.root, 0, 0)
-        self.layout.addWidget(self.buttonBox, 1, 0)
+        self.layout.addWidget(self.frame, 1, 0)
 
         self.setLayout(self.layout)
 
-    def __langTabWidget__(self, langData = {}, currentLang = ''):
-        widget = QScrollableGridWidget()
-        label = QLabel(langData['QLabel']['lang'])
-        widget.scrollLayout.addWidget(label, 0, 0)
+        self.setMinimumSize(int(parent.window().size().width() * (205 / 256)), int(parent.window().size().height() * (13 / 15)))
 
-        self.langDropdown = QComboBox()
-        self.langDropdown.addItems(list(lang.displayName for lang in self.__data__.lang))
+    def __appearance_tab_widget__(self, lang_data = {}, current_lang = '', current_theme = '', current_theme_variant = ''):
+        widget = QScrollableGridWidget()
+        widget.scroll_layout.setSpacing(0)
+        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
+
+        root_frame = QGridFrame()
+        root_frame.grid_layout.setSpacing(16)
+        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
+        widget.scroll_layout.addWidget(root_frame, 0, 0)
+        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
+
+        label = QSettingsDialog.textGroup(lang_data['QLabel']['language']['title'], lang_data['QLabel']['language']['description'])
+        root_frame.grid_layout.addWidget(label, 0, 0)
+
+        self.lang_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['language'])
+        self.lang_dropdown.combo_box.addItems(list(lang.display_name for lang in self.__data__.lang))
         i = 0
         for langId in range(len(self.__data__.lang)):
-            if self.__data__.lang[langId].filename == currentLang: i = langId
-        self.langDropdown.setCurrentIndex(i)
-        widget.scrollLayout.addWidget(self.langDropdown, 0, 1)
+            if self.__data__.lang[langId].filename == current_lang: i = langId
+        self.lang_dropdown.combo_box.setCurrentIndex(i)
+        root_frame.grid_layout.addWidget(self.lang_dropdown, 1, 0)
+        root_frame.grid_layout.setAlignment(self.lang_dropdown, Qt.AlignmentFlag.AlignLeft)
 
-        return widget
 
-    def __themesTabWidget__(self, themesData = {}, currentTheme = '', currentThemeVariant = ''):
-        widget = QScrollableGridWidget()
-        label = QLabel(themesData['QLabel']['themes'])
-        widget.scrollLayout.addWidget(label, 0, 0)
+        frame = QFrame()
+        frame.setProperty('border-top', True)
+        frame.setFixedHeight(1)
+        root_frame.grid_layout.addWidget(frame, 2, 0)
 
-        self.themesDropdown = QComboBox()
-        self.themesDropdown.addItems(list(theme.displayName for theme in self.__data__.themes))
+
+        label = QSettingsDialog.textGroup(lang_data['QLabel']['theme']['title'], lang_data['QLabel']['theme']['description'])
+        root_frame.grid_layout.addWidget(label, 3, 0)
+
+        self.themes_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['theme'])
+        self.themes_dropdown.combo_box.addItems(list(theme.display_name for theme in self.__data__.themes))
         i = 0
         for themeId in range(len(self.__data__.themes)):
-            if self.__data__.themes[themeId].filename == currentTheme: i = themeId
-        self.themesDropdown.setCurrentIndex(i)
-        self.themesDropdown.currentIndexChanged.connect(self.__loadThemeVariants__)
-        widget.scrollLayout.addWidget(self.themesDropdown, 0, 1)
+            if self.__data__.themes[themeId].filename == current_theme: i = themeId
+        self.themes_dropdown.combo_box.setCurrentIndex(i)
+        self.themes_dropdown.combo_box.currentIndexChanged.connect(self.__loadThemeVariants__)
+        root_frame.grid_layout.addWidget(self.themes_dropdown, 4, 0)
+        root_frame.grid_layout.setAlignment(self.themes_dropdown, Qt.AlignmentFlag.AlignLeft)
 
-        label = QLabel(themesData['QLabel']['themeVariants'])
-        widget.scrollLayout.addWidget(label, 1, 0)
-
-        self.themeVariantsDropdown = QComboBox()
+        self.theme_variants_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['themeVariant'])
         self.__loadThemeVariants__(i)
-        self.themeVariantsDropdown.setCurrentIndex(list(self.__data__.themes[i].variants.keys()).index(currentThemeVariant))
-        widget.scrollLayout.addWidget(self.themeVariantsDropdown, 1, 1)
+        self.theme_variants_dropdown.combo_box.setCurrentIndex(list(self.__data__.themes[i].variants.keys()).index(current_theme_variant))
+        root_frame.grid_layout.addWidget(self.theme_variants_dropdown, 5, 0)
+        root_frame.grid_layout.setAlignment(self.theme_variants_dropdown, Qt.AlignmentFlag.AlignLeft)
 
         return widget
 
+    def textGroup(title: str = '', description: str = '') -> QGridWidget:
+        widget = QGridWidget()
+        widget.grid_layout.setSpacing(0)
+        widget.grid_layout.setContentsMargins(0, 0, 0, 0)
+
+        label = QLabel(title)
+        label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        label.setProperty('bigbrighttitle', True)
+        label.setWordWrap(True)
+        widget.grid_layout.addWidget(label, 0, 0)
+
+        label = QLabel(description)
+        label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        label.setProperty('brightnormal', True)
+        label.setWordWrap(True)
+        widget.grid_layout.addWidget(label, 1, 0)
+        widget.grid_layout.setRowStretch(2, 1)
+
+        return widget
 
     def __loadThemeVariants__(self, index):
-        self.themeVariantsDropdown.clear()
-        self.themeVariantsDropdown.addItems(list(self.__data__.themes[index].variants[variant]['displayName'] for variant in self.__data__.themes[index].variants.keys()))
-        self.themeVariantsDropdown.setCurrentIndex(0)
+        self.theme_variants_dropdown.combo_box.clear()
+        self.theme_variants_dropdown.combo_box.addItems(list(self.__data__.themes[index].variants[variant]['displayName'] for variant in self.__data__.themes[index].variants.keys()))
+        self.theme_variants_dropdown.combo_box.setCurrentIndex(0)
 
-    def get(self):
-        if self.exec():
-            try: self.getFunction(self.extraTabs)
-            except: pass
+    def exec(self):
+        if super().exec():
+            try: self.get_function(self.extra_tabs)
+            except Exception as e: print(e)
             return (
-                self.__data__.lang[self.langDropdown.currentIndex()].filename,
-                self.__data__.themes[self.themesDropdown.currentIndex()].filename,
-                list(self.__data__.themes[self.themesDropdown.currentIndex()].variants.keys())[self.themeVariantsDropdown.currentIndex()]
+                self.__data__.lang[self.lang_dropdown.combo_box.currentIndex()].filename,
+                self.__data__.themes[self.themes_dropdown.combo_box.currentIndex()].filename,
+                list(self.__data__.themes[self.themes_dropdown.combo_box.currentIndex()].variants.keys())[self.theme_variants_dropdown.combo_box.currentIndex()]
             )
         return None
 #----------------------------------------------------------------------

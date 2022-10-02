@@ -6,13 +6,12 @@ import numpy as np
 from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QScrollArea, QLabel, QProgressBar
 from PyQt6.QtCore import Qt, QPoint
 from PyQt6.QtGui import QImage, QPixmap, QColor, QPainter, QPen
-from data.lib.qtUtils import QFilePicker, QComboBoxWithLabel, QColorButton
-from data.lib.utils import Color
+from data.lib.qtUtils import QColorButton, QFileButton, QFiles, QNamedComboBox, QUtilsColor
 #----------------------------------------------------------------------
 
     # Class
 class QExportImageDialog(QDialog):
-    def __init__(self, parent = None, langData: dict = {}, selectedBgMode: int = 0, bgColor: Color = Color('#000000'), image: QImage = None, progressBar: QProgressBar = None):
+    def __init__(self, parent = None, langData: dict = {}, selectedBgMode: int = 0, bgColor: QUtilsColor = QUtilsColor('#000000'), image: QImage = None, progressBar: QProgressBar = None):
         super().__init__(parent = parent)
 
         self.langData = langData
@@ -30,19 +29,19 @@ class QExportImageDialog(QDialog):
         self.buttonBox.accepted.connect(self.acceptVerification)
         self.buttonBox.rejected.connect(self.reject)
 
-        self.combobox = QComboBoxWithLabel(langData['QComboBoxWithLabel']['QLabel']['bgMode'])
-        self.combobox.comboBox.addItems([
-            langData['QComboBoxWithLabel']['QComboBox']['default'],
-            langData['QComboBoxWithLabel']['QComboBox']['color'],
-            langData['QComboBoxWithLabel']['QComboBox']['transparent']
+        self.combobox = QNamedComboBox(None, langData['QNamedComboBox']['QLabel']['bgMode'])
+        self.combobox.combo_box.addItems([
+            langData['QNamedComboBox']['QComboBox']['default'],
+            langData['QNamedComboBox']['QComboBox']['color'],
+            langData['QNamedComboBox']['QComboBox']['transparent']
         ])
-        self.combobox.comboBox.setCurrentIndex(selectedBgMode)
-        self.combobox.comboBox.currentIndexChanged.connect(self.indexChanged)
+        self.combobox.combo_box.setCurrentIndex(selectedBgMode)
+        self.combobox.combo_box.currentIndexChanged.connect(self.indexChanged)
 
-        self.colorButton = QColorButton(langData['QColorButton']['bg'])
-        self.colorButton.color = bgColor.toQColor()
-        self.oldColor = QColor(self.colorButton.color.rgba())
-        self.colorButton.clicked.connect(self.clickEvent)
+        self.color_button = QColorButton(langData['QColorButton']['bg'])
+        self.color_button.color = bgColor
+        self.oldColor = QUtilsColor(self.color_button.color.rgba)
+        self.color_button.clicked.connect(self.clickEvent)
 
         self.label = QLabel()
         self.label.setStyleSheet('background-color: black;')
@@ -52,47 +51,48 @@ class QExportImageDialog(QDialog):
 
         self.indexChanged()
 
-        self.filename = QFilePicker(
-            langData['QFilePicker'],
-            QFilePicker.Type.SaveFileName,
+        self.filename = QFileButton(
+            None,
+            langData['QFileButton'],
             './image.png',
-            QFilePicker.Extension.combine(
-                QFilePicker.Extension.Image.PNG,
-                QFilePicker.Extension.Image.JPEG,
-                QFilePicker.Extension.Image.TIFF,
-                QFilePicker.Extension.Image.BMP
-            ),
-            False
+            None,
+            QFiles.Dialog.SaveFileName,
+            QFiles.Extension.combine(
+                QFiles.Extension.Image.PNG,
+                QFiles.Extension.Image.JPEG,
+                QFiles.Extension.Image.TIFF,
+                QFiles.Extension.Image.BMP
+            )
         )
 
 
         layout = QGridLayout(self)
         layout.addWidget(self.combobox, 0, 0)
-        layout.addWidget(self.colorButton, 0, 1)
+        layout.addWidget(self.color_button, 0, 1)
         layout.addWidget(self.preview, 1, 0, 1, 2)
         layout.addWidget(self.filename, 2, 0)
         layout.addWidget(self.buttonBox, 2, 1)
 
 
     def clickEvent(self, event = None):
-        if self.oldColor.rgba() != self.colorButton.color.rgba():
+        if self.oldColor.rgba() != self.color_button.color.rgba():
             self.newImage = self.applyColor()
             self.label.setPixmap(QPixmap().fromImage(self.newImage))
-        self.oldColor = self.colorButton.color
+        self.oldColor = self.color_button.color
 
 
     def indexChanged(self, event = None):
-        match self.combobox.comboBox.currentIndex():
+        match self.combobox.combo_box.currentIndex():
             case 0:
-                self.colorButton.setDisabled(True)
+                self.color_button.setDisabled(True)
                 self.label.setPixmap(QPixmap().fromImage(self.image))
             case 1:
-                self.colorButton.setDisabled(False)
+                self.color_button.setDisabled(False)
                 self.newImage = self.applyColor()
                 self.label.setPixmap(QPixmap().fromImage(self.newImage))
 
             case 2:
-                self.colorButton.setDisabled(True)
+                self.color_button.setDisabled(True)
                 self.newImage = self.applyTransparency()
                 self.label.setPixmap(QPixmap().fromImage(self.newImage))
 
@@ -110,7 +110,7 @@ class QExportImageDialog(QDialog):
         target_color = getPixel(0, 0)
 
         p = QPainter(image)
-        p.setPen(QPen(self.colorButton.color))
+        p.setPen(QPen(self.color_button.color.QColor))
 
         queue = list((x, y) for x in range(image.width()) for y in range(image.height()))
 
@@ -144,7 +144,7 @@ class QExportImageDialog(QDialog):
         targetColor = getPixel(0, 0)
 
         p = QPainter(image)
-        p.setPen(QPen(QColor(0, 0, 0, 0)))
+        p.setPen(QPen(QUtilsColor().QColor))
         p.setCompositionMode(QPainter.CompositionMode.CompositionMode_Clear)
 
         queue = list((x, y) for x in range(image.width()) for y in range(image.height()))
@@ -168,7 +168,7 @@ class QExportImageDialog(QDialog):
 
 
     def acceptVerification(self, event = None):
-        match self.combobox.comboBox.currentIndex():
+        match self.combobox.combo_box.currentIndex():
             case 0:
                 self.image.save(self.filename.path(), self.filename.path().split('.')[-1])
             case 1:
@@ -181,5 +181,5 @@ class QExportImageDialog(QDialog):
 
     def exec(self):
         accept = super().exec()
-        if accept: return self.combobox.comboBox.currentIndex(), Color(self.colorButton.color.red(), self.colorButton.color.green(), self.colorButton.color.blue(), self.colorButton.color.alpha())
+        if accept: return self.combobox.combo_box.currentIndex(), QUtilsColor(self.color_button.color.red, self.color_button.color.green, self.color_button.color.blue, self.color_button.color.alpha)
 #----------------------------------------------------------------------

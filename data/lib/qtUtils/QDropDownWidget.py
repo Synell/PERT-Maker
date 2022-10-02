@@ -2,34 +2,37 @@
 
     # Libraries
 from PyQt6.QtWidgets import QPushButton, QGridLayout, QWidget
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 #----------------------------------------------------------------------
 
     # Class
 class QDropDownWidget(QWidget):
+    clicked = pyqtSignal()
+
     def __init__(self, text: str = '', widget: QWidget = None):
         super().__init__()
-        self.__layout__ = QGridLayout(self)
-        self.__layout__.setSpacing(1)
+        self._layout = QGridLayout(self)
+        self._layout.setSpacing(1)
 
-        self.__layout__.setColumnStretch(1, 1)
-        self.__layout__.setRowStretch(2, 1)
+        self._layout.setColumnStretch(1, 1)
+        self._layout.setRowStretch(2, 1)
 
-        self.__showHideButton__ = QPushButton(text)
-        self.__showHideButton__.setCheckable(True)
-        self.__showHideButton__.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.__showHideButton__.setProperty('class', 'QDropDownWidget')
-        self.__showHideButton__.clicked.connect(self.__showHideButtonClicked__)
+        self._show_hide_button = QPushButton(text)
+        self._show_hide_button.setCheckable(True)
+        self._show_hide_button.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self._show_hide_button.setProperty('QDropDownWidget', True)
+        self._show_hide_button.clicked.connect(self._show_hide_button_clicked)
 
-        self.showHideWidget = widget
+        self.show_hide_widget = widget
 
-        self.__layout__.addWidget(self.__showHideButton__, 0, 0)
-        self.__layout__.setAlignment(self.__showHideButton__, Qt.AlignmentFlag.AlignRight)
-        self.__layout__.addWidget(self.showHideWidget , 1, 0)
+        self._layout.addWidget(self._show_hide_button, 0, 0)
+        self._layout.setAlignment(self._show_hide_button, Qt.AlignmentFlag.AlignRight)
+        self._layout.addWidget(self.show_hide_widget , 1, 0)
 
-        self.showHideWidget.hide()
+        self.show_hide_widget.hide()
 
-    def __showHideButtonClicked__(self, event = None):
-        if self.__showHideButton__.isChecked(): self.showHideWidget.show()
-        else: self.showHideWidget.hide()
+    def _show_hide_button_clicked(self, event = None):
+        if self._show_hide_button.isChecked(): self.show_hide_widget.show()
+        else: self.show_hide_widget.hide()
+        self.clicked.emit()
 #----------------------------------------------------------------------
