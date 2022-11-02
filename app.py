@@ -1075,7 +1075,7 @@ class Application(QBaseApplication):
         self.status_bar.coordinates_label.setText(f'({floor(mousePos.x / (self.save_data.grid_size))}, {floor(mousePos.y / (self.save_data.grid_size))}) - ({floor(mousePos.x)}, {floor(mousePos.y)})')
 
     def canvas_MMB_press_event(self, event: QMouseEvent):
-        self.setOverrideCursor(Qt.CursorShape.SizeAllCursor)
+        self.canvas.setCursor(Qt.CursorShape.SizeAllCursor)
         self.old_mouse_pos = self.canvas_get_point(event)
 
     def canvas_MMB_move_event(self, event: QMouseEvent):
@@ -1086,7 +1086,7 @@ class Application(QBaseApplication):
         self.canvas.update()
 
     def canvas_MMB_release_event(self, event: QMouseEvent):
-        self.setOverrideCursor(Qt.CursorShape.ArrowCursor)
+        self.canvas.setCursor(Qt.CursorShape.ArrowCursor)
 
     def canvas_wheel_event(self, event: QWheelEvent):
         if self.control_key:

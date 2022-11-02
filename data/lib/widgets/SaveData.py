@@ -108,7 +108,7 @@ class SaveData(QSaveData):
         root_frame.grid_layout.addWidget(label, 9, 0)
 
         widget.zoom_speed_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['zoomSpeed'])
-        widget.zoom_speed_spinbox.setRange(1, 200)
+        widget.zoom_speed_spinbox.setRange(0.25, 4.0)
         widget.zoom_speed_spinbox.setValue(self.zoom_speed)
         root_frame.grid_layout.addWidget(widget.zoom_speed_spinbox, 10, 0)
         root_frame.grid_layout.setAlignment(widget.zoom_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
