@@ -651,7 +651,7 @@ class Application(QBaseApplication):
         live_refresh_connection_view_button.setProperty('color', 'main')
         live_refresh_connection_view_button.clicked.connect(self.refresh_connection_view)
         live_refresh_connection_view_checkbox = QToggleButton()
-        live_refresh_connection_view_checkbox.setText(lang['QToggleButton']['liveRefreshConnectionView'])
+        live_refresh_connection_view_checkbox.setToolTip(lang['QToggleButton']['liveRefreshConnectionView'])
         if self.save_data.live_refresh_connection_view: live_refresh_connection_view_checkbox.setCheckState(Qt.CheckState.Checked)
         live_refresh_connection_view_checkbox.stateChanged.connect(rcv_value_changed)
 
@@ -660,7 +660,7 @@ class Application(QBaseApplication):
         generate_min_max_time_button.setProperty('color', 'main')
         generate_min_max_time_button.clicked.connect(self.generate_min_max_time)
         generate_min_max_time_checkbox = QToggleButton()
-        generate_min_max_time_checkbox.setText(lang['QToggleButton']['liveGenerateMinMax'])
+        generate_min_max_time_checkbox.setToolTip(lang['QToggleButton']['liveGenerateMinMax'])
         if self.save_data.live_min_max: generate_min_max_time_checkbox.setCheckState(Qt.CheckState.Checked)
         generate_min_max_time_checkbox.stateChanged.connect(mm_value_changed)
 
@@ -669,7 +669,7 @@ class Application(QBaseApplication):
         generate_critical_path_button.setProperty('color', 'main')
         generate_critical_path_button.clicked.connect(self.generate_critical_path)
         live_generate_critical_path_checkbox = QToggleButton()
-        live_generate_critical_path_checkbox.setText(lang['QToggleButton']['liveGenerateCriticalPath'])
+        live_generate_critical_path_checkbox.setToolTip(lang['QToggleButton']['liveGenerateCriticalPath'])
         if self.save_data.live_generate_critical_path: live_generate_critical_path_checkbox.setCheckState(Qt.CheckState.Checked)
         live_generate_critical_path_checkbox.stateChanged.connect(gcp_value_changed)
 

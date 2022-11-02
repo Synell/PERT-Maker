@@ -41,16 +41,24 @@ class QSaveData:
 
     def save_extra_data(self) -> dict: return {}
 
-    def load(self) -> None:
+    def load(self, safe_mode: bool = False) -> None:
         if not os.path.exists(self.path): self.save()
-        with open(self.path, 'r', encoding = 'utf-8') as infile:
-            data = json.load(infile)
-        self.language = data['language']
-        self.theme = data['theme']
-        self.theme_variant = data['themeVariant']
-        self.load_language_data()
-        self.load_theme_data()
-        self.load_extra_data(data)
+        try:
+            with open(self.path, 'r', encoding = 'utf-8') as infile:
+                data = json.load(infile)
+            self.language = data['language']
+            self.theme = data['theme']
+            self.theme_variant = data['themeVariant']
+            self.load_language_data()
+            self.load_theme_data()
+            self.load_extra_data(data)
+
+        except Exception as e:
+            self.language = 'english'
+            self.theme = 'neutron'
+            self.theme_variant = 'dark'
+            self.save()
+            if not safe_mode: self.load()
 
     def load_language_data(self) -> None:
         with open(f'{self.lang_folder}{self.language}.json', 'r', encoding = 'utf-8') as infile:
@@ -62,14 +70,15 @@ class QSaveData:
             data = json.load(infile)['qss']
             path = data[self.theme_variant]['location']
 
-        with open(f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/main.json', 'r', encoding = 'utf-8') as infile:
-            files = json.load(infile)['files']
+        if os.path.exists(f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/main.json'):
+            with open(f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/main.json', 'r', encoding = 'utf-8') as infile:
+                files = json.load(infile)['files']
 
-        for file in files:
-            with open(f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/{file}.qss', 'r', encoding = 'utf-8') as infile:
-                self.theme_data += infile.read()
+            for file in files:
+                with open(f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/{file}.qss', 'r', encoding = 'utf-8') as infile:
+                    self.theme_data += infile.read()
 
-        self.theme_data = self.theme_data.replace('{path}', f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/icons/'.replace('//', '/'))
+            self.theme_data = self.theme_data.replace('{path}', f'data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/{path}/icons/'.replace('//', '/'))
 
     def load_extra_data(self, extra_data: dict = {}) -> None: pass
 
