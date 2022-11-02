@@ -1240,7 +1240,7 @@ class Application(QBaseApplication):
         ).exec()
 
     def help_menu_tips_action(self):
-        QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md'))
+        QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage'))
 
     def help_menu_about_qt_action(self):
         self.aboutQt()
