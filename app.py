@@ -5,9 +5,9 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtSvg import *
-import sys
 from math import *
-import json
+from datetime import datetime, timedelta
+import json, sys
 from data.lib import *
 #----------------------------------------------------------------------
 
@@ -24,6 +24,14 @@ class Application(QBaseApplication):
     COLOR_GRID = QUtilsColor()
 
     SAVE_PATH = None
+
+    MESSAGE_DURATION = 5000
+
+    ALERT_RAISE_DURATION = 350
+    ALERT_PAUSE_DURATION = 2300
+    ALERT_FADE_DURATION = 350
+
+    UPDATE_LINK = 'https://github.com/Synell/PERT-Maker'
 
     KEY_WORDS = ['Start', 'End']
 
@@ -65,6 +73,18 @@ class Application(QBaseApplication):
         self.create_widgets()
         self.file_menu_new_action()
 
+        if self.save_data.check_for_updates == 4: self.check_updates()
+        elif self.save_data.check_for_updates > 0 and self.save_data.check_for_updates < 4:
+            deltatime = datetime.now() - self.save_data.last_check_for_updates
+
+            match self.save_data.check_for_updates:
+                case 1:
+                    if deltatime > timedelta(days = 1): self.check_updates()
+                case 2:
+                    if deltatime > timedelta(weeks = 1): self.check_updates()
+                case 3:
+                    if deltatime > timedelta(weeks = 4): self.check_updates()
+
     def notImplemented(self, text = ''):
         if text:
             w = QDropDownWidget(text = lang['details'], widget = QLabel(text))
@@ -105,7 +125,22 @@ class Application(QBaseApplication):
         empty_widget.setContentsMargins(0, 0, 0, 0)
         empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
         empty_widget.grid_layout.setSpacing(0)
-        self.status_bar.addPermanentWidget(empty_widget, 14)
+        self.status_bar.addPermanentWidget(empty_widget, 2)
+
+        self.update_button = QPushButton(self.save_data.language_data['QStatusBar']['QPushButton']['update'])
+        self.update_button.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.update_button.clicked.connect(self.update_click)
+        self.update_button.setProperty('color', 'main')
+        self.update_button.setProperty('transparent', True)
+        empty_widget.grid_layout.addWidget(self.update_button, 0, 0)
+        self.update_button.setVisible(False)
+
+
+        empty_widget = QGridWidget()
+        empty_widget.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
+        empty_widget.grid_layout.setSpacing(0)
+        self.status_bar.addPermanentWidget(empty_widget, 12)
 
 
         empty_widget = QGridWidget()
@@ -1477,6 +1512,31 @@ class Application(QBaseApplication):
         self.status_bar.zoom.zoom_slider.setValue(int(self.zoom * 100))
         self.status_bar.zoom.zoom_level.setText(f' {int(self.zoom * 100)}%\t')
         self.canvas.update()
+
+
+    def check_updates(self) -> None:
+        self.update_request = RequestWorker([self.UPDATE_LINK])
+        self.update_request.signals.received.connect(self.check_updates_release)
+        self.update_request.signals.failed.connect(self.check_updates_failed)
+        self.update_request.start()
+
+    def check_updates_release(self, rel: dict, app: str) -> None:
+        self.update_request.exit()
+        self.must_update_link = RequestWorker.get_release(rel, None).link
+        if rel['tag_name'] > self.BUILD: self.set_update(True)
+        else: self.save_data.last_check_for_updates = datetime.now()
+
+    def check_updates_failed(self, error: str) -> None:
+        self.update_request.exit()
+        print('Failed to check for updates:', error)
+
+    def set_update(self, update: bool) -> None:
+        self.update_button.setVisible(update)
+
+    def update_click(self) -> None:
+        self.save_data.save()
+        self.must_update = self.must_update_link
+        self.exit()
 #----------------------------------------------------------------------
 
     # Main

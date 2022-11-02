@@ -6,7 +6,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtSvg import *
 from PyQt6.QtSvgWidgets import *
-from datetime import timedelta
+from datetime import datetime, timedelta
 import os, base64, math, sys, subprocess
 from urllib.request import urlopen, Request
 from time import sleep
@@ -247,6 +247,9 @@ class QUpdater(QBaseApplication):
         self.open_button.setDisabled(False)
         self.open_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.open_button.clicked.connect(self.open_app)
+
+        self.save_data.last_check_for_updates = datetime.now()
+        self.save_data.save()
 
     def install_failed(self, error: str, exit_code: int):
         QMessageBoxWithWidget(

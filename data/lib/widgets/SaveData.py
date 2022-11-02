@@ -4,6 +4,7 @@
 from urllib.parse import urlparse
 from PyQt6.QtWidgets import QFrame
 from PyQt6.QtCore import Qt
+from datetime import datetime
 
 from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QDragList, QNamedSpinBox
 #----------------------------------------------------------------------
@@ -31,6 +32,9 @@ class SaveData(QSaveData):
 
         self.export_image_bg_color = QUtilsColor.from_hexa('#000000ff')
         self.export_image_fg_color = QUtilsColor.from_hexa('#ffffffff')
+
+        self.check_for_updates = 4
+        self.last_check_for_updates = datetime.now()
 
         super().__init__(save_path)
 
@@ -124,6 +128,8 @@ class SaveData(QSaveData):
         self.arrow_move_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].arrow_move_speed_spinbox.value()
         self.zoom_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].zoom_speed_spinbox.value()
 
+        # self.check_for_updates = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']].check_for_updates_combobox.combo_box.currentIndex()
+
 
 
     def valid_url(self, url: str) -> bool:
@@ -150,7 +156,10 @@ class SaveData(QSaveData):
             'alignToGrid': self.align_to_grid,
 
             'exportImageBgColor': self.export_image_bg_color.hexa,
-            'exportImageFgColor': self.export_image_fg_color.hexa
+            'exportImageFgColor': self.export_image_fg_color.hexa,
+
+            'checkForUpdates': self.check_for_updates,
+            'lastCheckForUpdates': self.last_check_for_updates.strftime(self.dateformat)
         }
 
     def load_extra_data(self, extra_data: dict = ...) -> None:
@@ -170,6 +179,9 @@ class SaveData(QSaveData):
 
             self.export_image_bg_color = QUtilsColor.from_hexa(extra_data['exportImageBgColor'])
             self.export_image_fg_color = QUtilsColor.from_hexa(extra_data['exportImageFgColor'])
+
+            self.check_for_updates = extra_data['checkForUpdates']
+            self.last_check_for_updates = datetime.strptime(extra_data['lastCheckForUpdates'], self.dateformat)
 
         except: self.save()
 #----------------------------------------------------------------------
