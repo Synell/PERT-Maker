@@ -2,12 +2,12 @@
 
     # Libraries
 from PyQt6.QtWidgets import QGridLayout, QDialog, QLabel, QPushButton
-from PyQt6.QtCore import Qt
-from PyQt6.QtSvgWidgets import QSvgWidget
+from PyQt6.QtCore import Qt, QSize
 
 from .QBaseApplication import QBaseApplication
 from .QGridWidget import QGridWidget
 from .QGridFrame import QGridFrame
+from .QIconWidget import QIconWidget
 #----------------------------------------------------------------------
 
     # Class
@@ -33,11 +33,10 @@ class QAboutBox(QDialog):
         self._layout.addWidget(self.right, 0, 1)
 
 
-        pixmap = QSvgWidget(logo)
-        pixmap.setFixedSize(128, 128)
+        icon_widget = QIconWidget(None, logo, QSize(128, 128), False)
 
-        self.left.grid_layout.addWidget(pixmap)
-        self.left.grid_layout.setAlignment(pixmap, Qt.AlignmentFlag.AlignTop)
+        self.left.grid_layout.addWidget(icon_widget)
+        self.left.grid_layout.setAlignment(icon_widget, Qt.AlignmentFlag.AlignTop)
         self.left.grid_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
         self.setWindowTitle(title)
