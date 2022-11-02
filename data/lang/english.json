@@ -118,10 +118,10 @@
                     "text": "This functionality doesn't exist yet and will be\navailable in a later version of the software.",
                     "details": "Details"
                 },
-                "export": {
+                "exportImage": {
                     "title": "PERT Maker > Export",
                     "text": "An error occurred during the process !",
-                    "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
+                    "informativeText": "Make sure your graph fits in your field of view."
                 }
             },
             "warning": {
@@ -152,8 +152,8 @@
                     "text": "Your table is empty !",
                     "informativeText": "Can't export a table that doesn't exist."
                 },
-                "export": {
-                    "title": "PERT Maker > Export",
+                "exportImage": {
+                    "title": "PERT Maker > Export > Image",
                     "text": "Your graph is empty !",
                     "informativeText": "Can't export a graph that doesn't exist."
                 }
@@ -171,9 +171,6 @@
             },
             "saveAs": {
                 "title": "PERT Maker > Save As"
-            },
-            "exportSVG": {
-                "title": "PERT Maker > Export > SVG"
             }
         },
         "QDockWidget": {
@@ -265,25 +262,25 @@
             }
         },
         "QExportImageDialog": {
-            "title": "PERT Maker > Export",
+            "title": "PERT Maker > Export > Image",
             "QPushButton": {
                 "export": "Export",
                 "cancel": "Cancel"
             },
             "QFileButton": {
                 "title": "Output File",
-                "dialog": "PERT Maker > Export > Output File"
+                "dialog": "PERT Maker > Export > Image > Output File"
             },
             "QColorDialog": {
                 "bgColor": {
-                    "title": "PERT Maker > Export > Background Color",
+                    "title": "PERT Maker > Export > Image > Background Color",
                     "QPushButton": {
                         "cancel": "Cancel",
                         "select": "Select"
                     }
                 },
                 "fgColor": {
-                    "title": "PERT Maker > Export > Foreground Color",
+                    "title": "PERT Maker > Export > Image > Foreground Color",
                     "QPushButton": {
                         "cancel": "Cancel",
                         "select": "Select"

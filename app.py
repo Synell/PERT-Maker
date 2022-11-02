@@ -1276,11 +1276,11 @@ class Application(QBaseApplication):
         if not data:
             for x in range(len(new_node_lst)):
                 for y in range(len(new_node_lst[x])):
-                    self.graph.rename(new_node_lst[x][y][1], self.graph.__TEMP_PATH_NAME__ + new_node_lst[x][y][1])
+                    self.graph.rename(new_node_lst[x][y][1], self.graph._TEMP_PATH_NAME + new_node_lst[x][y][1])
 
             for x in range(len(new_node_lst)):
                 for y in range(len(new_node_lst[x])):
-                    self.graph.rename(self.graph.__TEMP_PATH_NAME__ + new_node_lst[x][y][1], str(new_node_lst[x][y][0]))
+                    self.graph.rename(self.graph._TEMP_PATH_NAME + new_node_lst[x][y][1], str(new_node_lst[x][y][0]))
 
                     for node in list(self.graph.node(str(new_node_lst[x][y][0])).previous.keys()):
                         for next_node in list(self.graph.node(node).next.keys()):
@@ -1332,9 +1332,9 @@ class Application(QBaseApplication):
         if not self.graph.nodes:
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.save_data.language_data['QMessageBox']['warning']['export']['title'],
-                text = self.save_data.language_data['QMessageBox']['warning']['export']['text'],
-                informative_text = self.save_data.language_data['QMessageBox']['warning']['export']['informativeText'],
+                title = self.save_data.language_data['QMessageBox']['warning']['exportImage']['title'],
+                text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['text'],
+                informative_text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['informativeText'],
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 

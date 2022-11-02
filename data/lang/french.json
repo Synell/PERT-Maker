@@ -118,10 +118,10 @@
                     "text": "Cette fonctionnalité n'existe pas encore et sera\ndisponible dans une version ultérieure du logiciel.",
                     "details": "Détails"
                 },
-                "export": {
+                "exportImage": {
                     "title": "PERT Maker > Exporter",
                     "text": "Une erreur est survenue lors du processus !",
-                    "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
+                    "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue."
                 }
             },
             "warning": {
@@ -152,8 +152,8 @@
                     "text": "Votre tableau est vide !",
                     "informativeText": "Aucun tableau ne peut être exporté car il n'y en a pas."
                 },
-                "export": {
-                    "title": "PERT Maker > Exporter",
+                "exportImage": {
+                    "title": "PERT Maker > Exporter > Image",
                     "text": "Votre graphe est vide !",
                     "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
                 }
@@ -265,25 +265,25 @@
             }
         },
         "QExportImageDialog": {
-            "title": "PERT Maker > Exporter",
+            "title": "PERT Maker > Exporter > Image",
             "QPushButton": {
                 "export": "Exporter",
                 "cancel": "Annuler"
             },
             "QFileButton": {
                 "title": "Fichier Sortant",
-                "dialog": "PERT Maker > Exporter > Fichier Sortant"
+                "dialog": "PERT Maker > Exporter > Image > Fichier Sortant"
             },
             "QColorDialog": {
                 "bgColor": {
-                    "title": "PERT Maker > Exporter > Couleur de l'Arrière-Plan",
+                    "title": "PERT Maker > Exporter > Image > Couleur de l'Arrière-Plan",
                     "QPushButton": {
                         "cancel": "Annuler",
                         "select": "Sélectionner"
                     }
                 },
                 "fgColor": {
-                    "title": "PERT Maker > Exporter > Couleur de la Police",
+                    "title": "PERT Maker > Exporter > Image > Couleur de la Police",
                     "QPushButton": {
                         "cancel": "Annuler",
                         "select": "Sélectionner"
