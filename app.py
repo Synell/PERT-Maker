@@ -1419,9 +1419,10 @@ class Application(QBaseApplication):
 
                         set_color(node, lvl + 1)
 
-                ET.register_namespace('', 'http://www.w3.org/2000/svg')
                 t = ET.parse(path)
-                xmlns = '{' + t.getroot().tag.split('}')[0][1:] + '}'
+                xmlns = t.getroot().tag.split('}')[0][1:]
+                ET.register_namespace('', xmlns)
+                xmlns = '{' + xmlns + '}'
 
                 x, y, w, h = (int(val) for val in t.getroot().attrib['viewBox'].split(' '))
                 t.getroot().attrib['viewBox'] = f'0 0 {w} {h}'
