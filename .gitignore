@@ -6,3 +6,6 @@ compileConfig.json
 *.pyc
 data/save.dat
 *.pyw
+data/lib/widgets/updater/*.png
+data/lib/widgets/updater/*.pdn
+data/lib/widgets/updater/data.json
