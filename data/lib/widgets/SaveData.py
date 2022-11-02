@@ -7,7 +7,7 @@ from PyQt6.QtCore import Qt
 from datetime import datetime
 import os
 
-from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QDragList, QNamedSpinBox
+from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QNamedComboBox, QNamedSpinBox
 #----------------------------------------------------------------------
 
     # Class
@@ -46,7 +46,8 @@ class SaveData(QSaveData):
 
     def settings_menu_extra(self):
         return {
-            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png')
+            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png'),
+            self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']: (self.settings_menu_updates(), f'{self.getIconsDir()}/sidepanel/updates.png'),
         }, self.get_extra
 
 
@@ -120,6 +121,40 @@ class SaveData(QSaveData):
         widget.zoom_speed_spinbox.setValue(self.zoom_speed)
         root_frame.grid_layout.addWidget(widget.zoom_speed_spinbox, 10, 0)
         root_frame.grid_layout.setAlignment(widget.zoom_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
+
+
+        return widget
+
+
+
+    def settings_menu_updates(self):
+        lang = self.language_data['QSettingsDialog']['QSidePanel']['updates']
+        widget = QScrollableGridWidget()
+        widget.scroll_layout.setSpacing(0)
+        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
+
+
+        root_frame = QGridFrame()
+        root_frame.grid_layout.setSpacing(16)
+        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
+        widget.scroll_layout.addWidget(root_frame, 0, 0)
+        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
+
+
+        label = QSettingsDialog.textGroup(lang['QLabel']['checkForUpdates']['title'], lang['QLabel']['checkForUpdates']['description'])
+        root_frame.grid_layout.addWidget(label, 0, 0)
+
+        widget.check_for_updates_combobox = QNamedComboBox(None, lang['QNamedComboBox']['checkForUpdates']['title'])
+        widget.check_for_updates_combobox.combo_box.addItems([
+            lang['QNamedComboBox']['checkForUpdates']['values']['never'],
+            lang['QNamedComboBox']['checkForUpdates']['values']['daily'],
+            lang['QNamedComboBox']['checkForUpdates']['values']['weekly'],
+            lang['QNamedComboBox']['checkForUpdates']['values']['monthly'],
+            lang['QNamedComboBox']['checkForUpdates']['values']['atLaunch']
+        ])
+        widget.check_for_updates_combobox.combo_box.setCurrentIndex(self.check_for_updates)
+        root_frame.grid_layout.addWidget(widget.check_for_updates_combobox, 1, 0)
+        root_frame.grid_layout.setAlignment(widget.check_for_updates_combobox, Qt.AlignmentFlag.AlignLeft)
 
 
         return widget

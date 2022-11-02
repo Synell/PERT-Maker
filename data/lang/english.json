@@ -58,18 +58,18 @@
             }
         },
         "QSettingsDialog": {
-            "title": "App Manager > Settings",
+            "title": "PERT Maker > Settings",
             "QSidePanel": {
                 "appearance": {
                     "title": "Appearance",
                     "QLabel": {
                         "language": {
                             "title": "Language",
-                            "description": "Select a display language for App Manager."
+                            "description": "Select a display language for PERT Maker."
                         },
                         "theme": {
                             "title": "Theme",
-                            "description": "Select a display theme for App Manager."
+                            "description": "Select a display theme for PERT Maker."
                         }
                     },
                     "QNamedComboBox": {
@@ -103,6 +103,27 @@
                         "gridSize": "Grid Size",
                         "arrowMoveSpeed": "Moving Speed (Arrow Keys)",
                         "zoomSpeed": "Zoom Speed"
+                    }
+                },
+                "updates": {
+                    "title": "Updates",
+                    "QLabel": {
+                        "checkForUpdates": {
+                            "title": "Check for Updates",
+                            "description": "Determines how often PERT Maker checks for updates."
+                        }
+                    },
+                    "QNamedComboBox": {
+                        "checkForUpdates": {
+                            "title": "Check for Updates",
+                            "values": {
+                                "never": "Never",
+                                "daily": "Daily",
+                                "weekly": "Weekly",
+                                "monthly": "Monthly",
+                                "atLaunch": "At Launch"
+                            }
+                        }
                     }
                 }
             },

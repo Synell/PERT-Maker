@@ -58,18 +58,18 @@
             }
         },
         "QSettingsDialog": {
-            "title": "App Manager > Paramètres",
+            "title": "PERT Maker > Paramètres",
             "QSidePanel": {
                 "appearance": {
                     "title": "Apparence",
                     "QLabel": {
                         "language": {
                             "title": "Langage",
-                            "description": "Sélectionnez un langage à afficher pour App Manager."
+                            "description": "Sélectionnez un langage à afficher pour PERT Maker."
                         },
                         "theme": {
                             "title": "Thème",
-                            "description": "Sélectionnez un thème à afficher pour App Manager."
+                            "description": "Sélectionnez un thème à afficher pour PERT Maker."
                         }
                     },
                     "QNamedComboBox": {
@@ -103,6 +103,27 @@
                         "gridSize": "Taille de la Grille",
                         "arrowMoveSpeed": "Vitesse de Déplacement (Flèches)",
                         "zoomSpeed": "Vitesse de Zoom"
+                    }
+                },
+                "updates": {
+                    "title": "Mises à Jour",
+                    "QLabel": {
+                        "checkForUpdates": {
+                            "title": "Vérifier les Mises à Jour",
+                            "description": "Détermine la fréquence de vérification des mises à jour de PERT Maker."
+                        }
+                    },
+                    "QNamedComboBox": {
+                        "checkForUpdates": {
+                            "title": "Vérifier les Mises à Jour",
+                            "values": {
+                                "never": "Jamais",
+                                "daily": "Quotidienne",
+                                "weekly": "Hebdomadaire",
+                                "monthly": "Mensuelle",
+                                "atLaunch": "Au lancement"
+                            }
+                        }
                     }
                 }
             },
@@ -336,7 +357,7 @@
                     },
                     "openAppFailed": {
                         "title": "Erreur d'Ouverture",
-                        "text": "Une erreur est survenue lors de l'ouverture de App Manager."
+                        "text": "Une erreur est survenue lors de l'ouverture de PERT Maker."
                     },
                     "appNotFound": {
                         "title": "Application Introuvable",
