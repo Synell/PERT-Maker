@@ -18,6 +18,7 @@ class QNamedTextEdit(QGridWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.setProperty('QNamedTextEdit', True)
+        self.setProperty('color', 'main')
 
         self.text_edit = QTextEdit()
         self.text_edit.setPlaceholderText(placeholder)

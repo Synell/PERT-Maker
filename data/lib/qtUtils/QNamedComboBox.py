@@ -18,6 +18,7 @@ class QNamedComboBox(QGridWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.setProperty('QNamedComboBox', True)
+        self.setProperty('color', 'main')
 
         self.combo_box = QComboBox()
         self.combo_box.setCursor(Qt.CursorShape.PointingHandCursor)

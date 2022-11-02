@@ -104,18 +104,6 @@
                         "arrowMoveSpeed": "Moving Speed (Arrow Keys)",
                         "zoomSpeed": "Zoom Speed"
                     }
-                },
-                "export": {
-                    "title": "Export",
-                    "QLabel": {
-                        "exportImageScale": {
-                            "title": "Export Image Scale",
-                            "description": "Set the scale of exported images."
-                        }
-                    },
-                    "QNamedSpinBox": {
-                        "exportImageScale": "Export Image Scale"
-                    }
                 }
             },
             "QPushButton": {
@@ -130,13 +118,8 @@
                     "text": "This functionality doesn't exist yet and will be\navailable in a later version of the software.",
                     "details": "Details"
                 },
-                "exportImage": {
-                    "title": "PERT Maker > Export > Image",
-                    "text": "An error occurred during the process !",
-                    "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
-                },
-                "exportSVG": {
-                    "title": "PERT Maker > Export > SVG",
+                "export": {
+                    "title": "PERT Maker > Export",
                     "text": "An error occurred during the process !",
                     "informativeText": "Make sure your graph fits in your field of view.\nTry editing the image scale settings and retry again."
                 }
@@ -169,13 +152,8 @@
                     "text": "Your table is empty !",
                     "informativeText": "Can't export a table that doesn't exist."
                 },
-                "exportImage": {
-                    "title": "PERT Maker > Export > Image",
-                    "text": "Your graph is empty !",
-                    "informativeText": "Can't export a graph that doesn't exist."
-                },
-                "exportSVG": {
-                    "title": "PERT Maker > Export > SVG",
+                "export": {
+                    "title": "PERT Maker > Export",
                     "text": "Your graph is empty !",
                     "informativeText": "Can't export a graph that doesn't exist."
                 }
@@ -274,7 +252,9 @@
                 }
             },
             "QPushButton": {
-                "open": "Open..."
+                "open": "Open...",
+                "import": "Import",
+                "cancel": "Cancel"
             },
             "QFileDialog": {
                 "title": "PERT Maker > Import > Table > Open"
@@ -285,23 +265,30 @@
             }
         },
         "QExportImageDialog": {
-            "title": "PERT Maker > Export > Image",
-            "QNamedComboBox": {
-                "QLabel": {
-                    "bgMode": "Background Mode"
-                },
-                "QComboBox": {
-                    "default": "Default",
-                    "color": "Color",
-                    "transparent": "Transparent"
-                }
+            "title": "PERT Maker > Export",
+            "QPushButton": {
+                "export": "Export",
+                "cancel": "Cancel"
             },
             "QFileButton": {
                 "title": "Output File",
-                "dialog": "PERT Maker > Export > Image > Output File"
+                "dialog": "PERT Maker > Export > Output File"
             },
-            "QColorButton": {
-                "bg": "Background"
+            "QColorDialog": {
+                "bgColor": {
+                    "title": "PERT Maker > Export > Background Color",
+                    "QPushButton": {
+                        "cancel": "Cancel",
+                        "select": "Select"
+                    }
+                },
+                "fgColor": {
+                    "title": "PERT Maker > Export > Foreground Color",
+                    "QPushButton": {
+                        "cancel": "Cancel",
+                        "select": "Select"
+                    }
+                }
             }
         }
     }

@@ -13,8 +13,8 @@ from .QGridFrame import QGridFrame
 class QIconWidget(QGridFrame):
     def __init__(self, parent = None, icon: str|bytes|QPixmap|QSvgWidget|QIcon|QLabel|None = None, icon_size: QSize = QSize(96, 96), check_file: bool = True) -> None:
         super().__init__(parent)
-        self.__icon_size__ = QSize(96, 96)
-        self.__check_file__ = check_file
+        self._icon_size = QSize(96, 96)
+        self._check_file = check_file
         self.set(icon, icon_size)
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
         self.grid_layout.setSpacing(0)
@@ -38,20 +38,20 @@ class QIconWidget(QGridFrame):
 
     @property
     def icon_size(self) -> QSize:
-        return self.__icon_size__
+        return self._icon_size
 
     @icon_size.setter
     def icon_size(self, size: QSize) -> None:
-        self.__icon_size__ = size
+        self._icon_size = size
         self.update()
 
     @property
     def check_file(self) -> bool:
-        return self.__check_file__
+        return self._check_file
 
     @check_file.setter
     def check_file(self, check_file: bool) -> None:
-        self.__check_file__ = check_file
+        self._check_file = check_file
         self.update()
 
     @staticmethod

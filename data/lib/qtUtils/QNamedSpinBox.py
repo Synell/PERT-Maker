@@ -18,6 +18,7 @@ class QNamedSpinBox(QGridWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.setProperty('QNamedSpinBox', True)
+        self.setProperty('color', 'main')
 
         self.spin_box = QSpinBox()
         self.grid_layout.addWidget(self.spin_box, 0, 0)

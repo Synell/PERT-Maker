@@ -18,6 +18,7 @@ class QNamedLineEdit(QGridWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.setProperty('QNamedLineEdit', True)
+        self.setProperty('color', 'main')
 
         self.line_edit = QLineEdit()
         self.line_edit.setPlaceholderText(placeholder)

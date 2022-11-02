@@ -2,11 +2,12 @@
 
     # Libraries
 from enum import Enum
-from PyQt6.QtWidgets import QGridLayout, QWidget, QDialog, QDialogButtonBox, QStyle, QLabel
+from PyQt6.QtWidgets import QGridLayout, QWidget, QDialog, QPushButton, QStyle, QLabel
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import Qt
 
 from .QBaseApplication import QBaseApplication
+from .QGridWidget import QGridWidget
 #----------------------------------------------------------------------
 
     # Class
@@ -22,6 +23,8 @@ class QMessageBoxWithWidget(QDialog):
         super().__init__(parent = app.window)
         self._layout = QGridLayout(self)
 
+        self.setWindowFlags(Qt.WindowType.Dialog | Qt.WindowType.MSWindowsFixedSizeDialogHint)
+
         self._left = QWidget()
         self._left_layout = QGridLayout(self._left)
 
@@ -29,12 +32,12 @@ class QMessageBoxWithWidget(QDialog):
         self._right_layout = QGridLayout(self._right)
         self._right_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
 
-        self.msg_box_widget = widget
+        self._msg_box_widget = widget
 
         self._layout.addWidget(self._left, 0, 0)
         self._layout.addWidget(self._right, 0, 1)
-        if self.msg_box_widget:
-            self._layout.addWidget(self.msg_box_widget, 1, 0, 1, 2)
+        if self._msg_box_widget:
+            self._layout.addWidget(self._msg_box_widget, 1, 0, 1, 2)
 
         if app:
             match icon:
@@ -57,14 +60,18 @@ class QMessageBoxWithWidget(QDialog):
         self._right_layout.addWidget(informative_text, 1, 0)
         self._right_layout.setAlignment(informative_text, Qt.AlignmentFlag.AlignLeft)
 
+        right_buttons = QGridWidget()
+        right_buttons.grid_layout.setSpacing(16)
+        right_buttons.grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        QBtn = QDialogButtonBox.StandardButton.Ok
+        button = QPushButton('OK')
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.accept)
+        button.setProperty('color', 'main')
+        right_buttons.grid_layout.addWidget(button, 0, 0)
 
-        self._button_box = QDialogButtonBox(QBtn)
-        self._button_box.accepted.connect(self.accept)
-        self._button_box.rejected.connect(self.reject)
-
-        self._layout.addWidget(self._button_box, 2, 1)
+        self._layout.addWidget(right_buttons, 2, 1)
+        self._layout.setAlignment(right_buttons, Qt.AlignmentFlag.AlignRight)
 
 
     def __generatePixmap__(self, icon: Icon|QIcon = Icon.NoIcon):

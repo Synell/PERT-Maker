@@ -18,6 +18,7 @@ class QNamedDoubleSpinBox(QGridWidget):
         self.grid_layout.setContentsMargins(0, 0, 0, 0)
 
         self.setProperty('QNamedDoubleSpinBox', True)
+        self.setProperty('color', 'main')
 
         self.double_spin_box = QDoubleSpinBox()
         self.grid_layout.addWidget(self.double_spin_box, 0, 0)

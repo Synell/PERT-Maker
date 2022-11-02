@@ -9,13 +9,13 @@ from .QColorDialog import QColorDialog
 
     # Class
 class QColorButton(QPushButton):
-    colorChanged = pyqtSignal(QUtilsColor)
+    color_changed = pyqtSignal(QUtilsColor)
 
     def __init__(self, parent = None, lang: dict = {}, color: QUtilsColor = QUtilsColor('#FFFFFF')) -> None:
         super().__init__(parent)
 
-        self.__color__ = QUtilsColor.from_rgba(color.rgba)
-        self.__lang__ = lang
+        self._color = QUtilsColor.from_rgba(color.rgba)
+        self._lang = lang
         self.setProperty('QColorButton', True)
         self.setProperty('color', 'main')
         self.setFixedSize(32, 32)
@@ -24,7 +24,7 @@ class QColorButton(QPushButton):
         self.clicked.connect(self.__clicked__)
 
     def __clicked__(self) -> None:
-        result = QColorDialog(self.parent(), self.__lang__, self.color).exec()
+        result = QColorDialog(self.parent(), self._lang, self.color).exec()
         if result:
             self.color = result
 
@@ -34,11 +34,11 @@ class QColorButton(QPushButton):
 
     @property
     def color(self) -> QUtilsColor:
-        return self.__color__
+        return self._color
 
     @color.setter
     def color(self, color: QUtilsColor) -> None:
-        self.__color__ = color
+        self._color = color
         self.update()
-        self.colorChanged.emit(self.color)
+        self.color_changed.emit(self.color)
 #----------------------------------------------------------------------

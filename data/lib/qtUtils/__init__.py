@@ -2,6 +2,7 @@
 
     # Libraries
 from .QBaseApplication import *
+from .QssParser import QssParser, QssSelector
 from .QSaveData import QSaveData
 from .QBetterListWidget import QBetterListWidget
 from .QScrollableGridWidget import QScrollableGridWidget
@@ -38,4 +39,9 @@ from .QNamedToggleButton import QNamedToggleButton
 from .QDragList import QDragList, QDragListItem
 from .QFileExplorer import QFileExplorer
 from .QSlidingStackedWidget import QSlidingStackedWidget
+from .QAnimatedProgressBar import QAnimatedProgressBar
+from .QAnimatedSlider import QAnimatedSlider
+from .QSmoothScrollArea import QSmoothScrollArea
+from .QPlatform import QPlatform
+from .QCrashReport import QCrashReport
 #----------------------------------------------------------------------

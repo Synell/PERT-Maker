@@ -3,10 +3,10 @@
     # Libraries
 from typing import Callable
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QMessageBox
 import json, os
 from enum import Enum
 
+from .QMessageBoxWithWidget import QMessageBoxWithWidget
 from .QBaseApplication import QBaseApplication
 from .QSettingsDialog import QSettingsDialog
 #----------------------------------------------------------------------
@@ -134,11 +134,13 @@ class QSaveData:
             self.save()
             self.load()
             self.setStyleSheet(app)
-            QMessageBox.information(app.window,
+            QMessageBoxWithWidget(app,
                 self.language_data['QMessageBox']['information']['settingsReload']['title'],
                 self.language_data['QMessageBox']['information']['settingsReload']['text'],
-                QMessageBox.StandardButton.Ok
-            )
+                None,
+                QMessageBoxWithWidget.Icon.Information,
+                None
+            ).exec()
 
     def settings_menu_extra(self) -> tuple[dict, Callable|None]:
         return {}, None

@@ -19,33 +19,33 @@ class Vector3:
             float z
         '''
 
-        self.__x__ = x
-        self.__y__ = y
-        self.__z__ = z
+        self._x = x
+        self._y = y
+        self._z = z
 
     @property
     def x(self) -> float:
-        return self.__x__
+        return self._x
 
     @x.setter
     def x(self, x: float = 0) -> None:
-        self.__x__ = float(x)
+        self._x = float(x)
 
     @property
     def y(self) -> float:
-        return self.__y__
+        return self._y
 
     @y.setter
     def y(self, y: float = 0) -> None:
-        self.__y__ = float(y)
+        self._y = float(y)
 
     @property
     def z(self) -> float:
-        return self.__z__
+        return self._z
 
     @z.setter
     def z(self, z: float = 0) -> None:
-        self.__z__ = float(z)
+        self._z = float(z)
 
     def __str__(self):
         return f'x: {self.x} - y: {self.y} - z: {self.z}'

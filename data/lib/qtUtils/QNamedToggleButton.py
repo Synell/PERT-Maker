@@ -11,6 +11,7 @@ class QNamedToggleButton(QGridFrame):
     def __init__(self, parent = None, text: str = '', checked: bool = False):
         super().__init__(parent)
         self.setProperty('QNamedToggleButton', True)
+        self.setProperty('color', 'main')
 
         self.grid_layout.setSpacing(16)
         self.grid_layout.setContentsMargins(0, 0, 0, 0)

@@ -1,12 +1,13 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QFrame, QScrollArea, QGridLayout
+from PyQt6.QtWidgets import QFrame, QGridLayout
 from PyQt6.QtCore import Qt
+from .QSmoothScrollArea import QSmoothScrollArea
 #----------------------------------------------------------------------
 
     # Class
-class QScrollableGridFrame(QScrollArea):
+class QScrollableGridFrame(QSmoothScrollArea):
     def __init__(self):
         super(QScrollableGridFrame, self).__init__()
         self.scroll_frame = QFrame()

@@ -80,21 +80,29 @@
                 },
                 "editor": {
                     "title": "Éditeur",
-                    "QNamedSpinBox": {
-                        "QLabel": {
-                            "maxLoop": "Maximum de Boucles:",
-                            "gridSize": "Taille de la Grille:",
-                            "arrowMoveSpeed": "Vitesse de Déplacement (Flèches):",
-                            "zoomSpeed": "Vitesse de Zoom:"
+                    "QLabel": {
+                        "maxLoops": {
+                            "title": "Maximum de Boucles",
+                            "description": "Défini le nombre maximum de boucles que l'algorithme de résolution peut faire avant de s'arrêter."
+                        },
+                        "gridSize": {
+                            "title": "Taille de la Grille",
+                            "description": "Défini la taille de la grille."
+                        },
+                        "arrowMoveSpeed": {
+                            "title": "Vitesse de Déplacement (Flèches)",
+                            "description": "Défini la vitesse de déplacement des flèches."
+                        },
+                        "zoomSpeed": {
+                            "title": "Vitesse de Zoom",
+                            "description": "Défini la vitesse de zoom."
                         }
-                    }
-                },
-                "export": {
-                    "title": "Exporter",
+                    },
                     "QNamedSpinBox": {
-                        "QLabel": {
-                            "exportImageScale": "Échelle d'Image (Affecte la Qualité):"
-                        }
+                        "maxLoops": "Maximum de Boucles",
+                        "gridSize": "Taille de la Grille",
+                        "arrowMoveSpeed": "Vitesse de Déplacement (Flèches)",
+                        "zoomSpeed": "Vitesse de Zoom"
                     }
                 }
             },
@@ -110,13 +118,8 @@
                     "text": "Cette fonctionnalité n'existe pas encore et sera\ndisponible dans une version ultérieure du logiciel.",
                     "details": "Détails"
                 },
-                "exportImage": {
-                    "title": "PERT Maker > Exporter > Image",
-                    "text": "Une erreur est survenue lors du processus !",
-                    "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
-                },
-                "exportSVG": {
-                    "title": "PERT Maker > Exporter > SVG",
+                "export": {
+                    "title": "PERT Maker > Exporter",
                     "text": "Une erreur est survenue lors du processus !",
                     "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue.\nTentez d'éditer les paramètres d'échelle d'image et réessayez ensuite."
                 }
@@ -149,13 +152,8 @@
                     "text": "Votre tableau est vide !",
                     "informativeText": "Aucun tableau ne peut être exporté car il n'y en a pas."
                 },
-                "exportImage": {
-                    "title": "PERT Maker > Exporter > Image",
-                    "text": "Votre graphe est vide !",
-                    "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
-                },
-                "exportSVG": {
-                    "title": "PERT Maker > Exporter > SVG",
+                "export": {
+                    "title": "PERT Maker > Exporter",
                     "text": "Votre graphe est vide !",
                     "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
                 }
@@ -254,7 +252,9 @@
                 }
             },
             "QPushButton": {
-                "open": "Ouvrir..."
+                "open": "Ouvrir...",
+                "import": "Importer",
+                "cancel": "Annuler"
             },
             "QFileDialog": {
                 "title": "PERT Maker > Importer > Table > Ouvrir"
@@ -265,23 +265,30 @@
             }
         },
         "QExportImageDialog": {
-            "title": "PERT Maker > Exporter > Image",
-            "QNamedComboBox": {
-                "QLabel": {
-                    "bgMode": "Mode d'Arrière-Plan:"
-                },
-                "QComboBox": {
-                    "default": "Défaut",
-                    "color": "Couleur",
-                    "transparent": "Transparent"
-                }
+            "title": "PERT Maker > Exporter",
+            "QPushButton": {
+                "export": "Exporter",
+                "cancel": "Annuler"
             },
             "QFileButton": {
                 "title": "Fichier Sortant",
-                "dialog": "PERT Maker > Exporter > Image > Fichier Sortant"
+                "dialog": "PERT Maker > Exporter > Fichier Sortant"
             },
-            "QColorButton": {
-                "bg": "Arrière-Plan"
+            "QColorDialog": {
+                "bgColor": {
+                    "title": "PERT Maker > Exporter > Couleur de l'Arrière-Plan",
+                    "QPushButton": {
+                        "cancel": "Annuler",
+                        "select": "Sélectionner"
+                    }
+                },
+                "fgColor": {
+                    "title": "PERT Maker > Exporter > Couleur de la Police",
+                    "QPushButton": {
+                        "cancel": "Annuler",
+                        "select": "Sélectionner"
+                    }
+                }
             }
         }
     }

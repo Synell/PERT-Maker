@@ -1,63 +1,88 @@
 #----------------------------------------------------------------------
 
     # Libraries
-import cv2
-import numpy as np
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QScrollArea, QLabel, QProgressBar
-from PyQt6.QtCore import Qt, QPoint
-from PyQt6.QtGui import QImage, QPixmap, QColor, QPainter, QPen
-from data.lib.qtUtils import QColorButton, QFileButton, QFiles, QNamedComboBox, QUtilsColor
+from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton
+from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtGui import QPixmap, QPainter
+from data.lib.qtUtils import QColorButton, QFileButton, QFiles, QUtilsColor, QGridWidget, QIconWidget, QScrollableGridFrame
 #----------------------------------------------------------------------
 
     # Class
 class QExportImageDialog(QDialog):
-    def __init__(self, parent = None, langData: dict = {}, selectedBgMode: int = 0, bgColor: QUtilsColor = QUtilsColor('#000000'), image: QImage = None, progressBar: QProgressBar = None):
+    def __init__(self, parent = None, lang: dict = {}, bg_color: QUtilsColor = QUtilsColor('#000000'), fg_color = QUtilsColor('#ffffff'), data: QPixmap = None):
         super().__init__(parent = parent)
 
-        self.langData = langData
-        self.image = image
-        self.newImage = None
-        self.progressBar = progressBar
+        self.lang = lang
+        self.data = data
 
-        self.setWindowTitle(langData['title'])
+        layout = QGridLayout(self)
+        layout.setSpacing(16)
+        layout.setContentsMargins(16, 16, 16, 16)
+
+        self.setWindowTitle(lang['title'])
         self.setFixedWidth(700)
         self.setFixedHeight(500)
 
-        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        right_buttons = QGridWidget()
+        right_buttons.grid_layout.setSpacing(16)
+        right_buttons.grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.acceptVerification)
-        self.buttonBox.rejected.connect(self.reject)
+        button = QPushButton(lang['QPushButton']['cancel'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.reject)
+        button.setProperty('color', 'white')
+        button.setProperty('transparent', True)
+        right_buttons.grid_layout.addWidget(button, 0, 0)
 
-        self.combobox = QNamedComboBox(None, langData['QNamedComboBox']['QLabel']['bgMode'])
-        self.combobox.combo_box.addItems([
-            langData['QNamedComboBox']['QComboBox']['default'],
-            langData['QNamedComboBox']['QComboBox']['color'],
-            langData['QNamedComboBox']['QComboBox']['transparent']
-        ])
-        self.combobox.combo_box.setCurrentIndex(selectedBgMode)
-        self.combobox.combo_box.currentIndexChanged.connect(self.indexChanged)
+        button = QPushButton(lang['QPushButton']['export'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.accept)
+        button.setProperty('color', 'main')
+        right_buttons.grid_layout.addWidget(button, 0, 1)
 
-        self.color_button = QColorButton(langData['QColorButton']['bg'])
-        self.color_button.color = bgColor
-        self.oldColor = QUtilsColor(self.color_button.color.rgba)
-        self.color_button.clicked.connect(self.clickEvent)
+        left_frame = QGridWidget()
+        left_frame.grid_layout.setSpacing(16)
+        left_frame.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.bg_color = QColorButton(None, lang['QColorDialog']['bgColor'], bg_color)
+        self.bg_color.color_changed.connect(self.bg_color_changed)
+        left_frame.grid_layout.addWidget(QLabel('Background Color'), 0, 0)
+        left_frame.grid_layout.addWidget(self.bg_color, 0, 1)
+        left_frame.grid_layout.setColumnStretch(2, 1)
 
-        self.label = QLabel()
-        self.label.setStyleSheet('background-color: black;')
-        self.preview = QScrollArea()
-        self.label.setPixmap(QPixmap().fromImage(self.image))
-        self.preview.setWidget(self.label)
+        right_frame = QGridWidget()
+        right_frame.grid_layout.setSpacing(16)
+        right_frame.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.fg_color = QColorButton(None, lang['QColorDialog']['fgColor'], fg_color)
+        self.fg_color.color_changed.connect(self.fg_color_changed)
+        right_frame.grid_layout.addWidget(QLabel('Foreground Color'), 0, 0)
+        right_frame.grid_layout.addWidget(self.fg_color, 0, 1)
+        right_frame.grid_layout.setColumnStretch(2, 1)
 
-        self.indexChanged()
+        frame = QGridWidget()
+        frame.grid_layout.setSpacing(16)
+        frame.grid_layout.setContentsMargins(0, 0, 0, 0)
+        frame.grid_layout.addWidget(left_frame, 0, 0)
+        frame.grid_layout.setAlignment(left_frame, Qt.AlignmentFlag.AlignCenter)
+        frame.grid_layout.addWidget(right_frame, 0, 1)
+        frame.grid_layout.setAlignment(right_frame, Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(frame, 0, 0)
+
+        preview_area = QScrollableGridFrame()
+        self.preview = QIconWidget(None, self.data, QSize(self.data.width(), self.data.height()), False)
+        preview_area.scroll_layout.addWidget(self.preview, 0, 0)
+        layout.addWidget(preview_area, 1, 0)
+
+        self.bg_color_changed(bg_color)
+        self.fg_color_changed(fg_color)
 
         self.filename = QFileButton(
             None,
-            langData['QFileButton'],
-            './image.png',
+            lang['QFileButton'],
+            './image.svg',
             None,
             QFiles.Dialog.SaveFileName,
             QFiles.Extension.combine(
+                QFiles.Extension.Image.SVG,
                 QFiles.Extension.Image.PNG,
                 QFiles.Extension.Image.JPEG,
                 QFiles.Extension.Image.TIFF,
@@ -65,121 +90,56 @@ class QExportImageDialog(QDialog):
             )
         )
 
+        frame = QGridWidget()
+        frame.grid_layout.setSpacing(16)
+        frame.grid_layout.setContentsMargins(0, 0, 0, 0)
+        frame.grid_layout.addWidget(self.filename, 0, 0)
+        frame.grid_layout.addWidget(right_buttons, 0, 1)
+        layout.addWidget(frame, 2, 0)
 
-        layout = QGridLayout(self)
-        layout.addWidget(self.combobox, 0, 0)
-        layout.addWidget(self.color_button, 0, 1)
-        layout.addWidget(self.preview, 1, 0, 1, 2)
-        layout.addWidget(self.filename, 2, 0)
-        layout.addWidget(self.buttonBox, 2, 1)
-
-
-    def clickEvent(self, event = None):
-        if self.oldColor.rgba() != self.color_button.color.rgba():
-            self.newImage = self.applyColor()
-            self.label.setPixmap(QPixmap().fromImage(self.newImage))
-        self.oldColor = self.color_button.color
+        # layout.addWidget(self.bg_color, 0, 0)
+        # layout.addWidget(self.fg_color, 0, 1)
+        # layout.addWidget(self.preview_area, 1, 0, 1, 2)
+        # layout.addWidget(self.filename, 2, 0)
+        # layout.addWidget(right_buttons, 2, 1)
 
 
-    def indexChanged(self, event = None):
-        match self.combobox.combo_box.currentIndex():
-            case 0:
-                self.color_button.setDisabled(True)
-                self.label.setPixmap(QPixmap().fromImage(self.image))
-            case 1:
-                self.color_button.setDisabled(False)
-                self.newImage = self.applyColor()
-                self.label.setPixmap(QPixmap().fromImage(self.newImage))
+    def bg_color_changed(self, color: QUtilsColor) -> None:
+        self.color_changed(color, self.fg_color.color)
 
-            case 2:
-                self.color_button.setDisabled(True)
-                self.newImage = self.applyTransparency()
-                self.label.setPixmap(QPixmap().fromImage(self.newImage))
+    def fg_color_changed(self, color: QUtilsColor) -> None:
+        self.color_changed(self.bg_color.color, color)
 
+    def color_changed(self, bg_color: QUtilsColor, fg_color: QUtilsColor) -> QPixmap:
+        # self.preview.grid_layout.itemAt(0).widget().setStyleSheet(f'background-color: {color.ahex};')
+        data = self.data.copy()
 
-    def applyColor(self):
-        image = self.image.copy()
+        qp = QPainter(data)
+        qp.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+        qp.fillRect( data.rect(), fg_color.QColorAlpha )
+        qp.end()
 
-        w, h = image.width(), image.height()
-        s = image.bits().asstring(w * h * 4)
+        new_data = QPixmap(data.width(), data.height())
+        new_data.fill(bg_color.QColorAlpha)
+        
+        qp = QPainter(new_data)
+        qp.drawPixmap(0, 0, data)
+        qp.end()
 
-        def getPixel(x, y):
-            i = (x + (y * w)) * 4
-            return s[i:i+3]
+        self.preview.icon = new_data
 
-        target_color = getPixel(0, 0)
-
-        p = QPainter(image)
-        p.setPen(QPen(self.color_button.color.QColor))
-
-        queue = list((x, y) for x in range(image.width()) for y in range(image.height()))
-
-        if self.progressBar:
-            length = len(queue)
-            self.progressBar.setHidden(False)
-            self.progressBar.setRange(0, length)
-            self.progressBar.setValue(0)
-
-        while queue:
-            x, y = queue.pop()
-            if getPixel(x, y) == target_color:
-                p.drawPoint(QPoint(x, y))
-            elif self.progressBar:
-                self.progressBar.setValue(length - len(queue))
-
-        if self.progressBar: self.progressBar.setHidden(True)
-
-        return image
-
-    def applyTransparency(self):
-        image = self.image.copy()
-
-        w, h = image.width(), image.height()
-        s = image.bits().asstring(w * h * 4)
-
-        def getPixel(x, y):
-            i = (x + (y * w)) * 4
-            return s[i:i+3]
-
-        targetColor = getPixel(0, 0)
-
-        p = QPainter(image)
-        p.setPen(QPen(QUtilsColor().QColor))
-        p.setCompositionMode(QPainter.CompositionMode.CompositionMode_Clear)
-
-        queue = list((x, y) for x in range(image.width()) for y in range(image.height()))
-
-        if self.progressBar:
-            length = len(queue)
-            self.progressBar.setHidden(False)
-            self.progressBar.setRange(0, length)
-            self.progressBar.setValue(0)
-
-        while queue:
-            x, y = queue.pop()
-            if getPixel(x, y) == targetColor:
-                p.eraseRect(x, y, 1, 1)
-            elif self.progressBar:
-                self.progressBar.setValue(length - len(queue))
-
-        if self.progressBar: self.progressBar.setHidden(True)
-
-        return image
-
-
-    def acceptVerification(self, event = None):
-        match self.combobox.combo_box.currentIndex():
-            case 0:
-                self.image.save(self.filename.path(), self.filename.path().split('.')[-1])
-            case 1:
-                self.newImage.save(self.filename.path(), self.filename.path().split('.')[-1])
-            case 2:
-                self.newImage.save(self.filename.path(), self.filename.path().split('.')[-1])
-
-        self.accept()
+        return new_data
 
 
     def exec(self):
         accept = super().exec()
-        if accept: return self.combobox.combo_box.currentIndex(), QUtilsColor(self.color_button.color.red, self.color_button.color.green, self.color_button.color.blue, self.color_button.color.alpha)
+        if accept:
+            format = 'svg' if sum(self.filename.path().endswith(f'.{ext}') for ext in ['svg', 'svgz']) else 'img'
+            return {
+                'path': self.filename.path(),
+                'bg': self.bg_color.color,
+                'fg': self.fg_color.color,
+                'format': format,
+                'data': self.color_changed(self.bg_color.color, self.fg_color.color) if format == 'img' else None
+            }
 #----------------------------------------------------------------------

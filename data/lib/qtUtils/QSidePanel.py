@@ -89,8 +89,8 @@ class QSidePanel(QScrollableGridFrame):
 
     def __init__(self, parent = None, width: int = 120, transparent: bool = False) -> None:
         super().__init__()
-        # self.scroll_frame.setProperty('QSidePanel', True)
         self.set_transparent(transparent)
+        self.setProperty('color', 'main')
 
         self.__items__ = []
 
@@ -103,7 +103,6 @@ class QSidePanel(QScrollableGridFrame):
         self.scroll_layout.setSpacing(5)
         self.scroll_layout.setContentsMargins(10, 10, 10, 10)
         self.set_width(width)
-        # self.scroll_frame.setProperty('QSidePanel', True)
         self.setProperty('QSidePanel', True)
 
         self.__current_index__ = 0

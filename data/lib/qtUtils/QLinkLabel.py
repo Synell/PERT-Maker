@@ -38,7 +38,7 @@ class QLinkLabel(QLabel):
 
             ending = link_text.find('>')
             if ending == -1: raise ValueError(f'Invalid link: {base_link_text}')
-            link_text = self.start_text + " " + link_text[:ending] + f'style=\"color: {self.link_color};\"' + link_text[ending:] + self.end_text
+            link_text = f'{self.start_text} {link_text[:ending]} style=\"color: {self.link_color}; text-decoration: none;\"{link_text[ending:]}{self.end_text}'
 
             new_text += link_text
             text = text[end + len(self.end_text):]

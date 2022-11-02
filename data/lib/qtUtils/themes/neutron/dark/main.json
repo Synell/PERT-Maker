@@ -2,6 +2,7 @@
     "files": [
         "QMainWindow",
         "QWidget",
+        "QFrame",
         "QDockWidget",
         "QStatusBar",
         "QProgressBar",

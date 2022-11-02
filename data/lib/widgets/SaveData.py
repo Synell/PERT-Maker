@@ -2,13 +2,10 @@
 
     # Libraries
 from urllib.parse import urlparse
-from PyQt6.QtWidgets import QFrame, QLabel, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QFrame
 from PyQt6.QtCore import Qt
 
-from datetime import datetime
-import os
-
-from data.lib.qtUtils import QFiles, QNamedDoubleSpinBox, QNamedLineEdit, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QFileButton, QNamedComboBox, QNamedToggleButton, QUtilsColor, QDragList, QNamedSpinBox
+from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QDragList, QNamedSpinBox
 #----------------------------------------------------------------------
 
     # Class
@@ -33,9 +30,7 @@ class SaveData(QSaveData):
         self.zoom_speed = 0.25
 
         self.export_image_bg_color = QUtilsColor.from_hexa('#000000ff')
-        self.export_image_bg_mode = 0
-
-        self.export_image_scale = 1
+        self.export_image_fg_color = QUtilsColor.from_hexa('#ffffffff')
 
         super().__init__(save_path)
 
@@ -43,8 +38,7 @@ class SaveData(QSaveData):
 
     def settings_menu_extra(self):
         return {
-            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png'),
-            self.language_data['QSettingsDialog']['QSidePanel']['export']['title']: (self.settings_menu_export(), f'{self.getIconsDir()}/sidepanel/export.png')
+            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png')
         }, self.get_extra
 
 
@@ -124,40 +118,11 @@ class SaveData(QSaveData):
 
 
 
-    def settings_menu_export(self):
-        lang = self.language_data['QSettingsDialog']['QSidePanel']['export']
-        widget = QScrollableGridWidget()
-        widget.scroll_layout.setSpacing(0)
-        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
-
-        root_frame = QGridFrame()
-        root_frame.grid_layout.setSpacing(16)
-        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
-        widget.scroll_layout.addWidget(root_frame, 0, 0)
-        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
-
-
-        label = QSettingsDialog.textGroup(lang['QLabel']['exportImageScale']['title'], lang['QLabel']['exportImageScale']['description'])
-        root_frame.grid_layout.addWidget(label, 0, 0)
-
-        widget.export_image_scale_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['exportImageScale'])
-        widget.export_image_scale_spinbox.setRange(0.25, 3)
-        widget.export_image_scale_spinbox.setValue(self.zoom_speed)
-        root_frame.grid_layout.addWidget(widget.export_image_scale_spinbox, 1, 0)
-        root_frame.grid_layout.setAlignment(widget.export_image_scale_spinbox, Qt.AlignmentFlag.AlignLeft)
-
-
-        return widget
-
-
-
     def get_extra(self, extra_tabs: dict = {}):
         self.max_loops = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].max_loops_spinbox.value()
         self.grid_size = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].grid_size_spinbox.value()
         self.arrow_move_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].arrow_move_speed_spinbox.value()
         self.zoom_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].zoom_speed_spinbox.value()
-
-        self.export_image_scale = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['export']['title']].export_image_scale_spinbox.value()
 
 
 
@@ -175,7 +140,6 @@ class SaveData(QSaveData):
             'gridSize': self.grid_size,
             'arrowMoveSpeed': self.arrow_move_speed,
             'zoomSpeed': self.zoom_speed,
-            'exportImageScale': self.export_image_scale,
 
             'liveRefreshConnectionView': self.live_refresh_connection_view,
             'liveMinMax': self.live_min_max,
@@ -183,7 +147,10 @@ class SaveData(QSaveData):
 
             'gridMode': self.grid_mode,
             'gridSize': self.grid_size,
-            'alignToGrid': self.align_to_grid
+            'alignToGrid': self.align_to_grid,
+
+            'exportImageBgColor': self.export_image_bg_color.hexa,
+            'exportImageFgColor': self.export_image_fg_color.hexa
         }
 
     def load_extra_data(self, extra_data: dict = ...) -> None:
@@ -192,7 +159,6 @@ class SaveData(QSaveData):
             self.grid_size = extra_data['gridSize']
             self.arrow_move_speed = extra_data['arrowMoveSpeed']
             self.zoom_speed = extra_data['zoomSpeed']
-            self.export_image_scale = extra_data['exportImageScale']
 
             self.live_refresh_connection_view = extra_data['liveRefreshConnectionView']
             self.live_min_max = extra_data['liveMinMax']
@@ -201,6 +167,9 @@ class SaveData(QSaveData):
             self.grid_mode = extra_data['gridMode']
             self.grid_size = extra_data['gridSize']
             self.align_to_grid = extra_data['alignToGrid']
+
+            self.export_image_bg_color = QUtilsColor.from_hexa(extra_data['exportImageBgColor'])
+            self.export_image_fg_color = QUtilsColor.from_hexa(extra_data['exportImageFgColor'])
 
         except: self.save()
 #----------------------------------------------------------------------

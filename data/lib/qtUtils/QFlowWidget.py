@@ -1,12 +1,13 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QFrame, QSizePolicy, QScrollArea, QLayout
+from PyQt6.QtWidgets import QFrame, QSizePolicy, QLayout
 from PyQt6.QtCore import Qt, QRect, QSize, QPoint
+from .QSmoothScrollArea import QSmoothScrollArea
 #----------------------------------------------------------------------
 
     # Class
-class QFlowWidget(QScrollArea):
+class QFlowWidget(QSmoothScrollArea):
     def __init__(self, parent = None, orientation = Qt.Orientation.Horizontal, margin = 0, spacing = -1):
         super(QFlowWidget, self).__init__(parent)
         self.scroll_frame = QFrame()

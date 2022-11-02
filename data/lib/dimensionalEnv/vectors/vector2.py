@@ -19,24 +19,24 @@ class Vector2:
             float y
         '''
 
-        self.__x__ = float(x)
-        self.__y__ = float(y)
+        self._x = float(x)
+        self._y = float(y)
 
     @property
     def x(self) -> float:
-        return self.__x__
+        return self._x
 
     @x.setter
     def x(self, x: float = 0) -> None:
-        self.__x__ = float(x)
+        self._x = float(x)
 
     @property
     def y(self) -> float:
-        return self.__y__
+        return self._y
 
     @y.setter
     def y(self, y: float = 0) -> None:
-        self.__y__ = float(y)
+        self._y = float(y)
 
     def __str__(self):
         return f'x: {self.x} - y: {self.y}'

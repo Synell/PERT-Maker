@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
+from PyQt6.QtWidgets import QDialog, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
 from PyQt6.QtCore import Qt
-# from data.lib.qtUtils import QFilePicker
+from data.lib.qtUtils import QGridWidget
 #----------------------------------------------------------------------
 
     # Class
@@ -11,35 +11,46 @@ class QImportTableDialog(QDialog):
     WIDTH = 3
     HEIGHT = 50
 
-    def __init__(self, parent = None, langData: dict = {}, selectedItem: int = 0):
+    def __init__(self, parent = None, lang: dict = {}, selected_item: int = 0):
         super().__init__(parent = parent)
 
-        self.langData = langData
+        self.lang = lang
 
-        self.setWindowTitle(langData['title'])
+        self.setWindowTitle(lang['title'])
         self.setMinimumWidth(500)
         self.setMinimumHeight(300)
 
-        QBtn = QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        right_buttons = QGridWidget()
+        right_buttons.grid_layout.setSpacing(16)
+        right_buttons.grid_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.buttonBox = QDialogButtonBox(QBtn)
-        self.buttonBox.accepted.connect(self.acceptVerification)
-        self.buttonBox.rejected.connect(self.reject)
+        button = QPushButton(lang['QPushButton']['cancel'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.reject)
+        button.setProperty('color', 'white')
+        button.setProperty('transparent', True)
+        right_buttons.grid_layout.addWidget(button, 0, 0)
 
-        self.tableWidget = QTableWidget()
-        self.tableWidget.setRowCount(50)
-        self.tableWidget.setColumnCount(3)
-        self.tableWidget.setHorizontalHeaderLabels([
-            langData['QTableWidget']['horizonalHeader']['task'],
-            langData['QTableWidget']['horizonalHeader']['previousTasks'],
-            langData['QTableWidget']['horizonalHeader']['time']
+        button = QPushButton(lang['QPushButton']['import'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self.accept_verification)
+        button.setProperty('color', 'main')
+        right_buttons.grid_layout.addWidget(button, 0, 1)
+
+        self.table_widget = QTableWidget()
+        self.table_widget.setRowCount(50)
+        self.table_widget.setColumnCount(3)
+        self.table_widget.setHorizontalHeaderLabels([
+            lang['QTableWidget']['horizonalHeader']['task'],
+            lang['QTableWidget']['horizonalHeader']['previousTasks'],
+            lang['QTableWidget']['horizonalHeader']['time']
         ])
-        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
-        self.tableWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
+        self.table_widget.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.table_widget.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        self.table_widget.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+        self.table_widget.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
 
-        self.tableWidget.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.table_widget.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
 
         self.items = []
 
@@ -49,32 +60,39 @@ class QImportTableDialog(QDialog):
             for column in range(self.WIDTH):
                 item = QTableWidgetItem()
                 item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-                self.tableWidget.setItem(row, column, item)
+                self.table_widget.setItem(row, column, item)
                 self.items[row].append(item)
 
 
-        self.button = QPushButton(langData['QPushButton']['open'])
-        self.button.clicked.connect(self.selectButton)
+        button = QPushButton(lang['QPushButton']['open'])
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.setProperty('color', 'main')
+        button.setProperty('transparent', True)
+        button.clicked.connect(self.selectButton)
 
         self.combobox = QComboBox()
+        self.combobox.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.combobox.view().setCursor(Qt.CursorShape.PointingHandCursor)
         self.combobox.addItems([
-            langData['QComboBox']['tasksAsPathNames'],
-            langData['QComboBox']['tasksAsNodeNames']
+            lang['QComboBox']['tasksAsPathNames'],
+            lang['QComboBox']['tasksAsNodeNames']
         ])
-        self.combobox.setCurrentIndex(selectedItem)
+        self.combobox.setCurrentIndex(selected_item)
 
         layout = QGridLayout(self)
-        layout.addWidget(self.tableWidget, 0, 0, 1, 2)
+        layout.setSpacing(16)
+        layout.setContentsMargins(16, 16, 16, 16)
+        layout.addWidget(self.table_widget, 0, 0, 1, 2)
         layout.addWidget(self.combobox, 1, 0, 1, 2)
-        layout.addWidget(self.button, 2, 0)
-        layout.addWidget(self.buttonBox, 2, 1)
+        layout.addWidget(button, 2, 0)
+        layout.addWidget(right_buttons, 2, 1)
 
 
     def selectButton(self, event = None):
         path = QFileDialog.getOpenFileName(
             parent = self,
             directory = './',
-            caption = self.langData['QFileDialog']['title'],
+            caption = self.lang['QFileDialog']['title'],
             filter = 'CSV (*.csv)'
         )[0]
 
@@ -88,32 +106,32 @@ class QImportTableDialog(QDialog):
                     self.items[row][column].setText(items[column])
 
 
-    def acceptVerification(self, event = None):
-        newLst = [['-1', '', 1]]
+    def accept_verification(self, event = None):
+        new_lst = [['-1', '', 1]]
         for row in range(self.HEIGHT):
-            canPass = False
+            can_pass = False
             for column in range(self.WIDTH):
                 if self.items[row][column].text():
-                    canPass = True
+                    can_pass = True
                     break
 
-            if canPass:
-                newLst.append([])
+            if can_pass:
+                new_lst.append([])
                 for column in range(self.WIDTH):
                     if column == self.WIDTH - 1:
                         if self.items[row][column].text().isdigit():
-                            newLst[-1].append(int(self.items[row][column].text()))
-                        else: newLst[-1].append(0)
+                            new_lst[-1].append(int(self.items[row][column].text()))
+                        else: new_lst[-1].append(0)
                     else:
-                        newLst[-1].append(self.items[row][column].text())
-                        if column == 1 and newLst[-1][-1] == '': newLst[-1][-1] = '-1'
+                        new_lst[-1].append(self.items[row][column].text())
+                        if column == 1 and new_lst[-1][-1] == '': new_lst[-1][-1] = '-1'
 
-        self.newLst = newLst
+        self.new_lst = new_lst
 
         self.accept()
 
 
     def exec(self):
         accept = super().exec()
-        if accept: return (self.newLst, self.combobox.currentIndex())
+        if accept: return (self.new_lst, self.combobox.currentIndex())
 #----------------------------------------------------------------------
