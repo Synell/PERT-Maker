@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from PyQt6.QtWidgets import QFrame
 from PyQt6.QtCore import Qt
 from datetime import datetime
+import os
 
 from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QDragList, QNamedSpinBox
 #----------------------------------------------------------------------
@@ -35,6 +36,9 @@ class SaveData(QSaveData):
 
         self.check_for_updates = 4
         self.last_check_for_updates = datetime.now()
+
+        self.token = ''
+        self.downloads_folder = os.path.abspath('./data/downloads/').replace('\\', '/')
 
         super().__init__(save_path)
 

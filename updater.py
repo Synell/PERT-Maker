@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtSvg import *
 from PyQt6.QtSvgWidgets import *
 from datetime import datetime, timedelta
-import os, base64, math, sys, subprocess
+import os, base64, math, sys, subprocess, platform
 from urllib.request import urlopen, Request
 from time import sleep
 from data.lib.qtUtils import *
@@ -25,8 +25,8 @@ class QUpdater(QBaseApplication):
 
     UPDATE_LINK = ''
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, platform: QPlatform):
+        super().__init__(platform)
 
         self.save_data = SaveData(save_path = os.path.abspath('./data/save.dat').replace('\\', '/'))
 
@@ -318,7 +318,17 @@ if __name__ == '__main__':
     if len(sys.argv) > 1: QUpdater.UPDATE_LINK = sys.argv[1]
     else: sys.exit()
 
-    app = QUpdater()
+    platf = None
+    match platform.system():
+        case 'Windows': platf = QPlatform.Windows
+        case 'Linux': platf = QPlatform.Linux
+        case 'Darwin': platf = QPlatform.MacOS
+        case 'Java': platf = QPlatform.Java
+        case _: platf = QPlatform.Unknown
+
+    if platf == QPlatform.Unknown: raise Exception('Unknown platform')
+
+    app = QUpdater(platf)
     app.window.showNormal()
     sys.exit(app.exec())
 #----------------------------------------------------------------------
