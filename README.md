@@ -94,7 +94,7 @@ If the node is pointing to another node, you can edit the display name of the co
 
 Let's say you have this PERT diagram:
 
-<img alt="Apps tab with an app installed" src="https://drive.google.com/u/0/uc?id=1KXyBOgzz5TLCnXRZ8BddpA8xLxbU9rCw" />
+<img alt="PERT diagram example" src="https://drive.google.com/u/0/uc?id=1KXyBOgzz5TLCnXRZ8BddpA8xLxbU9rCw" />
 
 Let's focus on the "Generation" tab:
 
@@ -147,11 +147,11 @@ The last toggle switch, as its name suggests, allows you to use the node names i
 
 You can export the PERT diagram as an image or as a vectorial image (SVG) by clicking on the "Export" button, then on the "Image" button, in the "File" tab.
 
-<img alt="PERT diagram with node names instead of path names" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSJr_xhMwDgP4OYPkTERQg7LOsB2ZJE8MVEHU60bskFhCebgmfAUGM3YJEozjiql07hdyBcdTFSYZ1pEXbLWLy86VMG" />
+<img alt="Export menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSJr_xhMwDgP4OYPkTERQg7LOsB2ZJE8MVEHU60bskFhCebgmfAUGM3YJEozjiql07hdyBcdTFSYZ1pEXbLWLy86VMG" />
 
 There, you can choose the file location, the file name, the background color and the foreground color.
 
-<img alt="PERT diagram with node names instead of path names" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmRMehVydSaZr-ifBg7KUQpJkQc36IBcszT_RnawKm1Rj6LuENXwSG6cHbE6wMYvZnmWVkqrFZv-xgDNt6c1VFHT5_3Azg" />
+<img alt="Color picker menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmRMehVydSaZr-ifBg7KUQpJkQc36IBcszT_RnawKm1Rj6LuENXwSG6cHbE6wMYvZnmWVkqrFZv-xgDNt6c1VFHT5_3Azg" />
 
 
 ### Generate a PERT diagram from a CSV file
