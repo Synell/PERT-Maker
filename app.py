@@ -374,16 +374,30 @@ class Application(QBaseApplication):
             about_action = QAction(QIcon('./data/themes/logo.ico'), lang['about'], self.window)
             about_action.triggered.connect(self.help_menu_about_action)
 
-            tips_action = QAction(self.save_data.getIcon('menubar/tips.png'), lang['tips'], self.window)
-            tips_action.triggered.connect(self.help_menu_tips_action)
-
             about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
             about_qt_action.triggered.connect(self.help_menu_about_pyside_action)
 
+            tips_action = QAction(self.save_data.getIcon('menubar/tips.png'), lang['tips'], self.window)
+            tips_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage')))
+
+            def create_donate_menu():
+                donate_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QMenu']['donate']['title'], self.window)
+                donate_menu.setIcon(self.save_data.getIcon('menubar/donate.png'))
+
+                buymeacoffee_action = QAction(self.save_data.getIcon('menubar/buyMeACoffee.png'), 'Buy Me a Coffee', self.window)
+                buymeacoffee_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://www.buymeacoffee.com/Synell')))
+
+                donate_menu.addAction(buymeacoffee_action)
+
+                return donate_menu
+
 
             help_menu.addAction(about_action)
-            help_menu.addAction(tips_action)
             help_menu.addAction(about_qt_action)
+            help_menu.addSeparator()
+            help_menu.addAction(tips_action)
+            help_menu.addSeparator()
+            help_menu.addMenu(create_donate_menu())
 
 
         create_file_menu()
@@ -1238,9 +1252,6 @@ class Application(QBaseApplication):
                 lang['texts'][2].replace('%s', f'<a href=\"https://github.com/Synell/PERT-Maker\" style=\"color: {self.COLOR_LINK.hex};\">PERT Maker Github</a>')
             ]
         ).exec()
-
-    def help_menu_tips_action(self):
-        QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage'))
 
     def help_menu_about_pyside_action(self):
         self.aboutQt()
