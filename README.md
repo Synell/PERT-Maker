@@ -14,7 +14,7 @@
 
 ----------------------------------------------------------------------
 
-PERT Maker is a simple tool to create PERT diagrams. It is written in Python and uses the PySide framework.
+PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Program_evaluation_and_review_technique">PERT diagrams</a>. It is written in Python and uses the PySide framework.
 
 
 ## Requirements
