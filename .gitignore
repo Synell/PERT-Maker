@@ -153,6 +153,7 @@ cython_debug/
 *.bat
 compileConfig.json
 tmp/
+output/
 *.csv
 *.pypert
 *.pyc

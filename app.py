@@ -13,7 +13,7 @@ from data.lib import *
 
     # Class
 class Application(QBaseApplication):
-    BUILD = '07e6e910'
+    BUILD = '07e6e918'
     VERSION = 'Experimental'
 
     DELTA = 80

@@ -27,7 +27,7 @@ PERT Maker is a simple tool to create PERT diagrams. It is written in Python and
 
 ### Source Code
 - Python 3.10 or later
-  - PyQt6 (`pip install PyQt6`)
+  - PySide6 (`pip install PySide6`)
   - datetime (`pip install datetime`)
   - requests (`pip install requests`)
 
