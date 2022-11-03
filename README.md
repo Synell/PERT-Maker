@@ -14,7 +14,7 @@
 
 ----------------------------------------------------------------------
 
-PERT Maker is a simple tool to create PERT diagrams. It is written in Python and uses the Qt framework.
+PERT Maker is a simple tool to create PERT diagrams. It is written in Python and uses the PySide framework.
 
 
 ## Requirements
