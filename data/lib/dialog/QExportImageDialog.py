@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton
-from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtGui import QPixmap, QPainter
+from PySide6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QPixmap, QPainter
 from data.lib.qtUtils import QColorButton, QFileButton, QFiles, QUtilsColor, QGridWidget, QIconWidget, QScrollableGridFrame
 #----------------------------------------------------------------------
 

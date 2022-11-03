@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QFrame, QSizePolicy, QLayout
-from PyQt6.QtCore import Qt, QRect, QSize, QPoint
+from PySide6.QtWidgets import QFrame, QSizePolicy, QLayout
+from PySide6.QtCore import Qt, QRect, QSize, QPoint
 from .QSmoothScrollArea import QSmoothScrollArea
 #----------------------------------------------------------------------
 

@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtCore import Qt, QSize, QPoint, QPointF, QRectF, QEasingCurve, QPropertyAnimation, QSequentialAnimationGroup, pyqtSlot, pyqtProperty
-from PyQt6.QtWidgets import QCheckBox
-from PyQt6.QtGui import QColor, QBrush, QPaintEvent, QPen, QPainter
+from PySide6.QtCore import Qt, QSize, QPoint, QPointF, QRectF, QEasingCurve, QPropertyAnimation, QSequentialAnimationGroup, Slot, Property
+from PySide6.QtWidgets import QCheckBox
+from PySide6.QtGui import QColor, QBrush, QPaintEvent, QPen, QPainter
 #----------------------------------------------------------------------
 
     # Class
@@ -49,7 +49,7 @@ class QToggleButton(QCheckBox):
     def hitButton(self, pos: QPoint):
         return self.contentsRect().contains(pos)
 
-    @pyqtSlot(int)
+    @Slot(int)
     def setup_animation(self, value):
         self.animations_group.stop()
         if value:
@@ -95,7 +95,7 @@ class QToggleButton(QCheckBox):
 
         p.end()
 
-    @pyqtProperty(float)
+    @Property(float)
     def handle_position(self):
         return self._handle_position
 

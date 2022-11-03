@@ -2,9 +2,9 @@
 
     # Libraries
 from enum import Enum
-from PyQt6.QtWidgets import QGridLayout, QWidget, QDialog, QPushButton, QStyle, QLabel
-from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QGridLayout, QWidget, QDialog, QPushButton, QStyle, QLabel
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtCore import Qt
 
 from .QBaseApplication import QBaseApplication
 from .QGridWidget import QGridWidget

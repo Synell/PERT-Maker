@@ -1,13 +1,13 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtCore import QObject, pyqtSignal, QThread
+from PySide6.QtCore import QObject, Signal, QThread
 from data.lib.qtUtils import QSlidingStackedWidget
 #----------------------------------------------------------------------
 
     # Class
 class __WorkerSignals__(QObject):
-        slide_changed = pyqtSignal()
+        slide_changed = Signal()
 
 class SlideWorker(QThread):
     def __init__(self):

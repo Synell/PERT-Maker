@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QGroupBox, QGridLayout
+from PySide6.QtWidgets import QGroupBox, QGridLayout
 #----------------------------------------------------------------------
 
     # Class

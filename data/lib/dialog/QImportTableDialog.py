@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QDialog, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
+from PySide6.QtCore import Qt
 from data.lib.qtUtils import QGridWidget
 #----------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ class QImportTableDialog(QDialog):
     def selectButton(self, event = None):
         path = QFileDialog.getOpenFileName(
             parent = self,
-            directory = './',
+            dir = './',
             caption = self.lang['QFileDialog']['title'],
             filter = 'CSV (*.csv)'
         )[0]

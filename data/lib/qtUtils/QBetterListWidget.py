@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QTreeView, QAbstractItemView, QHeaderView
-from PyQt6.QtGui import QStandardItemModel, QStandardItem, QIcon
-from PyQt6.QtCore import Qt, QItemSelectionModel, QModelIndex, QSize
+from PySide6.QtWidgets import QTreeView, QAbstractItemView, QHeaderView
+from PySide6.QtGui import QStandardItemModel, QStandardItem, QIcon
+from PySide6.QtCore import Qt, QItemSelectionModel, QModelIndex, QSize
 import colorama
 #----------------------------------------------------------------------
 

@@ -2,8 +2,8 @@
 
     # Libraries
 from urllib.parse import urlparse
-from PyQt6.QtWidgets import QFrame
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QFrame
+from PySide6.QtCore import Qt
 from datetime import datetime
 import os
 
@@ -167,7 +167,7 @@ class SaveData(QSaveData):
         self.arrow_move_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].arrow_move_speed_spinbox.value()
         self.zoom_speed = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']].zoom_speed_spinbox.value()
 
-        # self.check_for_updates = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']].check_for_updates_combobox.combo_box.currentIndex()
+        self.check_for_updates = extra_tabs[self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']].check_for_updates_combobox.combo_box.currentIndex()
 
 
 

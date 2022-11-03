@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QScrollArea, QWidget, QApplication
-from PyQt6.QtCore import QTimer, Qt, QDateTime, QPoint
-from PyQt6.QtGui import QWheelEvent
+from PySide6.QtWidgets import QScrollArea, QWidget, QApplication
+from PySide6.QtCore import QTimer, Qt, QDateTime, QPoint
+from PySide6.QtGui import QWheelEvent
 from enum import Enum
 from math import cos, pi
 #----------------------------------------------------------------------

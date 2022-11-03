@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QStackedWidget, QWidget, QGraphicsOpacityEffect
-from PyQt6.QtCore import pyqtSignal, QPropertyAnimation, Qt, QEasingCurve, QPoint, QParallelAnimationGroup, QAbstractAnimation
+from PySide6.QtWidgets import QStackedWidget, QWidget, QGraphicsOpacityEffect
+from PySide6.QtCore import Signal, QPropertyAnimation, Qt, QEasingCurve, QPoint, QParallelAnimationGroup, QAbstractAnimation
 
 from enum import Enum
 from math import fmod
@@ -17,7 +17,7 @@ class QSlidingStackedWidget(QStackedWidget):
         Bottom2Top = 'bottom2top'
         Automatic = 'automatic'
 
-    animation_finished = pyqtSignal()
+    animation_finished = Signal()
 
     def __init__(self, parent = None) -> None:
         super().__init__(parent)

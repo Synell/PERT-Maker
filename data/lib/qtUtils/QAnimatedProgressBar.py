@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QProgressBar, QWidget
-from PyQt6.QtCore import QPropertyAnimation, QEasingCurve
+from PySide6.QtWidgets import QProgressBar, QWidget
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve
 #----------------------------------------------------------------------
 
     # Class

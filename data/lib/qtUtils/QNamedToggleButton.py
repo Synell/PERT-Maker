@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLabel
+from PySide6.QtWidgets import QLabel
 from .QGridFrame import QGridFrame
 from .QToggleButton import QToggleButton
 #----------------------------------------------------------------------

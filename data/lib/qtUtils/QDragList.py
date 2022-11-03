@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication, QStyleOption, QStyle, QLabel
-from PyQt6.QtGui import QMouseEvent, QDropEvent, QDragEnterEvent, QPaintEvent, QPainter
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication, QStyleOption, QStyle, QLabel
+from PySide6.QtGui import QMouseEvent, QDropEvent, QDragEnterEvent, QPaintEvent, QPainter
+from PySide6.QtCore import Qt
 
 from .QGridFrame import QGridFrame
 #----------------------------------------------------------------------

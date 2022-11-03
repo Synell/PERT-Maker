@@ -1,10 +1,10 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLabel
-from PyQt6.QtGui import QPixmap, QIcon, QFileSystemModel, QImage
-from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtCore import Qt, QSize, QFileInfo
+from PySide6.QtWidgets import QLabel, QFileSystemModel
+from PySide6.QtGui import QPixmap, QIcon, QImage
+from PySide6.QtSvgWidgets import QSvgWidget
+from PySide6.QtCore import Qt, QSize, QFileInfo
 import os
 from .QGridFrame import QGridFrame
 #----------------------------------------------------------------------

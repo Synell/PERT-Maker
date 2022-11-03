@@ -1,15 +1,15 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtCore import Qt, QEvent, pyqtSignal
+from PySide6.QtWidgets import QPushButton
+from PySide6.QtCore import Qt, QEvent, Signal
 from data.lib.qtUtils.QUtilsColor import QUtilsColor
 from .QColorDialog import QColorDialog
 #----------------------------------------------------------------------
 
     # Class
 class QColorButton(QPushButton):
-    color_changed = pyqtSignal(QUtilsColor)
+    color_changed = Signal(QUtilsColor)
 
     def __init__(self, parent = None, lang: dict = {}, color: QUtilsColor = QUtilsColor('#FFFFFF')) -> None:
         super().__init__(parent)

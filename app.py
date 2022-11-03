@@ -1,10 +1,10 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtGui import *
-from PyQt6.QtCore import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtSvg import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
+from PySide6.QtSvg import *
 from math import *
 from datetime import datetime, timedelta
 import json, sys
@@ -1014,9 +1014,9 @@ class Application(QBaseApplication):
             qp.drawEllipse(int(((self.camera_pos.x + p.pos.x) - (self.DELTA / 2)) * self.zoom), int(((self.camera_pos.y + p.pos.y) - (self.DELTA / 2)) * self.zoom), int(self.DELTA * self.zoom), int(self.DELTA * self.zoom))
             qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + p.pos) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x, p.pos.y - (self.DELTA / 2))) * self.zoom))
             qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 2), p.pos.y)) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 2), p.pos.y)) * self.zoom))
-            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (qp.font().weight() / 135 * len(p.name)), p.pos.y + (self.DELTA / 4))) * self.zoom), p.name)
-            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.minTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
-            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().weight() / 135 * len(str(p.maxTime))), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (qp.font().pointSize() * (len(p.name) / 3)), p.pos.y + (self.DELTA / 4))) * self.zoom), p.name)
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().pointSize() * (len(str(p.minTime)) / 3)), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
+            qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().pointSize() * (len(str(p.maxTime)) / 3)), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
 
             for pathKey in list(p.next.keys()):
                 if p == self.selected_item:
@@ -1041,7 +1041,7 @@ class Application(QBaseApplication):
                 if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)) * self.zoom), f'{path.name} {path.value}')
 
     def canvas_get_point(self, event: QMouseEvent):
-        return Vector2(event.pos().x(), event.pos().y())
+        return Vector2(event.position().x(), event.position().y())
 
     def canvas_get_node(self, event: QMouseEvent):
         point = (self.canvas_get_point(event) / self.zoom) - self.camera_pos
@@ -1150,7 +1150,7 @@ class Application(QBaseApplication):
 
         path = QFileDialog.getOpenFileName(
             parent = self.window,
-            directory = './',
+            dir = './',
             caption = lang['title'],
             filter = 'Python PERT (*.pypert)'
         )[0]
@@ -1200,7 +1200,7 @@ class Application(QBaseApplication):
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
-            directory = './',
+            dir = './',
             caption = lang['title'],
             filter = 'Python PERT (*.pypert)'
         )[0]
@@ -1353,7 +1353,7 @@ class Application(QBaseApplication):
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
-            directory = './',
+            dir = './',
             caption = lang['QFileDialog']['table']['title'],
             filter = 'CSV (*.csv)'
         )[0]
@@ -1477,7 +1477,7 @@ class Application(QBaseApplication):
         result = None
         if type(obj) is QSvgGenerator:
             obj.setViewBox(QRectF(min_point.x, min_point.y, max_point.x - min_point.x, max_point.y - min_point.y))
-            self.canvas.render(obj, flags = QWidget.RenderFlag.DrawWindowBackground)
+            self.canvas.render(obj, renderFlags = QWidget.RenderFlag.DrawWindowBackground)
 
         else: result = self.canvas.grab(QRect(int(min_point.x), int(min_point.y), int(max_point.x - min_point.x), int(max_point.y - min_point.y)))
 

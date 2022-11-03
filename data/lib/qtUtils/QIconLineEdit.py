@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLineEdit
-from PyQt6.QtGui import QIcon, QAction
+from PySide6.QtWidgets import QLineEdit
+from PySide6.QtGui import QIcon, QAction
 #----------------------------------------------------------------------
 
     # Class

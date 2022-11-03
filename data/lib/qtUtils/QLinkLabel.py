@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLabel
-from PyQt6.QtCore import Qt, pyqtSignal
+from PySide6.QtWidgets import QLabel
+from PySide6.QtCore import Qt, Signal
 #----------------------------------------------------------------------
 
     # Class
@@ -11,7 +11,7 @@ class QLinkLabel(QLabel):
     end_text = '</a>'
     link_color = '#4B9CF5'
 
-    clicked = pyqtSignal(str)
+    clicked = Signal(str)
 
     def __init__(self, text: str = '', parent = None) -> None:
         super().__init__(parent)

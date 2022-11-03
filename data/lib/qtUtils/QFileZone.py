@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLabel, QFileDialog
-from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtGui import QDragEnterEvent, QDropEvent
+from PySide6.QtWidgets import QLabel, QFileDialog
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtGui import QDragEnterEvent, QDropEvent
 from .QFiles import QFiles
 from .QGridFrame import QGridFrame
 from .QIconWidget import QIconWidget
@@ -12,19 +12,19 @@ from .QLinkLabel import QLinkLabel
 
     # Class
 class QFileZone(QGridFrame):
-    drag_and_drop_used = pyqtSignal()
-    dialog_used = pyqtSignal()
-    item_added = pyqtSignal(str)
-    items_added = pyqtSignal(list)
+    drag_and_drop_used = Signal()
+    dialog_used = Signal()
+    item_added = Signal(str)
+    items_added = Signal(list)
 
     def __init__(self, parent = None, lang: dict = {}, icon: str = None, icon_size: int = 96, type: QFiles.Dialog = QFiles.Dialog.OpenFileName, directory: str = '', filter: str = '') -> None:
         super().__init__(parent)
-        self.__icon__ = icon
-        self.__lang__ = lang
-        self.__type__ = type
-        self.__directory__ = directory
+        self._icon = icon
+        self._lang = lang
+        self._type = type
+        self._directory = directory
         self.set_filter(filter)
-        self.__icon_size__ = icon_size
+        self._icon_size = icon_size
 
         match type:
             case QFiles.Dialog.OpenFileUrl: type = QFiles.Dialog.OpenFileName
@@ -32,11 +32,11 @@ class QFileZone(QGridFrame):
             case QFiles.Dialog.ExistingDirectoryUrl: type = QFiles.Dialog.ExistingDirectory
             case QFiles.Dialog.SaveFileName: type = QFiles.Dialog.OpenFileName
             case QFiles.Dialog.SaveFileUrl: type = QFiles.Dialog.OpenFileName
-        self.__type__ = type
+        self._type = type
 
         self.setProperty('QFileZone', True)
 
-        icon_widget = QIconWidget(self, self.__icon__, icon_size)
+        icon_widget = QIconWidget(self, self._icon, icon_size)
         self.grid_layout.addWidget(icon_widget, 0, 0)
 
         widget = QGridFrame()
@@ -66,13 +66,13 @@ class QFileZone(QGridFrame):
 
     @property
     def filter(self):
-        return self.__filter__
+        return self._filter
 
     def set_filter(self, filter: str) -> None:
-        self.__filter__ = filter
+        self._filter = filter
 
         self.__extension_list__ = []
-        for ext in self.__filter__.split(';;'):
+        for ext in self._filter.split(';;'):
             ext = ext.split('(')[-1].replace('.', '').replace('*', '').replace(')', '').replace(' ', '').replace('.', '').split(',')
             for i in ext:
                 if i: self.__extension_list__.append(i)
@@ -83,11 +83,11 @@ class QFileZone(QGridFrame):
 
         match action:
             case 'file':
-                path = QFileDialog.getOpenFileName(self, directory = self.__directory__, filter = self.__filter__, caption = self.__lang__['QFileDialog']['file'])[0]
+                path = QFileDialog.getOpenFileName(self, dir = self._directory, filter = self._filter, caption = self._lang['QFileDialog']['file'])[0]
             case 'files':
-                path = QFileDialog.getOpenFileNames(self, directory = self.__directory__, filter = self.__filter__, caption = self.__lang__['QFileDialog']['files'])[0]
+                path = QFileDialog.getOpenFileNames(self, dir = self._directory, filter = self._filter, caption = self._lang['QFileDialog']['files'])[0]
             case 'directory':
-                path = QFileDialog.getExistingDirectory(self, directory = self.__directory__, caption = self.__lang__['QFileDialog']['directory'])[0]
+                path = QFileDialog.getExistingDirectory(self, dir = self._directory, caption = self._lang['QFileDialog']['directory'])[0]
 
         if not path: return
 

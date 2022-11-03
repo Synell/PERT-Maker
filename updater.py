@@ -1,11 +1,11 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtGui import *
-from PyQt6.QtCore import *
-from PyQt6.QtWidgets import *
-from PyQt6.QtSvg import *
-from PyQt6.QtSvgWidgets import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
+from PySide6.QtSvg import *
+from PySide6.QtSvgWidgets import *
 from datetime import datetime, timedelta
 import os, base64, math, sys, subprocess, platform
 from urllib.request import urlopen, Request

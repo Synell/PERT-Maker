@@ -1,9 +1,9 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QPushButton, QLabel, QFileDialog
-from PyQt6.QtCore import Qt, QEvent, pyqtSignal
-from PyQt6.QtGui import QIcon
+from PySide6.QtWidgets import QPushButton, QLabel, QFileDialog
+from PySide6.QtCore import Qt, QEvent, Signal
+from PySide6.QtGui import QIcon
 from .QGridWidget import QGridWidget
 from .QFiles import QFiles
 #----------------------------------------------------------------------
@@ -13,7 +13,7 @@ class QFileButton(QGridWidget):
     normal_color = '#FFFFFF'
     hover_color = '#FFFFFF'
 
-    path_changed = pyqtSignal(str)
+    path_changed = Signal(str)
 
     def __init__(self, parent = None, lang: dict = {}, default_path: str = './', icon: str = None, type: QFiles.Dialog = QFiles.Dialog.ExistingDirectory, filter: str = '', end_with: str = ''):
         super().__init__(parent)
@@ -24,8 +24,8 @@ class QFileButton(QGridWidget):
 
         self.lang = lang
         self.type = type
-        self.__path__ = default_path
-        if self.__path__ == None: self.__path__ = './'
+        self._path = default_path
+        if self._path == None: self._path = './'
         self.filter = filter
         self.end_with = end_with
 
@@ -57,56 +57,56 @@ class QFileButton(QGridWidget):
             case QFiles.Dialog.OpenFileName:
                 path = QFileDialog.getOpenFileName(
                     parent = self,
-                    directory = self.__path__,
+                    dir = self._path,
                     caption = self.lang['dialog'],
                     filter = self.filter
                 )[0]
             case QFiles.Dialog.OpenFileUrl:
                 path = QFileDialog.getOpenFileUrl(
                     parent = self,
-                    directory = self.__path__,
+                    dir = self._path,
                     caption = self.lang['dialog'],
                     filter = self.filter
                 )[0]
             case QFiles.Dialog.SaveFileName:
                 path = QFileDialog.getSaveFileName(
                     parent = self,
-                    directory = self.__path__,
+                    dir = self._path,
                     caption = self.lang['dialog'],
                     filter = self.filter
                 )[0]
             case QFiles.Dialog.SaveFileUrl:
                 path = QFileDialog.getSaveFileUrl(
                     parent = self,
-                    directory = self.__path__,
+                    dir = self._path,
                     caption = self.lang['dialog'],
                     filter = self.filter
                 )[0]
             case _:
                 path = QFileDialog.getExistingDirectory(
                     parent = self,
-                    directory = self.__path__,
+                    dir = self._path,
                     caption = self.lang['dialog']
                 )
 
         if not path: return
-        old_path = self.__path__
-        self.__path__ = path
+        old_path = self._path
+        self._path = path
         self.update_path()
-        if self.__path__ != old_path: self.path_changed.emit(self.__path__)
+        if self._path != old_path: self.path_changed.emit(self._path)
 
     def update_path(self):
-        self.__path__ = self.__path__.replace('\\', '/')
-        while self.__path__[-1] == '/': self.__path__ = self.__path__[:-1]
-        #while self.__path__.find('//') != -1: self.__path__ = self.__path__.replace('//', '/')
-        self.__path__ = self.__path__[0].upper() + self.__path__[1:]
-        if len(self.__path__) > 24: self.push_button.setText('/'.join(self.__path__.split('/')[:1]) + '/.../' + '/'.join(self.__path__.split('/')[-2:]) + self.end_with)
-        else: self.push_button.setText(self.__path__ + self.end_with)
+        self._path = self._path.replace('\\', '/')
+        while self._path[-1] == '/': self._path = self._path[:-1]
+        #while self._path.find('//') != -1: self._path = self._path.replace('//', '/')
+        self._path = self._path[0].upper() + self._path[1:]
+        if len(self._path) > 24: self.push_button.setText('/'.join(self._path.split('/')[:1]) + '/.../' + '/'.join(self._path.split('/')[-2:]) + self.end_with)
+        else: self.push_button.setText(self._path + self.end_with)
 
     def path(self) -> str:
-        return self.__path__ + self.end_with
+        return self._path + self.end_with
 
     def setPath(self, value: str):
-        self.__path__ = value.replace('\\', '/')
+        self._path = value.replace('\\', '/')
         self.update_path()
 #----------------------------------------------------------------------

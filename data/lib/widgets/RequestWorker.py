@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtCore import QObject, pyqtSignal, QThread
+from PySide6.QtCore import QObject, Signal, QThread
 from datetime import datetime
 from collections import namedtuple
 import requests
@@ -10,8 +10,8 @@ from .PlatformType import PlatformType
 
     # Class
 class __WorkerSignals__(QObject):
-    received = pyqtSignal(dict, str)
-    failed = pyqtSignal(str)
+    received = Signal(dict, str)
+    failed = Signal(str)
 
 class RequestWorker(QThread):
     download_data = namedtuple('download_data', ['name', 'tag_name', 'link', 'prerelease', 'created_at', 'token'])

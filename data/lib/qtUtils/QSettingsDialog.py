@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QDialog, QFrame, QLabel, QGridLayout, QWidget, QPushButton
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QFrame, QLabel, QGridLayout, QWidget, QPushButton
+from PySide6.QtCore import Qt
 from data.lib.qtUtils.QGridFrame import QGridFrame
 
 from data.lib.qtUtils.QGridWidget import QGridWidget

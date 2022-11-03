@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QComboBox, QLabel, QLayout
-from PyQt6.QtCore import Qt, QEvent
+from PySide6.QtWidgets import QComboBox, QLabel, QLayout
+from PySide6.QtCore import Qt, QEvent
 from .QGridWidget import QGridWidget
 #----------------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 
     # Libraries
 from typing import Callable
-from PyQt6.QtGui import QIcon
+from PySide6.QtGui import QIcon
 import json, os
 from enum import Enum
 

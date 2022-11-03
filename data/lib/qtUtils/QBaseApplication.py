@@ -2,9 +2,9 @@
 
     # Libraries
 from sys import argv
-from PyQt6.QtWidgets import QApplication, QMainWindow, QLabel
-from PyQt6.QtCore import QPauseAnimation, QRect, QEvent, QSequentialAnimationGroup, QPauseAnimation, QPropertyAnimation, Qt, QEasingCurve
-from PyQt6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel
+from PySide6.QtCore import QPauseAnimation, QRect, QEvent, QSequentialAnimationGroup, QPauseAnimation, QPropertyAnimation, Qt, QEasingCurve
+from PySide6.QtGui import QIcon, QPixmap
 
 from .QPlatform import QPlatform
 from .QssParser import QssParser, QssSelector
@@ -32,7 +32,14 @@ class QBaseApplication(QApplication):
         self.save_data = None
 
         self._alerts = []
+        self._has_alert_queue = True
         self._has_installed_event_filter = False
+
+    def has_alert_queue(self) -> bool:
+        return self._has_alert_queue
+
+    def set_alert_queue(self, has_alert_queue: bool) -> None:
+        self._has_alert_queue = has_alert_queue
 
     def show_alert(self, message: str, icon: QIcon|QPixmap = None, raise_duration: int = 350, pause_duration: int = 1300, fade_duration: int = 350, color: str = 'main') -> None:
         if not self._has_installed_event_filter:
@@ -52,13 +59,26 @@ class QBaseApplication(QApplication):
         alert.animation.addAnimation(QPropertyAnimation(alert, b'geometry', duration = fade_duration, easingCurve = QEasingCurve.Type.InCubic))
         self._alerts.append(alert)
 
-        def deleteLater() -> None:
+        def delete_later() -> None:
             self._alerts.remove(alert)
             alert.deleteLater()
-        alert.animation.finished.connect(deleteLater)
+            if self._has_alert_queue and self._alerts:
+                self._start_alert(self._alerts[0])
+        alert.animation.finished.connect(delete_later)
 
         self._update_alert_animations()
 
+        alert.setVisible(False)
+
+        if self._has_alert_queue:
+            if alert == self._alerts[0]: self._start_alert(alert)
+        else: self._start_alert(alert)
+
+        alert.setGeometry(alert.animation.animationAt(0).startValue())
+
+
+    def _start_alert(self, alert: QLabel) -> None:
+        alert.setVisible(True)
         alert.setGeometry(alert.animation.animationAt(0).startValue())
         alert.show()
         alert.raise_()

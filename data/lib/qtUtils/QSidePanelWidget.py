@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QWidget, QGridLayout
-from PyQt6.QtCore import Qt
+from PySide6.QtWidgets import QWidget, QGridLayout
+from PySide6.QtCore import Qt
 from .QSidePanel import QSidePanel
 #----------------------------------------------------------------------
 

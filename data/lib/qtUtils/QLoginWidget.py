@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QLineEdit, QCheckBox
+from PySide6.QtWidgets import QLineEdit, QCheckBox
 
 from .QGridFrame import QGridFrame
 from .QNamedLineEdit import QNamedLineEdit

@@ -1,13 +1,13 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QPushButton, QGridLayout, QWidget
-from PyQt6.QtCore import Qt, pyqtSignal
+from PySide6.QtWidgets import QPushButton, QGridLayout, QWidget
+from PySide6.QtCore import Qt, Signal
 #----------------------------------------------------------------------
 
     # Class
 class QDropDownWidget(QWidget):
-    clicked = pyqtSignal()
+    clicked = Signal()
 
     def __init__(self, text: str = '', widget: QWidget = None):
         super().__init__()

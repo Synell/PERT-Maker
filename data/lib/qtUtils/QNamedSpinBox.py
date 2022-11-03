@@ -1,8 +1,8 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtWidgets import QSpinBox, QLabel
-from PyQt6.QtCore import Qt, QEvent
+from PySide6.QtWidgets import QSpinBox, QLabel
+from PySide6.QtCore import Qt, QEvent
 from .QGridWidget import QGridWidget
 #----------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
 
     # Libraries
 import sys, colorsys
-from PyQt6.QtCore import QPoint, Qt, pyqtSignal, QSize, QRect, QMetaObject, QCoreApplication
-from PyQt6.QtGui import QColor, QMouseEvent
-from PyQt6.QtWidgets import QWidget, QSizePolicy, QFrame, QLabel, QFormLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QSpinBox, QDoubleSpinBox, QComboBox
+from PySide6.QtCore import QPoint, Qt, Signal, QSize, QRect, QMetaObject, QCoreApplication
+from PySide6.QtGui import QColor, QMouseEvent
+from PySide6.QtWidgets import QWidget, QSizePolicy, QFrame, QLabel, QFormLayout, QLineEdit, QHBoxLayout, QVBoxLayout, QSpinBox, QDoubleSpinBox, QComboBox
 from .QGridFrame import QGridFrame
 from .QNamedComboBox import QNamedComboBox
 from .QUtilsColor import QUtilsColor
@@ -12,7 +12,7 @@ from .QUtilsColor import QUtilsColor
 
     # Class
 class QColorPicker(QGridFrame):
-    colorChanged = pyqtSignal(QUtilsColor)
+    colorChanged = Signal(QUtilsColor)
 
     def __init__(self, parent = None, color: QUtilsColor = QUtilsColor(), has_alpha: bool = True) -> None:
         super().__init__(parent)

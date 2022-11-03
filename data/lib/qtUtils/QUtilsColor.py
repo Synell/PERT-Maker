@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PyQt6.QtGui import QColor
+from PySide6.QtGui import QColor
 from multipledispatch import dispatch
 import colorsys
 #----------------------------------------------------------------------
