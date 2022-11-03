@@ -377,8 +377,8 @@ class Application(QBaseApplication):
             tips_action = QAction(self.save_data.getIcon('menubar/tips.png'), lang['tips'], self.window)
             tips_action.triggered.connect(self.help_menu_tips_action)
 
-            about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutQt'], self.window)
-            about_qt_action.triggered.connect(self.help_menu_about_qt_action)
+            about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
+            about_qt_action.triggered.connect(self.help_menu_about_pyside_action)
 
 
             help_menu.addAction(about_action)
@@ -1242,7 +1242,7 @@ class Application(QBaseApplication):
     def help_menu_tips_action(self):
         QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage'))
 
-    def help_menu_about_qt_action(self):
+    def help_menu_about_pyside_action(self):
         self.aboutQt()
 
 

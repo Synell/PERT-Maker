@@ -52,7 +52,7 @@
                     "QAction": {
                         "about": "About PERT Maker...",
                         "tips": "Tips...",
-                        "aboutQt": "About Qt..."
+                        "aboutPySide": "About PySide..."
                     }
                 }
             }
