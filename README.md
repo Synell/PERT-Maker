@@ -3,11 +3,11 @@
   <a href="https://www.python.org/downloads/">
     <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-blue" />
   </a>
-  <a href="https://www.qt.io/">
-    <img alt="Qt 6" src="https://img.shields.io/badge/Qt-6.2.3-brightgreen" />
+  <a href="https://doc.qt.io/qtforpython/index.html">
+    <img alt="PySide 6" src="https://img.shields.io/badge/PySide-6.3.1-brightgreen" />
   </a>
   <a href="https://github.com/Synell/PERT-Maker/blob/master/LICENSE">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green" target="_blank" />
+    <img alt="License: LGPL" src="https://img.shields.io/badge/License-LGPL-green" target="_blank" />
   </a>
   <img alt="Platforms: Windows" src="https://img.shields.io/badge/Platforms-Windows-yellow" />
 </p>
