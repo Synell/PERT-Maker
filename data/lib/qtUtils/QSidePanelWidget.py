@@ -15,6 +15,7 @@ class QSidePanelWidget(QWidget):
     def __init__(self, parent = None, width: int = 120) -> None:
         super().__init__(parent)
         self._layout = QGridLayout(self)
+        self._next_index = None
 
         self.sidepanel = QSidePanel(self, width = width)
         self.sidepanel.setProperty('border-right', True)
@@ -25,6 +26,7 @@ class QSidePanelWidget(QWidget):
 
         self._widget = QSlidingStackedWidget()
         self._widget.set_orientation(Qt.Orientation.Vertical)
+        self._widget.animation_finished.connect(self._animation_finished)
         w.grid_layout.addWidget(self._widget, 0, 0)
 
         self._layout.setSpacing(0)
@@ -42,6 +44,16 @@ class QSidePanelWidget(QWidget):
         return self._widget.currentIndex()
 
     def set_current_index(self, index: int) -> None:
+        if self._widget.active:
+            self._next_index = index
+            return
+
         self._widget.slide_in_idx(index)
         self.sidepanel.set_current_index(index)
+        self.current_index_changed.emit(self.current_index())
+
+    def _animation_finished(self) -> None:
+        if self._next_index is not None:
+            self.set_current_index(self._next_index)
+            self._next_index = None
 #----------------------------------------------------------------------
