@@ -85,7 +85,7 @@ class Application(QBaseApplication):
                 case 3:
                     if deltatime > timedelta(weeks = 4): self.check_updates()
 
-    def notImplemented(self, text = ''):
+    def not_implemented(self, text = ''):
         if text:
             w = QDropDownWidget(text = lang['details'], widget = QLabel(text))
         else: w = None
@@ -216,34 +216,34 @@ class Application(QBaseApplication):
         self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
 
 
-        self.connectionViewMenu = QScrollableGridWidget()
-        self.connectionViewMenu.setMinimumWidth(450)
-        self.connectionViewMenu.setMinimumHeight(200)
-        self.connectionViewMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.connectionViewMenu.scroll_widget.setProperty('QDockWidget', True)
+        self.connection_view_menu = QScrollableGridWidget()
+        self.connection_view_menu.setMinimumWidth(450)
+        self.connection_view_menu.setMinimumHeight(200)
+        self.connection_view_menu.setFrameShape(QFrame.Shape.NoFrame)
+        self.connection_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.connectionViewMenuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
-        self.connectionViewMenuDockWidget.setWidget(self.connectionViewMenu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connectionViewMenuDockWidget)
+        self.connection_view_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
+        self.connection_view_menu_dock_widget.setWidget(self.connection_view_menu)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connection_view_menu_dock_widget)
 
         self.create_connection_view_menu()
 
 
-        self.criticalPathViewMenu = QScrollableGridWidget()
-        self.criticalPathViewMenu.setMinimumWidth(450)
-        self.criticalPathViewMenu.setMinimumHeight(200)
-        self.criticalPathViewMenu.setFrameShape(QFrame.Shape.NoFrame)
-        self.criticalPathViewMenu.scroll_widget.setProperty('QDockWidget', True)
+        self.critical_path_view_menu = QScrollableGridWidget()
+        self.critical_path_view_menu.setMinimumWidth(450)
+        self.critical_path_view_menu.setMinimumHeight(200)
+        self.critical_path_view_menu.setFrameShape(QFrame.Shape.NoFrame)
+        self.critical_path_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.criticalPathViewMenuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
-        self.criticalPathViewMenuDockWidget.setWidget(self.criticalPathViewMenu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.criticalPathViewMenuDockWidget)
+        self.critical_path_view_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
+        self.critical_path_view_menu_dock_widget.setWidget(self.critical_path_view_menu)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.critical_path_view_menu_dock_widget)
 
         self.create_critical_path_view_menu()
 
 
-        self.window.tabifyDockWidget(self.connectionViewMenuDockWidget, self.criticalPathViewMenuDockWidget)
-        self.connectionViewMenuDockWidget.raise_()
+        self.window.tabifyDockWidget(self.connection_view_menu_dock_widget, self.critical_path_view_menu_dock_widget)
+        self.connection_view_menu_dock_widget.raise_()
 
 
         self.generation_menu = QScrollableGridWidget()
@@ -623,13 +623,13 @@ class Application(QBaseApplication):
         lang = self.save_data.language_data['QDockWidget']['connectionView']['QBetterListWidget']
 
         self.connectionTable = QBetterListWidget(headers = [lang['task'], lang['previousTasks'], lang['time']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
-        self.connectionViewMenu.scroll_layout.addWidget(self.connectionTable, 0, 0)
+        self.connection_view_menu.scroll_layout.addWidget(self.connectionTable, 0, 0)
 
     def create_critical_path_view_menu(self):
         lang = self.save_data.language_data['QDockWidget']['criticalPathView']['QBetterListWidget']
 
         self.criticalPathTable = QBetterListWidget(headers = [lang['criticalPath']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
-        self.criticalPathViewMenu.scroll_layout.addWidget(self.criticalPathTable, 0, 0)
+        self.critical_path_view_menu.scroll_layout.addWidget(self.criticalPathTable, 0, 0)
 
     def create_generation_menu(self):
         lang = self.save_data.language_data['QDockWidget']['generation']
@@ -1384,7 +1384,7 @@ class Application(QBaseApplication):
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
-        data = self.generateCanvasPixmap()
+        data = self.generate_canvas_pixmap()
         result = QExportImageDialog(self.window, self.save_data.language_data['QExportImageDialog'], self.save_data.export_image_bg_color, self.save_data.export_image_fg_color, data).exec()
         if result:
             path = result['path']
@@ -1395,7 +1395,7 @@ class Application(QBaseApplication):
                 generator.setFileName(path)
                 generator.setTitle('.'.join(path.split('/')[-1].split('\\')[-1].split('.')[:-1]))
                 generator.setDescription(f'\nGenerated with PERT Maker.\nVersion: {self.VERSION} - Build: {self.BUILD}\nYou can find this app here: https://github.com/Synell/PERT-Maker/releases/latest\n')
-                self.generateCanvasPixmap(generator)
+                self.generate_canvas_pixmap(generator)
 
                 import xml.etree.ElementTree as ET
 
@@ -1451,7 +1451,7 @@ class Application(QBaseApplication):
             self.save_data.save()
 
 
-    def generateCanvasPixmap(self, obj: QSvgGenerator = None) -> QPixmap|None:
+    def generate_canvas_pixmap(self, obj: QSvgGenerator = None) -> QPixmap|None:
         grid_mode = self.save_data.grid_mode
         self.save_data.grid_mode = 0
         zoom = self.zoom
