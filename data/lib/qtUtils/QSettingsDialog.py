@@ -90,6 +90,7 @@ class QSettingsDialog(QDialog):
         self.frame.setProperty('border-right', True)
 
         self.root = QSidePanelWidget(width = 220)
+        self.root.setProperty('wider', True)
 
         self._data = _QData(lang_folder, themes_folder)
 

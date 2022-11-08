@@ -59,6 +59,18 @@ QWidget[QNamedComboBox=true][dark=true] QComboBox QListView::item:selected {
 
 
 
+/* QNamedComboBox - Wide */
+
+QWidget[wide=true] QWidget[QNamedComboBox=true] QComboBox, QWidget[QNamedComboBox=true][wide=true] QComboBox {
+	min-width: 6em;
+}
+
+QWidget[wider=true] QWidget[QNamedComboBox=true] QComboBox, QWidget[QNamedComboBox=true][wider=true] QComboBox {
+	min-width: 12em;
+}
+
+
+
 /* QNamedComboBox - Blue */
 
 QWidget[color='blue'] QWidget[QNamedComboBox=true][color='main'] QComboBox:focus, QWidget[QNamedComboBox=true][color='blue'] QComboBox:focus {

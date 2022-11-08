@@ -45,6 +45,18 @@ QWidget[QNamedDoubleSpinBox=true][dark=true] QDoubleSpinBox {
 
 
 
+/* QNamedDoubleSpinBox - Wide */
+
+QWidget[wide=true] QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox, QWidget[QNamedDoubleSpinBox=true][wide=true] QDoubleSpinBox {
+	min-width: 6em;
+}
+
+QWidget[wider=true] QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox, QWidget[QNamedDoubleSpinBox=true][wider=true] QDoubleSpinBox {
+	min-width: 12em;
+}
+
+
+
 /* QNamedDoubleSpinBox - Blue */
 
 QWidget[color='blue'] QWidget[QNamedDoubleSpinBox=true][color='main'] QDoubleSpinBox:focus, QWidget[QNamedDoubleSpinBox=true][color='blue'] QDoubleSpinBox:focus {

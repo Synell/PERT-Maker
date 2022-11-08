@@ -206,6 +206,7 @@ class Application(QBaseApplication):
 
 
         self.properties_menu = QScrollableGridWidget()
+        self.properties_menu.setProperty('wide', True)
         self.properties_menu.setMinimumWidth(300)
         self.properties_menu.setMinimumHeight(200)
         self.properties_menu.setFrameShape(QFrame.Shape.NoFrame)

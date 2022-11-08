@@ -46,6 +46,18 @@ QWidget[QNamedTextEdit=true][dark=true] QTextEdit {
 
 
 
+/* QNamedTextEdit - Wide */
+
+QWidget[wide=true] QWidget[QNamedTextEdit=true] QTextEdit, QWidget[QNamedTextEdit=true][wide=true] QTextEdit {
+	min-width: 6em;
+}
+
+QWidget[wider=true] QWidget[QNamedTextEdit=true] QTextEdit, QWidget[QNamedTextEdit=true][wider=true] QTextEdit {
+	min-width: 12em;
+}
+
+
+
 /* QNamedTextEdit - Blue */
 
 QWidget[color='blue'] QWidget[QNamedTextEdit=true][color='main'] QTextEdit:focus, QWidget[QNamedTextEdit=true][color='blue'] QTextEdit:focus {
