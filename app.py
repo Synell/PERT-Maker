@@ -41,6 +41,8 @@ class Application(QBaseApplication):
     def __init__(self, platform: QPlatform) -> None:
         super().__init__(platform = platform)
 
+        self.window.closeEvent = self.close_event
+
         self.must_update = None
         self.must_update_link = None
 
@@ -212,9 +214,11 @@ class Application(QBaseApplication):
         self.properties_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.properties_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.properties_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['properties']['title'])
+        self.properties_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['properties']['title'])
+        self.properties_menu_dock_widget.setObjectName('properties')
         self.properties_menu_dock_widget.setWidget(self.properties_menu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
+        if 'properties' in self.save_data.dock_widgets: self.properties_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['properties'])
+        else: self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
 
 
         self.connection_view_menu = QScrollableGridWidget()
@@ -223,9 +227,11 @@ class Application(QBaseApplication):
         self.connection_view_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.connection_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.connection_view_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
+        self.connection_view_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
+        self.connection_view_menu_dock_widget.setObjectName('connectionView')
         self.connection_view_menu_dock_widget.setWidget(self.connection_view_menu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connection_view_menu_dock_widget)
+        if 'connectionView' in self.save_data.dock_widgets: self.connection_view_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['connectionView'])
+        else: self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connection_view_menu_dock_widget)
 
         self.create_connection_view_menu()
 
@@ -236,9 +242,11 @@ class Application(QBaseApplication):
         self.critical_path_view_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.critical_path_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.critical_path_view_menu_dock_widget = QDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
+        self.critical_path_view_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
+        self.critical_path_view_menu_dock_widget.setObjectName('criticalPathView')
         self.critical_path_view_menu_dock_widget.setWidget(self.critical_path_view_menu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.critical_path_view_menu_dock_widget)
+        if 'criticalPathView' in self.save_data.dock_widgets: self.critical_path_view_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['criticalPathView'])
+        else: self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.critical_path_view_menu_dock_widget)
 
         self.create_critical_path_view_menu()
 
@@ -252,10 +260,12 @@ class Application(QBaseApplication):
         self.generation_menu.setMinimumHeight(200)
         self.generation_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.generation_menu.scroll_widget.setProperty('QDockWidget', True)
-        
-        self.generation_menuDockWidget = QDockWidget(self.save_data.language_data['QDockWidget']['generation']['title'])
-        self.generation_menuDockWidget.setWidget(self.generation_menu)
-        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.generation_menuDockWidget)
+
+        self.generation_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['generation']['title'])
+        self.generation_menu_dock_widget.setObjectName('generation')
+        self.generation_menu_dock_widget.setWidget(self.generation_menu)
+        if 'generation' in self.save_data.dock_widgets: self.generation_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['generation'])
+        else: self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.generation_menu_dock_widget)
 
         self.create_generation_menu()
 
@@ -334,9 +344,9 @@ class Application(QBaseApplication):
             settings_action.setShortcut('Ctrl+Alt+S')
             settings_action.triggered.connect(self.file_menu_settings_action)
 
-            exitAction = QAction(self.save_data.getIcon('menubar/exit.png'), lang['exit'], self.window)
-            exitAction.setShortcut('Alt+F4')
-            exitAction.triggered.connect(self.window.close)
+            exit_action = QAction(self.save_data.getIcon('menubar/exit.png'), lang['exit'], self.window)
+            exit_action.setShortcut('Alt+F4')
+            exit_action.triggered.connect(self.window.close)
 
 
             file_menu.addAction(new_action)
@@ -350,7 +360,7 @@ class Application(QBaseApplication):
             file_menu.addSeparator()
             file_menu.addAction(settings_action)
             file_menu.addSeparator()
-            file_menu.addAction(exitAction)
+            file_menu.addAction(exit_action)
 
         def create_view_menu():
             lang = self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['QAction']
@@ -1550,6 +1560,21 @@ class Application(QBaseApplication):
         self.save_data.save()
         self.must_update = self.must_update_link
         self.exit()
+
+    def close_event(self, event: QCloseEvent) -> None:
+        event.ignore()
+        # todo: check if saved
+        self.exit()
+
+    def exit(self) -> None:
+        self.save_data.dock_widgets = {}
+
+        for dw in self.window.findChildren(QDockWidget):
+            self.save_data.dock_widgets[dw.objectName()] = dw.to_dict()
+
+        self.save_data.save()
+
+        super().exit()
 #----------------------------------------------------------------------
 
     # Main

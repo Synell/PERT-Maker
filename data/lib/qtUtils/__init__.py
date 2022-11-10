@@ -44,4 +44,5 @@ from .QAnimatedSlider import QAnimatedSlider
 from .QSmoothScrollArea import QSmoothScrollArea
 from .QPlatform import QPlatform
 from .QCrashReport import QCrashReport
+from .QSavableDockWidget import QSavableDockWidget
 #----------------------------------------------------------------------

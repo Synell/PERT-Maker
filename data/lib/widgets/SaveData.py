@@ -40,6 +40,8 @@ class SaveData(QSaveData):
         self.token = ''
         self.downloads_folder = os.path.abspath('./data/downloads/').replace('\\', '/')
 
+        self.dock_widgets = {}
+
         super().__init__(save_path)
 
 
@@ -198,7 +200,9 @@ class SaveData(QSaveData):
             'exportImageFgColor': self.export_image_fg_color.hexa,
 
             'checkForUpdates': self.check_for_updates,
-            'lastCheckForUpdates': self.last_check_for_updates.strftime(self.dateformat)
+            'lastCheckForUpdates': self.last_check_for_updates.strftime(self.dateformat),
+
+            'dockWidgets': self.dock_widgets
         }
 
     def load_extra_data(self, extra_data: dict = ...) -> None:
@@ -221,6 +225,8 @@ class SaveData(QSaveData):
 
             self.check_for_updates = extra_data['checkForUpdates']
             self.last_check_for_updates = datetime.strptime(extra_data['lastCheckForUpdates'], self.dateformat)
+
+            self.dock_widgets = extra_data['dockWidgets']
 
         except: self.save()
 #----------------------------------------------------------------------
