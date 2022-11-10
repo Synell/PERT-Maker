@@ -32,8 +32,8 @@ from .QColorPicker import QColorPicker
 from .QColorButton import QColorButton
 from .QColorDialog import QColorDialog
 from .QUtilsColor import QUtilsColor
-from .QLoginWidget import QLoginWidget
-from .QLoginDialog import QLoginDialog
+# from .QLoginWidget import QLoginWidget
+# from .QLoginDialog import QLoginDialog
 from .QToggleButton import QToggleButton
 from .QNamedToggleButton import QNamedToggleButton
 from .QDragList import QDragList, QDragListItem
