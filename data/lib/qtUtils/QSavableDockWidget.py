@@ -33,6 +33,7 @@ class QSavableDockWidget(QDockWidget):
             'isFloating': self.is_floating,
             'tabified': [dw.objectName() for dw in self.tabified],
             'size': [self.size().width(), self.size().height()],
+            'visible': self.isVisible()
             # 'orientation': self.orientation().value
         }
 
@@ -51,6 +52,8 @@ class QSavableDockWidget(QDockWidget):
         for w in data['tabified']:
             if type(w) == str: w = main_window.findChild(QDockWidget, w, Qt.FindChildOption.FindDirectChildrenOnly)
             if w: main_window.tabifyDockWidget(self, w)
+
+        self.setVisible(data['visible'])
 
     @staticmethod
     def from_dict(main_window: QMainWindow, data: dict, orientation: Qt.Orientation = Qt.Orientation.Vertical) -> 'QSavableDockWidget':

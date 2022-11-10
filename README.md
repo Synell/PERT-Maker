@@ -30,6 +30,7 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
   - PySide6 (`pip install PySide6`)
   - datetime (`pip install datetime`)
   - requests (`pip install requests`)
+  - multipledispatch (`pip install multipledispatch`)
 
 
 ## Installation
