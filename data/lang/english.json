@@ -43,6 +43,7 @@
                 "viewMenu": {
                     "title": "View",
                     "QAction": {
+                        "resetDockWidgets": "Reset Dock Widgets",
                         "gridSwitch": "Switch Grid",
                         "gridAlign": "Align Nodes on Grid"
                     }

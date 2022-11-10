@@ -162,3 +162,4 @@ data/save.dat
 data/lib/widgets/updater/*.png
 data/lib/widgets/updater/*.pdn
 data/lib/widgets/updater/data.json
+*.ai

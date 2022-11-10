@@ -33,7 +33,7 @@ class QUpdater(QBaseApplication):
         self.save_data.setStyleSheet(self)
         self.window.setProperty('color', updater_data.color)
 
-        self.setWindowIcon(QIcon('./data/icons/logo.ico'))
+        self.setWindowIcon(QIcon(updater_data.icon))
 
         self.window.setFixedSize(int(self.primaryScreen().size().width() * (7 / 30)), int(self.primaryScreen().size().height() * (16 / 27)))
 

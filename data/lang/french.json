@@ -43,6 +43,7 @@
                 "viewMenu": {
                     "title": "Affichage",
                     "QAction": {
+                        "resetDockWidgets": "Réinitialiser les fenêtres",
                         "gridSwitch": "Changer de Grille",
                         "gridAlign": "Aligner les Nœuds sur la Grille"
                     }

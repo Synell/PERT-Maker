@@ -70,7 +70,7 @@ class Application(QBaseApplication):
 
         self.load_colors()
 
-        self.setWindowIcon(QIcon('./data/themes/logo.ico'))
+        self.setWindowIcon(QIcon('./data/icons/PERTMaker.svg'))
 
         self.create_widgets()
         self.file_menu_new_action()
@@ -251,7 +251,7 @@ class Application(QBaseApplication):
         self.create_critical_path_view_menu()
 
 
-        self.window.tabifyDockWidget(self.connection_view_menu_dock_widget, self.critical_path_view_menu_dock_widget)
+        if not ('connectionView' in self.save_data.dock_widgets and 'criticalPathView' in self.save_data.dock_widgets): self.window.tabifyDockWidget(self.connection_view_menu_dock_widget, self.critical_path_view_menu_dock_widget)
         self.connection_view_menu_dock_widget.raise_()
 
 
@@ -366,6 +366,9 @@ class Application(QBaseApplication):
             lang = self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['QAction']
 
             view_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['title'])
+            
+            reset_dock_widgets_action = QAction(self.save_data.getIcon('menubar/resetDockWidgets.png'), lang['resetDockWidgets'], self.window)
+            reset_dock_widgets_action.triggered.connect(self.view_menu_reset_dock_widgets_action)
 
             grid_switch_action = QAction(self.save_data.getIcon('menubar/grid.png'), lang['gridSwitch'], self.window)
             grid_switch_action.triggered.connect(self.view_menu_grid_switch_action)
@@ -374,6 +377,7 @@ class Application(QBaseApplication):
             grid_align_action.triggered.connect(self.view_menu_grid_align_action)
 
 
+            view_menu.addAction(reset_dock_widgets_action)
             view_menu.addAction(grid_switch_action)
             view_menu.addAction(grid_align_action)
 
@@ -382,7 +386,7 @@ class Application(QBaseApplication):
 
             help_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['title'])
 
-            about_action = QAction(QIcon('./data/themes/logo.ico'), lang['about'], self.window)
+            about_action = QAction(QIcon('./data/icons/PERTMaker.svg'), lang['about'], self.window)
             about_action.triggered.connect(self.help_menu_about_action)
 
             about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
@@ -1239,6 +1243,19 @@ class Application(QBaseApplication):
         self.load_colors()
 
 
+    def view_menu_reset_dock_widgets_action(self):
+        if self.properties_menu_dock_widget.isFloating(): self.properties_menu_dock_widget.setFloating(False)
+        if self.connection_view_menu_dock_widget.isFloating(): self.connection_view_menu_dock_widget.setFloating(False)
+        if self.critical_path_view_menu_dock_widget.isFloating(): self.critical_path_view_menu_dock_widget.setFloating(False)
+        if self.generation_menu_dock_widget.isFloating(): self.generation_menu_dock_widget.setFloating(False)
+
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connection_view_menu_dock_widget)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.critical_path_view_menu_dock_widget)
+        self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.generation_menu_dock_widget)
+
+        if self.critical_path_view_menu_dock_widget not in self.window.tabifiedDockWidgets(self.connection_view_menu_dock_widget): self.window.tabifyDockWidget(self.connection_view_menu_dock_widget, self.critical_path_view_menu_dock_widget)
+
     def view_menu_grid_switch_action(self):
         self.save_data.grid_mode += 1
         if self.save_data.grid_mode > 2: self.save_data.grid_mode = 0
@@ -1256,7 +1273,7 @@ class Application(QBaseApplication):
         QAboutBox(
             app = self,
             title = lang['title'],
-            logo = './data/themes/logoNoBg.ico',
+            logo = './data/icons/PERTMaker.svg',
             texts = [
                 lang['texts'][0],
                 lang['texts'][1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.hex};\">Synel</a>'),
