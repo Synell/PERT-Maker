@@ -12,10 +12,11 @@ from .QGridWidget import QGridWidget
 class QSidePanelWidget(QWidget):
     current_index_changed = Signal(int)
 
-    def __init__(self, parent = None, width: int = 120) -> None:
+    def __init__(self, parent = None, width: int = 120, direction: QSlidingStackedWidget.Direction = QSlidingStackedWidget.Direction.Bottom2Top) -> None:
         super().__init__(parent)
         self._layout = QGridLayout(self)
         self._next_index = None
+        self._direction = direction
 
         self.sidepanel = QSidePanel(self, width = width)
         self.sidepanel.setProperty('border-right', True)
@@ -48,7 +49,7 @@ class QSidePanelWidget(QWidget):
             self._next_index = index
             return
 
-        self._widget.slide_in_idx(index)
+        self._widget.slide_in_idx(index, self._direction)
         self.sidepanel.set_current_index(index)
         self.current_index_changed.emit(self.current_index())
 

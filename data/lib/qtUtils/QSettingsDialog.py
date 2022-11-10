@@ -11,9 +11,9 @@ from .QScrollableGridWidget import QScrollableGridWidget
 import json
 
 from .QSidePanelWidget import QSidePanelWidget
-from .QSidePanel import QSidePanelItem
 from .QNamedComboBox import QNamedComboBox
 from .QFileExplorer import QFileExplorer
+from .QSlidingStackedWidget import QSlidingStackedWidget
 #----------------------------------------------------------------------
 
     # Class
@@ -89,7 +89,7 @@ class QSettingsDialog(QDialog):
         self.frame.setProperty('border-left', True)
         self.frame.setProperty('border-right', True)
 
-        self.root = QSidePanelWidget(width = 220)
+        self.root = QSidePanelWidget(width = 220, direction = QSlidingStackedWidget.Direction.Bottom2Top)
         self.root.setProperty('wider', True)
 
         self._data = _QData(lang_folder, themes_folder)
