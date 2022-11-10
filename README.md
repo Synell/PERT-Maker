@@ -1,4 +1,4 @@
-<h1 align="center"><img src="./data/themes/logo.ico" width="32" align="center" /> PERT Maker: Build PERT Diagrams with Ease</h1>
+<h1 align="center"><img src="./data/themes/logo.ico" width="32" align="center" /> PERT Maker: Build PERT Charts with Ease</h1>
 <p align="center">
   <a href="https://www.python.org/downloads/">
     <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-blue" />
@@ -14,7 +14,7 @@
 
 ----------------------------------------------------------------------
 
-PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Program_evaluation_and_review_technique">PERT diagrams</a>. It is written in Python and uses the PySide framework.
+PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Program_evaluation_and_review_technique">PERT charts</a>. It is written in Python and uses the PySide framework.
 
 
 ## Requirements
@@ -60,13 +60,13 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 
 ## Usage
 
-### Creating a PERT Diagram
+### Creating a PERT Chart
 
-By default, a new PERT diagram is created when you start the app. You can create a new PERT diagram by clicking on the "New" button in the "File" toolbar.
+By default, a new PERT chart is created when you start the app. You can create a new PERT chart by clicking on the "New" button in the "File" toolbar.
 
 <img alt="Default interface when opening the app" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmQMNStpD5p4D6paAA3PhMt8rpJhkfRR5kZnXEArZSlxPP2k7UeXsRUl_FzH_pTHReMsRR3NHvZGSRwYxUuZl6LZAp0ufg" />
 
-To start making a PERT diagram, you need to add some nodes. You can add a node by right-clicking on the canvas. There, you can edit the properties of the node in the "Properties" tab.
+To start making a PERT chart, you need to add some nodes. You can add a node by right-clicking on the canvas. There, you can edit the properties of the node in the "Properties" tab.
 
 <img alt="Creating a node" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSC1LMO9GkXR2YNidRLwjNVZbEnkB5OGhSiNw3qk3UIAybniz-2JJCUyzJan8INZxb5n-ivIul_ybaYslIRMDggXkgJEQ" />
 
@@ -92,9 +92,9 @@ If the node is pointing to another node, you can edit the display name of the co
 
 <br/>
 
-Let's say you have this PERT diagram:
+Let's say you have this PERT chart:
 
-<img alt="PERT diagram example" src="https://drive.google.com/u/0/uc?id=1KXyBOgzz5TLCnXRZ8BddpA8xLxbU9rCw" />
+<img alt="PERT chart example" src="https://drive.google.com/u/0/uc?id=1KXyBOgzz5TLCnXRZ8BddpA8xLxbU9rCw" />
 
 Let's focus on the "Generation" tab:
 
@@ -116,11 +116,11 @@ After clicking on the "Refresh Connection View" button, the connections are disp
 
 #### Generate Min and Max Times
 
-Before clicking on the "Generate Min and Max Times" button, the minimum and maximum times are not set on our PERT diagram. You could set them manually, but it's a lot of work. So, we can use the "Generate Min and Max Times" button to automatically set the minimum and maximum times.
+Before clicking on the "Generate Min and Max Times" button, the minimum and maximum times are not set on our PERT chart. You could set them manually, but it's a lot of work. So, we can use the "Generate Min and Max Times" button to automatically set the minimum and maximum times.
 
-<img alt="PERT diagrams with min and max values" src="https://drive.google.com/u/0/uc?id=1fFJ2zov3SUyBvWOtxU_UURi6x1wfcq_4" />
+<img alt="PERT charts with min and max values" src="https://drive.google.com/u/0/uc?id=1fFJ2zov3SUyBvWOtxU_UURi6x1wfcq_4" />
 
-After clicking on the "Generate Min and Max Times" button, the minimum and maximum times are set on our PERT diagram.
+After clicking on the "Generate Min and Max Times" button, the minimum and maximum times are set on our PERT chart.
 
 #### Generate Critical Path
 
@@ -136,16 +136,16 @@ After clicking on the "Generate Critical Path" button, the critical path is disp
 
 The last toggle switch, as its name suggests, allows you to use the node names instead of the node IDs in the "Connection View" and "Critical Path" tabs.
 
-*Note that the diagram will not look the same after checking this toggle switch.*
+*Note that the chart will not look the same after checking this toggle switch.*
 
-<img alt="PERT diagram with node names instead of path names" src="https://drive.google.com/u/0/uc?id=1qKbrbROttYOwRL-QzojXRzasmNixla9Y" />
+<img alt="PERT chart with node names instead of path names" src="https://drive.google.com/u/0/uc?id=1qKbrbROttYOwRL-QzojXRzasmNixla9Y" />
 
 <br/>
 
 
-### Exporting the PERT diagram
+### Exporting the PERT Chart
 
-You can export the PERT diagram as an image or as a vectorial image (SVG) by clicking on the "Export" button, then on the "Image" button, in the "File" tab.
+You can export the PERT chart as an image or as a vectorial image (SVG) by clicking on the "Export" button, then on the "Image" button, in the "File" tab.
 
 <img alt="Export menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSJr_xhMwDgP4OYPkTERQg7LOsB2ZJE8MVEHU60bskFhCebgmfAUGM3YJEozjiql07hdyBcdTFSYZ1pEXbLWLy86VMG" />
 
@@ -154,15 +154,15 @@ There, you can choose the file location, the file name, the background color and
 <img alt="Color picker menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmRMehVydSaZr-ifBg7KUQpJkQc36IBcszT_RnawKm1Rj6LuENXwSG6cHbE6wMYvZnmWVkqrFZv-xgDNt6c1VFHT5_3Azg" />
 
 
-### Generate a PERT diagram from a CSV file
+### Generate a PERT Chart from a CSV file
 
-You can generate a PERT diagram from a CSV file by clicking on the "Import" button, then on the "Table" button, in the "File" tab.
+You can generate a PERT chart from a CSV file by clicking on the "Import" button, then on the "Table" button, in the "File" tab.
 
-<img alt="Generate a PERT diagram from a table" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmTVOk_aMsZhr-IBaYhFvyAyYXPgRkYpOQs7pquMxZtlIuH6d1AQH6fKwkRDZUCGHgRMy6Fmjo_v5TFxjW_mHbPEywVt" />
+<img alt="Generate a PERT chart from a table" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmTVOk_aMsZhr-IBaYhFvyAyYXPgRkYpOQs7pquMxZtlIuH6d1AQH6fKwkRDZUCGHgRMy6Fmjo_v5TFxjW_mHbPEywVt" />
 
 There, you can choose the file to load or set manually the data.
 
 
-### Exporting the PERT diagram as a CSV file
+### Exporting the PERT Chart as a CSV file
 
-You can export the PERT diagram as a CSV file by clicking on the "Export" button, then on the "Table" button, in the "File" tab.
+You can export the PERT chart as a CSV file by clicking on the "Export" button, then on the "Table" button, in the "File" tab.
