@@ -1,4 +1,4 @@
-<h1 align="center"><img src="./data/themes/logo.ico" width="32" align="center" /> PERT Maker: Build PERT Charts with Ease</h1>
+<h1 align="center"><img src="./data/icons/PERTMaker.svg" width="32" align="center" /> PERT Maker: Build PERT Charts with Ease</h1>
 <p align="center">
   <a href="https://www.python.org/downloads/">
     <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-blue" />
