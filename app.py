@@ -367,8 +367,8 @@ class Application(QBaseApplication):
 
             view_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['title'])
             
-            reset_dock_widgets_action = QAction(self.save_data.getIcon('menubar/resetDockWidgets.png'), lang['resetDockWidgets'], self.window)
-            reset_dock_widgets_action.triggered.connect(self.view_menu_reset_dock_widgets_action)
+            reset_interface_action = QAction(self.save_data.getIcon('menubar/resetInterface.png'), lang['resetInterface'], self.window)
+            reset_interface_action.triggered.connect(self.view_menu_reset_interface_action)
 
             grid_switch_action = QAction(self.save_data.getIcon('menubar/grid.png'), lang['gridSwitch'], self.window)
             grid_switch_action.triggered.connect(self.view_menu_grid_switch_action)
@@ -377,7 +377,7 @@ class Application(QBaseApplication):
             grid_align_action.triggered.connect(self.view_menu_grid_align_action)
 
 
-            view_menu.addAction(reset_dock_widgets_action)
+            view_menu.addAction(reset_interface_action)
             view_menu.addAction(grid_switch_action)
             view_menu.addAction(grid_align_action)
 
@@ -1243,11 +1243,10 @@ class Application(QBaseApplication):
         self.load_colors()
 
 
-    def view_menu_reset_dock_widgets_action(self):
-        if self.properties_menu_dock_widget.isFloating(): self.properties_menu_dock_widget.setFloating(False)
-        if self.connection_view_menu_dock_widget.isFloating(): self.connection_view_menu_dock_widget.setFloating(False)
-        if self.critical_path_view_menu_dock_widget.isFloating(): self.critical_path_view_menu_dock_widget.setFloating(False)
-        if self.generation_menu_dock_widget.isFloating(): self.generation_menu_dock_widget.setFloating(False)
+    def view_menu_reset_interface_action(self):
+        for dw in [self.properties_menu_dock_widget, self.connection_view_menu_dock_widget, self.critical_path_view_menu_dock_widget, self.generation_menu_dock_widget]:
+            dw.setVisible(True)
+            dw.setFloating(False)
 
         self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.properties_menu_dock_widget)
         self.window.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.connection_view_menu_dock_widget)
