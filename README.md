@@ -1,7 +1,7 @@
 <h1 align="center"><img src="./data/icons/PERTMaker.svg" width="32" align="center" /> PERT Maker: Build PERT Charts with Ease</h1>
 <p align="center">
   <a href="https://www.python.org/downloads/">
-    <img alt="Python 3.10" src="https://img.shields.io/badge/Python-3.10-blue" />
+    <img alt="Python 3.11" src="https://img.shields.io/badge/Python-3.11-blue" />
   </a>
   <a href="https://doc.qt.io/qtforpython/index.html">
     <img alt="PySide 6" src="https://img.shields.io/badge/PySide-6.3.1-brightgreen" />
@@ -26,7 +26,7 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 
 
 ### Source Code
-- Python 3.10 or later
+- Python 3.11 or later
   - PySide6 (`pip install PySide6`)
   - datetime (`pip install datetime`)
   - requests (`pip install requests`)

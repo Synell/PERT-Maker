@@ -51,7 +51,7 @@ def main() -> None:
             case 'Java': platf = QPlatform.Java
             case _: platf = QPlatform.Unknown
 
-        if platf == QPlatform.Unknown: raise Exception('Unknown platform')
+        if platf not in [QPlatform.Windows, QPlatform.Linux, QPlatform.MacOS]: raise Exception('Unknown platform')
 
         app = Application(platf)
         app.window.showMaximized()
