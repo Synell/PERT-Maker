@@ -16,6 +16,7 @@ from .QNamedSpinBox import QNamedSpinBox
 from .QNamedDoubleSpinBox import QNamedDoubleSpinBox
 from .QToggleButton import QToggleButton
 from .QFileButton import QFileButton
+from .QLinkLabel import QLinkLabel
 #----------------------------------------------------------------------
 
     # Class
@@ -121,6 +122,7 @@ class QBaseApplication(QApplication):
                 QssSelector(widget = 'QLabel', attributes = {'color': self.window.property('color')}, items = ['link'])
             )['color']
         )
+        QLinkLabel.link_color = self.COLOR_LINK.hex
 
         QNamedLineEdit.normal_color = qss.search(
             QssSelector(widget = 'QWidget', attributes = {'QNamedLineEdit': True}),
