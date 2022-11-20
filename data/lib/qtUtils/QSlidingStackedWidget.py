@@ -31,6 +31,7 @@ class QSlidingStackedWidget(QStackedWidget):
         self._p_now = QPoint(0, 0)
         self._active = False
         self._has_opacity_effect = True
+        self._next_index: tuple[int, QSlidingStackedWidget.Direction] = None # In case the user moved too fast, we need to make sure that the animation starts
 
     @property
     def orientation(self) -> Qt.Orientation:
@@ -73,36 +74,40 @@ class QSlidingStackedWidget(QStackedWidget):
 
     def slide_loop_next(self, direction: Direction = Direction.Automatic) -> None:
         result = self.slide_in_next()
-        if (not result): self.slide_in_idx(0, direction)
+        if (not result): self.slide_in_index(0, direction)
 
     def slide_loop_previous(self, direction: Direction = Direction.Automatic) -> None:
         result = self.slide_in_previous()
-        if (not result): self.slide_in_idx(self.count() - 1, direction)
+        if (not result): self.slide_in_index(self.count() - 1, direction)
 
     def slide_in_next(self) -> bool:
         now = self.currentIndex()
-        if (self._wrap or (now < self.count() - 1)): self.slide_in_idx(now + 1)
+        if (self._wrap or (now < self.count() - 1)): self.slide_in_index(now + 1)
         else: return False
         return True
 
     def slide_in_previous(self) -> bool:
         now = self.currentIndex()
-        if (self._wrap or (now > 0)): self.slide_in_idx(now - 1)
+        if (self._wrap or (now > 0)): self.slide_in_index(now - 1)
         else: return False
         return True
 
-    def slide_in_idx(self, idx: int, direction: Direction = Direction.Automatic) -> None:
-        if (idx > self.count() - 1):
+    def slide_in_index(self, index: int, direction: Direction = Direction.Automatic) -> None:
+        if (index > self.count() - 1):
             if direction == QSlidingStackedWidget.Direction.Automatic: direction = QSlidingStackedWidget.Direction.Top2Bottom if (self._orientation == Qt.Orientation.Vertical) else QSlidingStackedWidget.Direction.Right2Left
-            idx = int(fmod((idx), self.count()))
+            index = int(fmod((index), self.count()))
 
-        elif (idx < 0):
+        elif (index < 0):
             if direction == QSlidingStackedWidget.Direction.Automatic: direction = QSlidingStackedWidget.Direction.Bottom2Top if (self._orientation == Qt.Orientation.Vertical) else QSlidingStackedWidget.Direction.Left2Right
-            idx = fmod((idx + self.count()), self.count())
+            index = fmod((index + self.count()), self.count())
 
-        self._slide_in_wgt(self.widget(idx), direction)
+        if self._active:
+            self._next_index = (index, direction)
+            return
 
-    def _slide_in_wgt(self, newwidget: QWidget, direction: Direction) -> None:
+        self._slide_in_widget(self.widget(index), direction)
+
+    def _slide_in_widget(self, newwidget: QWidget, direction: Direction) -> None:
         if (self._active): return
         else: self._active = True
 
@@ -202,4 +207,8 @@ class QSlidingStackedWidget(QStackedWidget):
         self.widget(self._now).move(self._p_now)
         self._active = False
         self.animation_finished.emit()
+        
+        if self._next_index is not None:
+            self.slide_in_index(self._next_index[0], self._next_index[1])
+            self._next_index = None
 #----------------------------------------------------------------------

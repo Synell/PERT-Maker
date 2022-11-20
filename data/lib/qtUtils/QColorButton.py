@@ -21,9 +21,9 @@ class QColorButton(QPushButton):
         self.setFixedSize(32, 32)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.update()
-        self.clicked.connect(self.__clicked__)
+        self.clicked.connect(self._clicked)
 
-    def __clicked__(self) -> None:
+    def _clicked(self) -> None:
         result = QColorDialog(self.parent(), self._lang, self.color).exec()
         if result:
             self.color = result
