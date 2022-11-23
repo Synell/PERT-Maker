@@ -958,16 +958,16 @@ class Application(QBaseApplication):
         qp.end()
 
     def canvas_draw_points(self, qp: QPainter):
-        lineSpace = int(self.save_data.grid_size / 10)
+        line_space = int(self.save_data.grid_size / 10)
 
         if self.save_data.grid_mode > 0:
             size = Vector2(self.canvas.size().width(), self.canvas.size().height()) * (1 / self.zoom)
-            startPos = self.camera_pos % self.save_data.grid_size
+            start_pos = self.camera_pos % self.save_data.grid_size
             nb = (size // self.save_data.grid_size) + 1
 
             if self.save_data.grid_mode == 1:
                 offset = self.camera_pos // self.save_data.grid_size
-                lineOffset = (self.camera_pos % ((lineSpace * 2) * self.zoom)) - (Vector2(lineSpace, lineSpace) * self.zoom)
+                lineOffset = (self.camera_pos % ((line_space * 2) * self.zoom)) - (Vector2(line_space, line_space) * self.zoom)
 
                 for n in range(int(nb.x)):
                     if (n - offset.x) % 5 == 0:
@@ -976,18 +976,18 @@ class Application(QBaseApplication):
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, size.y) * self.zoom),
-                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, 0) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, size.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, 0) * self.zoom)
                         )
                     else:
                         qp.setPen(QPen(self.COLOR_GRID.QColor, 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
+                        pen.setDashPattern([line_space * self.zoom, line_space * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, size.y + lineOffset.y) * self.zoom),
-                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + startPos.x, 0) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, size.y + lineOffset.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, 0) * self.zoom),
                         )
 
                 for n in range(int(nb.y)):
@@ -997,18 +997,18 @@ class Application(QBaseApplication):
                         pen.setStyle(Qt.PenStyle.SolidLine)
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2(size.x, (n * self.save_data.grid_size) + startPos.y) * self.zoom),
-                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + startPos.y) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2(size.x, (n * self.save_data.grid_size) + start_pos.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + start_pos.y) * self.zoom)
                         )
                     else:
                         qp.setPen(QPen(self.COLOR_GRID.QColor, 1 * self.zoom))
                         pen = qp.pen()
                         pen.setStyle(Qt.PenStyle.CustomDashLine)
-                        pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
+                        pen.setDashPattern([line_space * self.zoom, line_space * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2(size.x + lineOffset.x, (n * self.save_data.grid_size) + startPos.y) * self.zoom),
-                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + startPos.y) * self.zoom)
+                            self.Vector2_to_QPoint(Vector2(size.x + lineOffset.x, (n * self.save_data.grid_size) + start_pos.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + start_pos.y) * self.zoom)
                         )
 
             elif self.save_data.grid_mode == 2:
@@ -1020,7 +1020,7 @@ class Application(QBaseApplication):
                 qp.setBrush(brush)
                 for x in range(-int(offset.x), int(nb.x) + 1, 2):
                     for y in range(-1, int(nb.y) + 1):
-                        rectPos = Vector2((x * self.save_data.grid_size) + startPos.x - self.save_data.grid_size, (y * self.save_data.grid_size) + startPos.y - self.save_data.grid_size)
+                        rectPos = Vector2((x * self.save_data.grid_size) + start_pos.x - self.save_data.grid_size, (y * self.save_data.grid_size) + start_pos.y - self.save_data.grid_size)
                         if (y % 2) == 0: rectPos.x += self.save_data.grid_size
                         if offset.y: rectPos.y += self.save_data.grid_size
                         qp.drawRect(int(rectPos.x * self.zoom), int(rectPos.y * self.zoom), int(self.save_data.grid_size * self.zoom), int(self.save_data.grid_size * self.zoom))
@@ -1047,15 +1047,15 @@ class Application(QBaseApplication):
             qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x - (self.DELTA / 5) - (qp.font().pointSize() * (len(str(p.minTime)) / 3)), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.minTime))
             qp.drawText(self.Vector2_to_QPoint((self.camera_pos + Vector2(p.pos.x + (self.DELTA / 5) - (qp.font().pointSize() * (len(str(p.maxTime)) / 3)), p.pos.y - (self.DELTA / 6))) * self.zoom), str(p.maxTime))
 
-            for pathKey in list(p.next.keys()):
+            for path_key in list(p.next.keys()):
                 if p == self.selected_item:
-                    if pathKey == self.selected_node: qp.setPen(QPen(self.COLOR_SELECTED.QColor, 3 * self.zoom))
+                    if path_key == self.selected_node: qp.setPen(QPen(self.COLOR_SELECTED.QColor, 3 * self.zoom))
                     else: qp.setPen(QPen(self.COLOR_FOCUS.QColor, 3 * self.zoom))
-                path = p.next[pathKey]
+                path = p.next[path_key]
                 if (path.value == 0 and path.name == ''):
                     pen = qp.pen()
                     pen.setStyle(Qt.PenStyle.CustomDashLine)
-                    pen.setDashPattern([lineSpace * self.zoom, lineSpace * self.zoom])
+                    pen.setDashPattern([line_space * self.zoom, line_space * self.zoom])
                     qp.setPen(pen)
 
                 vect2 = (path.node.pos - p.pos).normalized * (self.DELTA // 2)
@@ -1075,9 +1075,9 @@ class Application(QBaseApplication):
     def canvas_get_node(self, event: QMouseEvent):
         point = (self.canvas_get_point(event) / self.zoom) - self.camera_pos
 
-        nodeLst = self.graph.nodes
-        dist = nodeLst[0]
-        for p in nodeLst[1:]:
+        node_lst = self.graph.nodes
+        dist = node_lst[0]
+        for p in node_lst[1:]:
             if (self.graph.node(p).pos - point).magnitude < (self.graph.node(dist).pos - point).magnitude: dist = p
 
         if (self.graph.node(dist).pos - point).magnitude <= (self.DELTA // 2):
