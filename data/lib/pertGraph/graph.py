@@ -6,7 +6,7 @@ from .node import Node
 from .__debug__ import Debug
 from .__error__ import Error
 
-from data.lib.dimensionalEnv.vectors.vector2 import Vector2
+from data.lib.extendedmath import Vector2
 #----------------------------------------------------------------------
 
     # Class

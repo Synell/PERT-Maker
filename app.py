@@ -1065,9 +1065,9 @@ class Application(QBaseApplication):
                 pen.setStyle(Qt.PenStyle.SolidLine)
                 qp.setPen(pen)
 
-                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 25)) * 10)) * self.zoom))
-                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg - 25)) * 10)) * self.zoom))
-                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - ((path.node.pos - p.pos) / 2) - (deg2Vector2(absoluteDeg(vect2.normalized.convert2Deg + 90)) * 20)) * self.zoom), f'{path.name} {path.value}')
+                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (Vector2.from_angle((Vector2.signed_angle(vect2.normalized, Vector2.right) + 25) % 360) * 10)) * self.zoom))
+                qp.drawLine(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2) * self.zoom), self.Vector2_to_QPoint((self.camera_pos + path.node.pos - vect2 - (Vector2.from_angle((Vector2.signed_angle(vect2.normalized, Vector2.right) - 25) % 360) * 10)) * self.zoom))
+                if not (path.value == 0 and path.name == ''): qp.drawText(self.Vector2_to_QPoint((self.camera_pos + path.node.pos - ((path.node.pos - p.pos) / 2) - (Vector2.from_angle((Vector2.signed_angle(vect2.normalized, Vector2.right) + 90) % 360) * 20)) * self.zoom), f'{path.name} {path.value}')
 
     def canvas_get_point(self, event: QMouseEvent):
         return Vector2(event.position().x(), event.position().y())
@@ -1491,8 +1491,8 @@ class Application(QBaseApplication):
 
         nodes = self.graph.nodes
 
-        min_point = self.graph.node(nodes[0]).pos.copy
-        max_point = min_point.copy
+        min_point = self.graph.node(nodes[0]).pos.copy()
+        max_point = min_point.copy()
         for k in nodes[1:]:
             p = self.graph.node(k)
 
