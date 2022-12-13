@@ -65,11 +65,11 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 
 By default, a new PERT chart is created when you start the app. You can create a new PERT chart by clicking on the "New" button in the "File" toolbar.
 
-<img alt="Default interface when opening the app" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmQMNStpD5p4D6paAA3PhMt8rpJhkfRR5kZnXEArZSlxPP2k7UeXsRUl_FzH_pTHReMsRR3NHvZGSRwYxUuZl6LZAp0ufg" />
+<img alt="Default interface when opening the app" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/interface.png" />
 
 To start making a PERT chart, you need to add some nodes. You can add a node by right-clicking on the canvas. There, you can edit the properties of the node in the "Properties" tab.
 
-<img alt="Creating a node" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSC1LMO9GkXR2YNidRLwjNVZbEnkB5OGhSiNw3qk3UIAybniz-2JJCUyzJan8INZxb5n-ivIul_ybaYslIRMDggXkgJEQ" />
+<img alt="Creating a node" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/create_node.png" />
 
 To select a node, you can left-click on it. To delete a node, you need to select it and press the "Delete" key on your keyboard.
 
@@ -81,13 +81,13 @@ To connect two nodes, you need to select the first node and then right-click on 
 
 *You can link existing nodes by right-clicking on an existing node as you second node.*
 
-<img alt="Connect a node" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmQGYA_PMQ8YM-_V6scrlk2oo5Vc8TJV7H0P8wCkxUdMz76GJn1HqmTS354_XwzkiHD-_p-FAbXHv1HX9Wp8-gr3umatMw" />
+<img alt="Connect a node" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/connect_node.png" />
 
 <br/>
 
 Nodes have properties that can be edited in the "Properties" tab. You can edit the properties of a node by selecting it. You can edit the display name, the minimum time to do the task and the maximum time to do the task.
 
-<img alt="Node properties" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSoW1gZtZdPw7mvnEUgHxGFKMxI_zbYqPpFsU_CFesP79cDtn2ztmLJaA0uMz6pS2t3Vrk0OFc51SV7KL3QhIx4h-I1" />
+<img alt="Node properties" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/node_properties.png" />
 
 If the node is pointing to another node, you can edit the display name of the connection and the time to do the task.
 
@@ -95,11 +95,11 @@ If the node is pointing to another node, you can edit the display name of the co
 
 Let's say you have this PERT chart:
 
-<img alt="PERT chart example" src="https://drive.google.com/u/0/uc?id=1KXyBOgzz5TLCnXRZ8BddpA8xLxbU9rCw" />
+<img alt="PERT chart example" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/example.svg" />
 
 Let's focus on the "Generation" tab:
 
-<img alt="Generation tab" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSYpOV0CqdvUHgCU5Q0gcAzMTLLlYqp3qXeZfIoMlAUKbvYU2nDEs2PCsrkN3g40CA5jrp3SRvTsow-XL10LohY-EV7jA" />
+<img alt="Generation tab" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/generation_view.png" />
 
 You can see that we have 3 buttons.
 
@@ -109,17 +109,17 @@ You can see that we have 3 buttons.
 
 Before clicking on the "Refresh Connection View" button, the connections are not displayed in the "Connection View" tab.
 
-<img alt="Refresh connection view tab" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmRSToxp0BIP0gK5P91Wjsx8XV4oJZD5yvNkNFs0fR4JDzItSuytQcphmmlciguopHpmTL_ilpcLUTg3y5PKQkTSTbbu" />
+<img alt="Refresh connection view tab" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/connection_view.png" />
 
 After clicking on the "Refresh Connection View" button, the connections are displayed as a table in the "Connection View" tab.
 
-<img alt="Refresh connection view tab with values" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSKyaHGRt20x-a89WQLi7TYpOa9UkiFkaLFGp2CTY9IQXbC26EArE0oKKIwq1WuEFLawP3QNv91R7tIHBUomgPT4FEIVg" />
+<img alt="Refresh connection view tab with values" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/connection_view_full.png" />
 
 #### Generate Min and Max Times
 
 Before clicking on the "Generate Min and Max Times" button, the minimum and maximum times are not set on our PERT chart. You could set them manually, but it's a lot of work. So, we can use the "Generate Min and Max Times" button to automatically set the minimum and maximum times.
 
-<img alt="PERT charts with min and max values" src="https://drive.google.com/u/0/uc?id=1fFJ2zov3SUyBvWOtxU_UURi6x1wfcq_4" />
+<img alt="PERT charts with min and max values" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/example_min_max.svg" />
 
 After clicking on the "Generate Min and Max Times" button, the minimum and maximum times are set on our PERT chart.
 
@@ -127,11 +127,11 @@ After clicking on the "Generate Min and Max Times" button, the minimum and maxim
 
 Before clicking on the "Generate Critical Path" button, the critical path is not displayed in the "Critical Path" tab.
 
-<img alt="Generation critical path tab" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmTPpX8oNmwqy4p85AujQuzbuFqs87PFvwwXV21mmBxlrloM0Uc-pIognceHYX2swenMpYBHLHHwduH0Lf8HdkfkfkMu" />
+<img alt="Generate critical path tab" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/critical_path_view.png" />
 
 After clicking on the "Generate Critical Path" button, the critical path is displayed as a table in the "Critical Path" tab.
 
-<img alt="Generation critical path tab with values" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSQz4BcK0fP2GxW7bwlM7Ez2zuxFfkycILnbtN8gxk0lRrYMTGJ-L7-_pBK6PgBR37n0ELVypEZmOtVJfzRGBSaF-Yf" />
+<img alt="Generate critical path tab with values" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/critical_path_view_full.png" />
 
 <br/>
 
@@ -139,7 +139,7 @@ The last toggle switch, as its name suggests, allows you to use the node names i
 
 *Note that the chart will not look the same after checking this toggle switch.*
 
-<img alt="PERT chart with node names instead of path names" src="https://drive.google.com/u/0/uc?id=1qKbrbROttYOwRL-QzojXRzasmNixla9Y" />
+<img alt="PERT chart with node names instead of path names" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/example_node_names.svg" />
 
 <br/>
 
@@ -148,18 +148,18 @@ The last toggle switch, as its name suggests, allows you to use the node names i
 
 You can export the PERT chart as an image or as a vectorial image (SVG) by clicking on the "Export" button, then on the "Image" button, in the "File" tab.
 
-<img alt="Export menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmSJr_xhMwDgP4OYPkTERQg7LOsB2ZJE8MVEHU60bskFhCebgmfAUGM3YJEozjiql07hdyBcdTFSYZ1pEXbLWLy86VMG" />
+<img alt="Export menu" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/export_image.png" />
 
 There, you can choose the file location, the file name, the background color and the foreground color.
 
-<img alt="Color picker menu" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmRMehVydSaZr-ifBg7KUQpJkQc36IBcszT_RnawKm1Rj6LuENXwSG6cHbE6wMYvZnmWVkqrFZv-xgDNt6c1VFHT5_3Azg" />
+<img alt="Color picker menu" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/color_panel.png" />
 
 
 ### Generate a PERT Chart from a CSV file
 
 You can generate a PERT chart from a CSV file by clicking on the "Import" button, then on the "Table" button, in the "File" tab.
 
-<img alt="Generate a PERT chart from a table" src="https://lh3.googleusercontent.com/drive-viewer/AJc5JmTVOk_aMsZhr-IBaYhFvyAyYXPgRkYpOQs7pquMxZtlIuH6d1AQH6fKwkRDZUCGHgRMy6Fmjo_v5TFxjW_mHbPEywVt" />
+<img alt="Generate a PERT chart from a table" src="https://raw.githubusercontent.com/Synell/Assets/main/PERTMaker/readme/import_table.png" />
 
 There, you can choose the file to load or set manually the data.
 
