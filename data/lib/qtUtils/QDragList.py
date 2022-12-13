@@ -3,7 +3,7 @@
     # Libraries
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QApplication, QStyleOption, QStyle, QLabel
 from PySide6.QtGui import QMouseEvent, QDropEvent, QDragEnterEvent, QPaintEvent, QPainter
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 
 from .QGridFrame import QGridFrame
 #----------------------------------------------------------------------
@@ -57,6 +57,7 @@ class QDragListItem(QGridFrame):
         newIndex = index - 1 if direction == 'MoveUp' else index + 1
         layout.removeWidget(widget)
         layout.insertWidget(newIndex , widget)
+        self.parentWidget().moved.emit(index, newIndex)
         return True
 
     def paintEvent(self, _: QPaintEvent) -> None:
@@ -104,6 +105,8 @@ class QDragListItem(QGridFrame):
 
 
 class QDragList(QWidget):
+    moved = Signal(int, int)
+
     def __init__(self, parent = None, orientation: Qt.Orientation = Qt.Orientation.Vertical) -> None:
         super().__init__(parent)
 
@@ -132,6 +135,13 @@ class QDragList(QWidget):
 
     def add_item(self, item: QDragListItem):
         self._layout.addWidget(item)
+
+    def remove_item(self, item: QDragListItem):
+        self._layout.removeWidget(item)
+        item.setParent(None)
+
+    def clear(self):
+        for child in self.findChildren(QDragListItem): self.remove_item(child)
 
     @property
     def items(self) -> list:

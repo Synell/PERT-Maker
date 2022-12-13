@@ -99,6 +99,30 @@ QComboBox QListView::item:selected {
 	background-color: #333333;
 }
 
+QComboBox[dark=true], QComboBox[dark=true]:hover, QComboBox[dark=true]:focus, QComboBox[dark=true]:selected, QComboBox[dark=true]:editable:hover, QComboBox[dark=true]:!editable:hover, QComboBox[dark=true]::drop-down:editable, QComboBox[dark=true]:!editable:on:hover, QComboBox[dark=true]::drop-down:editable:on {
+	background-color: #1A1A1A;
+}
+
+QComboBox[dark=true] QListView {
+	background-color: #1A1A1A;
+}
+
+QComboBox[dark=true] QListView::item {
+	background-color: #1A1A1A;
+}
+
+QComboBox[dark=true][bigitem=true] QListView::item {
+	background-color: #1A1A1A;
+}
+
+QComboBox[dark=true] QListView::item:hover {
+	background-color: #262626;
+}
+
+QComboBox[dark=true] QListView::item:selected {
+	background-color: #262626;
+}
+
 
 
 /* QComboBox - Blue */

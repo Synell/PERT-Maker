@@ -10,6 +10,11 @@ QDockWidget {
 	titlebar-normal-icon:  url({path}dockwidget/sendToFront.png);
 }
 
+QDockWidget QFrame, QDockWidget QWidget {
+	background-color: #262626;
+	color: #fefefe;
+}
+
 QDockWidget::title {
 	background-color: #262626;
 	color: #fefefe;
