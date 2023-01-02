@@ -20,12 +20,13 @@ class QDragListItem(QGridFrame):
     def mouseMoveEvent(self, event: QMouseEvent) -> None:
         if (not (event.buttons() == Qt.MouseButton.LeftButton)): return
         if (self.isMinimumDistanceRiched(event)): return
+        if (self.cursor() != self.drag_cursor): self.setCursor(self.drag_cursor)
         self.raise_()
 
         if self.isVertical():
             y = event.globalPosition().y() - self.mouse_click_y + self.old_y
             bottom_border = self.parentWidget().geometry().height() - self.geometry().height()
-            if(y < 0): y = 0
+            if (y < 0): y = 0
             elif (y > bottom_border): y = bottom_border
             self.move(int(self.old_x), int(y))
 
@@ -42,7 +43,6 @@ class QDragListItem(QGridFrame):
         self.old_y = self.geometry().y()
         self.mouse_click_x = event.globalPosition().x()
         self.mouse_click_y = event.globalPosition().y()
-        self.setCursor(self.drag_cursor)
 
     def isMinimumDistanceRiched(self, event: QMouseEvent) -> bool:
         return False

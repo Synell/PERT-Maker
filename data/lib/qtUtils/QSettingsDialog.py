@@ -102,6 +102,8 @@ class QSettingsDialog(QDialog):
         for k, v in extra_tabs.items():
             self.root.add_widget(v, k, extra_icons[k])
 
+        # todo: add manage data tab
+
         self.root.set_current_index(0)
 
         self.get_function = get_function
@@ -125,7 +127,7 @@ class QSettingsDialog(QDialog):
         widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
 
         label = QSettingsDialog.textGroup(lang_data['QLabel']['language']['title'], lang_data['QLabel']['language']['description'])
-        root_frame.grid_layout.addWidget(label, 0, 0)
+        root_frame.grid_layout.addWidget(label, root_frame.grid_layout.count(), 0)
 
         self.lang_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['language'])
         self.lang_dropdown.combo_box.addItems(list(lang.display_name for lang in self._data.lang))
@@ -134,18 +136,18 @@ class QSettingsDialog(QDialog):
             if self._data.lang[lang_id].filename == current_lang: i = lang_id
 
         self.lang_dropdown.combo_box.setCurrentIndex(i)
-        root_frame.grid_layout.addWidget(self.lang_dropdown, 1, 0)
+        root_frame.grid_layout.addWidget(self.lang_dropdown, root_frame.grid_layout.count(), 0)
         root_frame.grid_layout.setAlignment(self.lang_dropdown, Qt.AlignmentFlag.AlignLeft)
 
 
         frame = QFrame()
         frame.setProperty('border-top', True)
         frame.setFixedHeight(1)
-        root_frame.grid_layout.addWidget(frame, 2, 0)
+        root_frame.grid_layout.addWidget(frame, root_frame.grid_layout.count(), 0)
 
 
         label = QSettingsDialog.textGroup(lang_data['QLabel']['theme']['title'], lang_data['QLabel']['theme']['description'])
-        root_frame.grid_layout.addWidget(label, 3, 0)
+        root_frame.grid_layout.addWidget(label, root_frame.grid_layout.count(), 0)
 
         self.themes_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['theme'])
         self.themes_dropdown.combo_box.addItems(list(theme.display_name for theme in self._data.themes))
@@ -154,13 +156,13 @@ class QSettingsDialog(QDialog):
             if self._data.themes[themeId].filename == current_theme: i = themeId
         self.themes_dropdown.combo_box.setCurrentIndex(i)
         self.themes_dropdown.combo_box.currentIndexChanged.connect(self._load_theme_variants)
-        root_frame.grid_layout.addWidget(self.themes_dropdown, 4, 0)
+        root_frame.grid_layout.addWidget(self.themes_dropdown, root_frame.grid_layout.count(), 0)
         root_frame.grid_layout.setAlignment(self.themes_dropdown, Qt.AlignmentFlag.AlignLeft)
 
         self.theme_variants_dropdown = QNamedComboBox(None, lang_data['QNamedComboBox']['themeVariant'])
         self._load_theme_variants(i)
         self.theme_variants_dropdown.combo_box.setCurrentIndex(list(self._data.themes[i].variants.keys()).index(current_theme_variant))
-        root_frame.grid_layout.addWidget(self.theme_variants_dropdown, 5, 0)
+        root_frame.grid_layout.addWidget(self.theme_variants_dropdown, root_frame.grid_layout.count(), 0)
         root_frame.grid_layout.setAlignment(self.theme_variants_dropdown, Qt.AlignmentFlag.AlignLeft)
 
         return widget

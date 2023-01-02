@@ -105,7 +105,7 @@ class QSidePanel(QScrollableGridFrame):
         self.set_width(width)
         self.setProperty('QSidePanel', True)
 
-        self.__current_index__ = 0
+        self._current_index = 0
         self.update()
 
     @property
@@ -124,42 +124,43 @@ class QSidePanel(QScrollableGridFrame):
 
     @property
     def current_index(self) -> int:
-        return self.__current_index__
+        return self._current_index
 
     def set_current_index(self, index: int) -> None:
         if index >= self.count() or index < 0: raise IndexError(f'Index {index} out of range.')
-        self.__current_index__ = index
+        self._current_index = index
         self.update()
 
     @property
     def current_item(self) -> QSidePanelItem:
-        return self._items[self.__current_index__]
+        return self._items[self._current_index]
 
     def set_current_item(self, item: QSidePanelItem) -> None:
         self.set_current_index(self.items.index(item))
 
     def update(self) -> None:
-        if self.__current_index__ >= self.count(): self.__current_index__ = self.count() - 1
-        if self.__current_index__ < 0: self.__current_index__ = 0
+        if self._current_index >= self.count(): self._current_index = self.count() - 1
+        if self._current_index < 0: self._current_index = 0
 
         for i in reversed(range(self.scroll_layout.count())):
             self.scroll_layout.itemAt(i).widget().setParent(None)
 
-        send_param = lambda i: lambda: self.__clicked__(i)
+        send_param = lambda i: lambda: self._clicked(i)
 
         for index, item in enumerate(self._items):
             if type(item) is QSidePanelItem:
                 try: item._widget.clicked.disconnect()
                 except: pass
                 item._widget.clicked.connect(send_param(index))
-                # item._widget.setChecked(index == self.__current_index__)
-                item._widget.setProperty('selected', True) if index == self.__current_index__ else item._widget.setProperty('selected', False)
+                # item._widget.setChecked(index == self._current_index)
+                item._widget.setProperty('selected', True) if index == self._current_index else item._widget.setProperty('selected', False)
+                item._widget.update()
             self.scroll_layout.addWidget(item._widget, index, 0)
 
-    def __clicked__(self, index: int) -> None:
+    def _clicked(self, index: int) -> None:
         self.current_index_changed.emit(index)
         self.current_item_changed.emit(self._items[index])
-        if self._items[index].auto_select: self.__current_index__ = index
+        if self._items[index].auto_select: self._current_index = index
         if self._items[index].connect is not None: self._items[index].connect()
         self.update()
 
