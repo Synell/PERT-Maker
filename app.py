@@ -967,7 +967,7 @@ class Application(QBaseApplication):
 
             if self.save_data.grid_mode == 1:
                 offset = self.camera_pos // self.save_data.grid_size
-                lineOffset = (self.camera_pos % ((line_space * 2) * self.zoom)) - (Vector2(line_space, line_space) * self.zoom)
+                line_offset = (self.camera_pos % ((line_space * 2) * self.zoom)) - (Vector2(line_space, line_space) * self.zoom)
 
                 for n in range(int(nb.x)):
                     if (n - offset.x) % 5 == 0:
@@ -986,7 +986,7 @@ class Application(QBaseApplication):
                         pen.setDashPattern([line_space * self.zoom, line_space * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, size.y + lineOffset.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, size.y + line_offset.y) * self.zoom),
                             self.Vector2_to_QPoint(Vector2((n * self.save_data.grid_size) + start_pos.x, 0) * self.zoom),
                         )
 
@@ -1007,7 +1007,7 @@ class Application(QBaseApplication):
                         pen.setDashPattern([line_space * self.zoom, line_space * self.zoom])
                         qp.setPen(pen)
                         qp.drawLine(
-                            self.Vector2_to_QPoint(Vector2(size.x + lineOffset.x, (n * self.save_data.grid_size) + start_pos.y) * self.zoom),
+                            self.Vector2_to_QPoint(Vector2(size.x + line_offset.x, (n * self.save_data.grid_size) + start_pos.y) * self.zoom),
                             self.Vector2_to_QPoint(Vector2(0, (n * self.save_data.grid_size) + start_pos.y) * self.zoom)
                         )
 
