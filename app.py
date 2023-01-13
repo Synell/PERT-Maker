@@ -1527,8 +1527,17 @@ class Application(QBaseApplication):
 
 
 
-    def edit_zoom(self, zoom):
+    def camera_recenter(self, old_zoom: float, new_zoom: float) -> None:
+        qp_mouse_pos = self.canvas.mapFromGlobal(QCursor.pos())
+        absolute_mouse_pos = Vector2(qp_mouse_pos.x(), qp_mouse_pos.y())
+        old_relative_mouse_pos = absolute_mouse_pos / old_zoom
+        new_relative_mouse_pos = absolute_mouse_pos / new_zoom
+        difference = new_relative_mouse_pos - old_relative_mouse_pos
+        self.camera_pos += difference
+
+    def edit_zoom(self, zoom: float):
         if (zoom) >= self.ZOOM_MIN and (zoom) <= self.ZOOM_MAX:
+            self.camera_recenter(self.zoom, zoom)
             self.zoom = zoom
             self.update_zoom()
 
