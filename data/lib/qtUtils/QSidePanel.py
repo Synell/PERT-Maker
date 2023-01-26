@@ -74,12 +74,12 @@ class QSidePanelSeparator:
 
     @property
     def shape(self) -> Shape:
-        return self.__shape__
+        return self.shape_
 
     @shape.setter
     def shape(self, shape: Shape) -> None:
-        if type(shape) is QFrame.Shape:
-            self.__shape__ = shape
+        if type(shape) is QSidePanelSeparator.Shape:
+            self.shape_ = shape
         else: raise ValueError(f'Argument must be a \'QSidePanelSeparator.Shape\'.')
 
 
@@ -154,6 +154,7 @@ class QSidePanel(QScrollableGridFrame):
                 item._widget.clicked.connect(send_param(index))
                 # item._widget.setChecked(index == self._current_index)
                 item._widget.setProperty('selected', True) if index == self._current_index else item._widget.setProperty('selected', False)
+                item._widget.clearFocus()
                 item._widget.update()
             self.scroll_layout.addWidget(item._widget, index, 0)
 

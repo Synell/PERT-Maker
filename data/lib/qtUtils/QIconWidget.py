@@ -29,11 +29,11 @@ class QIconWidget(QGridFrame):
 
     @property
     def icon(self) -> str|bytes|QPixmap|QSvgWidget|QIcon|QLabel:
-        return self.__icon__
+        return self._icon
 
     @icon.setter
     def icon(self, icon: str|bytes|QPixmap|QSvgWidget|QIcon|QLabel) -> None:
-        self.__icon__ = icon
+        self._icon = icon
         self.update()
 
     @property
@@ -74,7 +74,7 @@ class QIconWidget(QGridFrame):
     def is_file_icon(icon: str|bytes|QPixmap|QSvgWidget|QIcon|QLabel) -> bool:
         if isinstance(icon, str):
             if os.path.isfile(icon):
-                if QIconWidget.__check_extension__(icon, ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.ico', '.svg']): return False
+                if QIconWidget._check_extension(icon, ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.ico', '.svg']): return False
             else: return False
         elif isinstance(icon, [bytes, QPixmap, QSvgWidget, QIcon, QLabel]): return False
         return True
@@ -103,7 +103,7 @@ class QIconWidget(QGridFrame):
             elif type(icon) is str:
                 if os.path.isfile(icon):
                     if icon.endswith('.svg'): pixmap = QSvgWidget(icon)
-                    elif QIconWidget.__check_extension__(icon, ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.ico']):
+                    elif QIconWidget._check_extension(icon, ['.png', '.jpg', '.jpeg', '.bmp', '.gif', '.ico']):
                         pmap = QPixmap(icon).scaled(icon_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
                         pixmap = QLabel()
                         pixmap.setPixmap(pmap)
@@ -132,7 +132,7 @@ class QIconWidget(QGridFrame):
         return pixmap
 
     @staticmethod
-    def __check_extension__(path: str, ext: list[str]) -> bool:
+    def _check_extension(path: str, ext: list[str]) -> bool:
         for i in ext:
             if path.endswith(i): return True
         return False

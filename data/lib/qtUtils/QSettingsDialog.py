@@ -1,14 +1,14 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from PySide6.QtWidgets import QDialog, QFrame, QLabel, QGridLayout, QWidget, QPushButton
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QFrame, QLabel, QGridLayout, QWidget, QPushButton, QFileDialog
+from PySide6.QtCore import Qt, Signal
 from data.lib.qtUtils.QGridFrame import QGridFrame
 
 from data.lib.qtUtils.QGridWidget import QGridWidget
 
 from .QScrollableGridWidget import QScrollableGridWidget
-import json
+import json, subprocess
 
 from .QSidePanelWidget import QSidePanelWidget
 from .QNamedComboBox import QNamedComboBox
@@ -50,6 +50,13 @@ class _QData:
 
 
 class QSettingsDialog(QDialog):
+    close_app = Signal()
+    restart_app = Signal()
+
+    clear_data = Signal()
+    import_data = Signal(str)
+    export_data = Signal(str)
+
     def __init__(self, parent = None, settings_data = {}, lang_folder = '', themes_folder = '', current_lang = '', current_theme = '', current_theme_variant = '', extra_tabs: dict[str: QWidget] = {}, get_function = None):
         super().__init__(parent)
 
@@ -102,7 +109,8 @@ class QSettingsDialog(QDialog):
         for k, v in extra_tabs.items():
             self.root.add_widget(v, k, extra_icons[k])
 
-        # todo: add manage data tab
+        self.data_tab = self._data_tab_widget(settings_data['QSidePanel']['data'])
+        self.root.add_widget(self.data_tab, settings_data['QSidePanel']['data']['title'], f'./data/lib/qtUtils/themes/{current_theme}/{current_theme_variant}/icons/sidepanel/data.png')
 
         self.root.set_current_index(0)
 
@@ -167,6 +175,63 @@ class QSettingsDialog(QDialog):
 
         return widget
 
+
+    def _data_tab_widget(self, lang_data = {}):
+        widget = QScrollableGridWidget()
+        widget.scroll_layout.setSpacing(0)
+        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
+
+        root_frame = QGridFrame()
+        root_frame.grid_layout.setSpacing(16)
+        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
+        widget.scroll_layout.addWidget(root_frame, 0, 0)
+        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
+
+        label = QSettingsDialog.textGroup(lang_data['QLabel']['clearData']['title'], lang_data['QLabel']['clearData']['description'])
+        root_frame.grid_layout.addWidget(label, root_frame.grid_layout.count(), 0)
+
+        button = QPushButton(lang_data['QPushButton']['clearData'])
+        button.setProperty('color', 'main')
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(self._clear_data)
+        root_frame.grid_layout.addWidget(button, root_frame.grid_layout.count(), 0)
+
+
+        frame = QFrame()
+        frame.setProperty('border-top', True)
+        frame.setFixedHeight(1)
+        root_frame.grid_layout.addWidget(frame, root_frame.grid_layout.count(), 0)
+
+
+        label = QSettingsDialog.textGroup(lang_data['QLabel']['importData']['title'], lang_data['QLabel']['importData']['description'])
+        root_frame.grid_layout.addWidget(label, root_frame.grid_layout.count(), 0)
+
+        button = QPushButton(lang_data['QPushButton']['importData'])
+        button.setProperty('color', 'main')
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(lambda: self._import_data(lang_data))
+        root_frame.grid_layout.addWidget(button, root_frame.grid_layout.count(), 0)
+
+
+        frame = QFrame()
+        frame.setProperty('border-top', True)
+        frame.setFixedHeight(1)
+        root_frame.grid_layout.addWidget(frame, root_frame.grid_layout.count(), 0)
+
+
+        label = QSettingsDialog.textGroup(lang_data['QLabel']['exportData']['title'], lang_data['QLabel']['exportData']['description'])
+        root_frame.grid_layout.addWidget(label, root_frame.grid_layout.count(), 0)
+
+        button = QPushButton(lang_data['QPushButton']['exportData'])
+        button.setProperty('color', 'main')
+        button.setCursor(Qt.CursorShape.PointingHandCursor)
+        button.clicked.connect(lambda: self._export_data(lang_data))
+        root_frame.grid_layout.addWidget(button, root_frame.grid_layout.count(), 0)
+
+
+        return widget
+
+
     def textGroup(title: str = '', description: str = '') -> QGridWidget:
         widget = QGridWidget()
         widget.grid_layout.setSpacing(0)
@@ -202,4 +267,35 @@ class QSettingsDialog(QDialog):
                 list(self._data.themes[self.themes_dropdown.combo_box.currentIndex()].variants.keys())[self.theme_variants_dropdown.combo_box.currentIndex()]
             )
         return None
+
+    def _clear_data(self):
+        self.clear_data.emit()
+        self.close()
+        self.restart_app.emit()
+
+    def _import_data(self, lang_data: dict):
+        path = QFileDialog.getOpenFileName(
+            parent = self,
+            dir = './',
+            caption = lang_data['QFileDialog']['importData'],
+            filter = 'All supported files (*.dat *.json);;DATA (*.dat);;JSON (*.json)'
+        )[0]
+
+        if path:
+            self.import_data.emit(path)
+            self.close()
+            self.restart_app.emit()
+
+    def _export_data(self, lang_data: dict):
+        path = QFileDialog.getSaveFileName(
+            parent = self,
+            dir = './',
+            caption = lang_data['QFileDialog']['exportData'],
+            filter = 'DATA (*.dat);;JSON (*.json)'
+        )[0]
+
+        if path:
+            self.export_data.emit(path)
+            path = path.replace('/', '\\')
+            subprocess.Popen(rf'explorer /select, "{path}"', shell = False)
 #----------------------------------------------------------------------

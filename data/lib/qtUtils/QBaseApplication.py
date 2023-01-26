@@ -3,7 +3,8 @@
     # Libraries
 from sys import argv
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel
-from PySide6.QtCore import QPauseAnimation, QRect, QEvent, QSequentialAnimationGroup, QPauseAnimation, QPropertyAnimation, Qt, QEasingCurve
+from PySide6.QtCore import QPauseAnimation, QRect, QEvent, QSequentialAnimationGroup, QPauseAnimation, QPropertyAnimation, Qt, QEasingCurve, Signal
+from PySide6.QtNetwork import QLocalSocket, QLocalServer
 from PySide6.QtGui import QIcon, QPixmap
 
 from .QPlatform import QPlatform
@@ -21,20 +22,50 @@ from .QLinkLabel import QLinkLabel
 
     # Class
 class QBaseApplication(QApplication):
+    another_instance_opened = Signal()
+
+    SERVER_NAME = 'myApp'
+
     COLOR_LINK = QUtilsColor.from_hex('#cccccc')
 
-    def __init__(self, platform: QPlatform) -> None:
+    def __init__(self, platform: QPlatform, start_listener: bool = False) -> None:
         super().__init__([argv[0]])
         self.window = QMainWindow()
         self.window.setWindowTitle('Base Qt Window')
 
         self.platform = platform
 
+        self.must_update = None
+        self.must_update_link = None
+
+        self.must_restart = None
+
         self.save_data = None
 
         self._alerts = []
         self._has_alert_queue = True
         self._has_installed_event_filter = False
+
+        if start_listener: self._start_listener()
+
+
+
+    @staticmethod
+    def instance_exists(server_name: str) -> bool:
+        socket = QLocalSocket()
+        socket.connectToServer(server_name)
+        return socket.state() == QLocalSocket.LocalSocketState.ConnectedState
+
+    def is_unique(self) -> bool:
+        return not QBaseApplication.instance_exists(self.SERVER_NAME)
+
+    def _start_listener(self) -> None:
+        self._listener = QLocalServer(self)
+        self._listener.setSocketOptions(self._listener.SocketOption.WorldAccessOption)
+        self._listener.newConnection.connect(lambda: self.another_instance_opened.emit())
+        self._listener.listen(self.SERVER_NAME)
+        print(f'Waiting for connections on "{self._listener.serverName()}"')
+
 
     def has_alert_queue(self) -> bool:
         return self._has_alert_queue

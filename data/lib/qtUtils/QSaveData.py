@@ -5,6 +5,7 @@ from typing import Callable
 from PySide6.QtGui import QIcon
 import json, os
 from enum import Enum
+from contextlib import suppress
 
 from .QMessageBoxWithWidget import QMessageBoxWithWidget
 from .QBaseApplication import QBaseApplication
@@ -46,17 +47,18 @@ class QSaveData:
         try:
             with open(self.path, 'r', encoding = 'utf-8') as infile:
                 data = json.load(infile)
-            self.language = data['language']
-            self.theme = data['theme']
-            self.theme_variant = data['themeVariant']
+
+            exc = suppress(Exception)
+
+            with exc: self.language = data['language']
+            with exc: self.theme = data['theme']
+            with exc: self.theme_variant = data['themeVariant']
+
             self.load_language_data()
             self.load_theme_data()
             self.load_extra_data(data)
 
         except Exception as e:
-            self.language = 'english'
-            self.theme = 'neutron'
-            self.theme_variant = 'dark'
             self.save()
             if not safe_mode: self.load()
 
@@ -122,9 +124,10 @@ class QSaveData:
             if asQIcon: return QIcon(f'./data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/icons/{path}')
             return f'./data/lib/qtUtils/themes/{self.theme}/{self.theme_variant}/icons/{path}'
 
-    def settings_menu(self, app: QBaseApplication = None) -> list:
+    def settings_menu(self, app: QBaseApplication = None) -> bool:
         dat = self.settings_menu_extra()
-        response = QSettingsDialog(
+
+        dialog = QSettingsDialog(
             parent = app.window,
             settings_data = self.language_data['QSettingsDialog'],
             lang_folder = self.lang_folder,
@@ -134,7 +137,14 @@ class QSaveData:
             current_theme_variant = self.theme_variant,
             extra_tabs = dat[0],
             get_function = dat[1]
-        ).exec()
+        )
+        dialog.close_app.connect(lambda: self._close_app(app))
+        dialog.restart_app.connect(lambda: self._restart_app(app))
+        dialog.clear_data.connect(self.clear_data)
+        dialog.import_data.connect(self.import_data)
+        dialog.export_data.connect(self.export_data)
+
+        response = dialog.exec()
         if response != None:
             self.language = response[0]
             self.theme = response[1]
@@ -151,6 +161,37 @@ class QSaveData:
                 None
             ).exec()
 
+            return True
+        return False
+
     def settings_menu_extra(self) -> tuple[dict, Callable|None]:
         return {}, None
+
+    def _close_app(self, app: QBaseApplication) -> None:
+        app.exit()
+
+    def _restart_app(self, app: QBaseApplication) -> None:
+        app.must_restart = True
+        app.exit()
+
+    def clear_data(self) -> None:
+        os.remove(self.path)
+
+    def export_data(self, filename: str) -> None:
+        new_data = {'language': self.language, 'theme': self.theme, 'themeVariant': self.theme_variant} | self.export_extra_data()
+
+        with open(filename, 'w', encoding = 'utf-8') as outfile:
+            json.dump(new_data, outfile)
+
+    def export_extra_data(self) -> dict: return {}
+
+    def import_data(self, filename: str) -> None:
+        with open(filename, 'r', encoding = 'utf-8') as infile:
+            data = json.load(infile)
+
+        self.language = data['language']
+        self.theme = data['theme']
+        self.theme_variant = data['themeVariant']
+        self.load_extra_data(data)
+        self.save()
 #----------------------------------------------------------------------
