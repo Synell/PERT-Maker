@@ -28,7 +28,7 @@ class QBaseApplication(QApplication):
 
     COLOR_LINK = QUtilsColor.from_hex('#cccccc')
 
-    def __init__(self, platform: QPlatform, start_listener: bool = False) -> None:
+    def __init__(self, platform: QPlatform, single_instance: bool = False) -> None:
         super().__init__([argv[0]])
         self.window = QMainWindow()
         self.window.setWindowTitle('Base Qt Window')
@@ -46,7 +46,7 @@ class QBaseApplication(QApplication):
         self._has_alert_queue = True
         self._has_installed_event_filter = False
 
-        if start_listener: self._start_listener()
+        if single_instance: self._start_listener()
 
 
 
