@@ -8,7 +8,7 @@ from .QToggleButton import QToggleButton
 
     # Class
 class QNamedToggleButton(QGridFrame):
-    def __init__(self, parent = None, text: str = '', checked: bool = False):
+    def __init__(self, parent = None, text: str = '', checked: bool = False, min_width: bool = False):
         super().__init__(parent)
         self.setProperty('QNamedToggleButton', True)
         self.setProperty('color', 'main')
@@ -24,6 +24,7 @@ class QNamedToggleButton(QGridFrame):
 
         self.grid_layout.addWidget(self.label, 0, 0)
         self.grid_layout.addWidget(self.toggle_button, 0, 1)
+        if min_width: self.grid_layout.setColumnStretch(2, 1)
 
     def setChecked(self, value: bool):
         self.toggle_button.setChecked(value)

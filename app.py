@@ -41,6 +41,11 @@ class Application(QBaseApplication):
     def __init__(self, platform: QPlatform) -> None:
         super().__init__(platform = platform)
 
+        self.setOrganizationName('Synel')
+        # self.setApplicationDisplayName('PERT Maker')
+        self.setApplicationName('PERT Maker')
+        self.setApplicationVersion(self.VERSION)
+
         self.window.closeEvent = self.close_event
 
         self.must_update = None
