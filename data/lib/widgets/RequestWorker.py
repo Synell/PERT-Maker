@@ -27,7 +27,10 @@ class RequestWorker(QThread):
     def run(self):
         for app in self.followed_apps:
             try:
-                response = requests.get(f'{app.replace("https://github.com/", "https://api.github.com/repos/")}/releases', headers = {'Authorization': self.token} if self.token else None)
+                response = requests.get(
+                    f'{app.replace("https://github.com/", "https://api.github.com/repos/")}/releases',
+                    headers = {'Authorization': f'token {self.token["github"]}'} if self.token['github'] else None
+                )
                 if response.status_code != 200: continue
                 response = response.json()
                 if type(response) is not list: return self.signals.failed.emit('Invalid response')
