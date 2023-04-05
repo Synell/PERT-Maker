@@ -1,7 +1,7 @@
 {
     "info": {
         "name": "Français",
-        "version": 2.1,
+        "version": "07e715d5",
         "description": "Langage français pour l'application PERT Maker."
     },
     "data": {
@@ -130,6 +130,32 @@
                                 "atLaunch": "Au lancement"
                             }
                         }
+                    }
+                },
+                "data": {
+                    "title": "Données",
+                    "QLabel": {
+                        "clearData": {
+                            "title": "Effacer les Données",
+                            "description": "Efface toutes les données et redémarre l'application."
+                        },
+                        "importData": {
+                            "title": "Importer les Données",
+                            "description": "Importe des données à partir d'un fichier et redémarre l'application."
+                        },
+                        "exportData": {
+                            "title": "Exporter les Données",
+                            "description": "Exporte les données vers un fichier."
+                        }
+                    },
+                    "QPushButton": {
+                        "clearData": "Effacer les Données",
+                        "importData": "Importer les Données",
+                        "exportData": "Exporter les Données"
+                    },
+                    "QFileDialog": {
+                        "importData": "PERT Maker > Paramètres > Données > Importer les Données",
+                        "exportData": "PERT Maker > Paramètres > Données > Exporter les Données"
                     }
                 }
             },

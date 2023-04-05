@@ -1,7 +1,7 @@
 {
     "info": {
         "name": "English",
-        "version": 2.1,
+        "version": "07e715d5",
         "description": "English language for PERT Maker."
     },
     "data": {
@@ -130,6 +130,32 @@
                                 "atLaunch": "At Launch"
                             }
                         }
+                    }
+                },
+                "data": {
+                    "title": "Data",
+                    "QLabel": {
+                        "clearData": {
+                            "title": "Clear Data",
+                            "description": "Clears all data stored by PERT Maker and restarts the app."
+                        },
+                        "importData": {
+                            "title": "Import Data",
+                            "description": "Imports data from a file and restarts the app. This will overwrite all data."
+                        },
+                        "exportData": {
+                            "title": "Export Data",
+                            "description": "Exports data to a file."
+                        }
+                    },
+                    "QPushButton": {
+                        "clearData": "Clear Data",
+                        "importData": "Import Data",
+                        "exportData": "Export Data"
+                    },
+                    "QFileDialog": {
+                        "importData": "PERT Maker > Settings > Data > Import Data",
+                        "exportData": "PERT Maker > Settings > Data > Export Data"
                     }
                 }
             },
