@@ -37,7 +37,7 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 
 ## Installation
 
-### Windows
+### Windows, Linux and MacOS
 
 <a href="https://github.com/Synell/PERT-Maker/releases/latest">
   <img alt="Release: Latest" src="https://img.shields.io/badge/Release-Latest-00B4BE?style=for-the-badge" target="_blank" />
