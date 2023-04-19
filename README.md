@@ -27,9 +27,7 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 
 ### Source Code
 - Python 3.11 or later
-  - PySide6 (`pip install PySide6`)
-  - requests (`pip install requests`)
-  - multipledispatch (`pip install multipledispatch`)
+  - Dependencies (use `pip install -r requirements.txt` in the project root folder to install them)
 
 
 ## Installation
