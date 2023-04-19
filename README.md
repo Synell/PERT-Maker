@@ -20,9 +20,14 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 ## Requirements
 
 ### Windows
-
 - Windows 7 or later
 - VC++ 2015 Redistributable
+
+### Linux
+- All Linux distributions supported by PySide6
+
+### MacOS
+- MacOS 10.14 (Mojave) or later
 
 
 ### Source Code
