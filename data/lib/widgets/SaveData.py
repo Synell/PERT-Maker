@@ -48,8 +48,8 @@ class SaveData(QSaveData):
 
     def settings_menu_extra(self):
         return {
-            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png'),
-            self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']: (self.settings_menu_updates(), f'{self.getIconsDir()}/sidepanel/updates.png'),
+            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.get_icon_dir()}/sidepanel/editor.png'),
+            self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']: (self.settings_menu_updates(), f'{self.get_icon_dir()}/sidepanel/updates.png'),
         }, self.get_extra
 
 
