@@ -10,6 +10,12 @@
     <img alt="License: LGPL" src="https://img.shields.io/badge/License-LGPL-green" target="_blank" />
   </a>
   <img alt="Platforms: Windows, Linux and MacOS" src="https://img.shields.io/badge/Platforms-Windows%20|%20Linux%20|%20MacOS-yellow" />
+  <a href="https://www.buymeacoffee.com/synell">
+    <img alt="Donate: Buy me a coffee" src="https://img.shields.io/badge/Donate-Buy%20Me%20a%20Coffee-orange" target="_blank" />
+  </a>
+  <a href="https://www.patreon.com/synel">
+    <img alt="Donate: Patreon" src="https://img.shields.io/badge/Donate-Patreon-red" target="_blank" />
+  </a>
 </p>
 
 ----------------------------------------------------------------------
@@ -20,21 +26,24 @@ PERT Maker is a simple tool to create <a href="https://en.wikipedia.org/wiki/Pro
 ## Requirements
 
 ### Windows
-
 - Windows 7 or later
 - VC++ 2015 Redistributable
+
+### Linux
+- All Linux distributions supported by PySide6
+
+### MacOS
+- MacOS 10.14 (Mojave) or later
 
 
 ### Source Code
 - Python 3.11 or later
-  - PySide6 (`pip install PySide6`)
-  - requests (`pip install requests`)
-  - multipledispatch (`pip install multipledispatch`)
+  - Dependencies (use `pip install -r requirements.txt` in the project root folder to install them)
 
 
 ## Installation
 
-### Windows
+### Windows, Linux and MacOS
 
 <a href="https://github.com/Synell/PERT-Maker/releases/latest">
   <img alt="Release: Latest" src="https://img.shields.io/badge/Release-Latest-00B4BE?style=for-the-badge" target="_blank" />
