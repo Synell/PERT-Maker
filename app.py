@@ -71,7 +71,7 @@ class Application(QBaseApplication):
 
         self.window.setProperty('color', 'magenta')
 
-        self.save_data.setStyleSheet(self)
+        self.save_data.set_stylesheet(self)
 
         self.load_colors()
 
@@ -178,12 +178,12 @@ class Application(QBaseApplication):
         self.status_bar.zoom.grid_layout.setSpacing(0)
 
         self.status_bar.zoom.zoom_min = QToolButton()
-        self.status_bar.zoom.zoom_min.setIcon(self.save_data.getIcon('statusbar/zoomMin.png'))
+        self.status_bar.zoom.zoom_min.setIcon(self.save_data.get_icon('statusbar/zoomMin.png'))
         self.status_bar.zoom.zoom_min.clicked.connect(self.zoom_min)
         self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_min, 0, 0)
 
         self.status_bar.zoom.zoom_out = QToolButton()
-        self.status_bar.zoom.zoom_out.setIcon(self.save_data.getIcon('statusbar/zoomOut.png'))
+        self.status_bar.zoom.zoom_out.setIcon(self.save_data.get_icon('statusbar/zoomOut.png'))
         self.status_bar.zoom.zoom_out.clicked.connect(self.zoom_out)
         self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_out, 0, 1)
 
@@ -194,12 +194,12 @@ class Application(QBaseApplication):
         self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_slider, 0, 2)
 
         self.status_bar.zoom.zoom_in = QToolButton()
-        self.status_bar.zoom.zoom_in.setIcon(self.save_data.getIcon('statusbar/zoomIn.png'))
+        self.status_bar.zoom.zoom_in.setIcon(self.save_data.get_icon('statusbar/zoomIn.png'))
         self.status_bar.zoom.zoom_in.clicked.connect(self.zoom_in)
         self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_in, 0, 3)
 
         self.status_bar.zoom.zoom_max = QToolButton()
-        self.status_bar.zoom.zoom_max.setIcon(self.save_data.getIcon('statusbar/zoomMax.png'))
+        self.status_bar.zoom.zoom_max.setIcon(self.save_data.get_icon('statusbar/zoomMax.png'))
         self.status_bar.zoom.zoom_max.clicked.connect(self.zoom_max)
         self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_max, 0, 4)
 
@@ -300,7 +300,7 @@ class Application(QBaseApplication):
                 lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['QAction']
 
                 import_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['title'], self.window)
-                import_menu.setIcon(self.save_data.getIcon('menubar/import.png'))
+                import_menu.setIcon(self.save_data.get_icon('menubar/import.png'))
 
                 table_action = QAction(lang['table'], self.window)
                 table_action.triggered.connect(self.file_menu_import_menu_table_action)
@@ -313,7 +313,7 @@ class Application(QBaseApplication):
                 lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['QAction']
 
                 export_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['title'], self.window)
-                export_menu.setIcon(self.save_data.getIcon('menubar/export.png'))
+                export_menu.setIcon(self.save_data.get_icon('menubar/export.png'))
 
                 table_action = QAction(lang['table'], self.window)
                 table_action.triggered.connect(self.file_menu_export_menu_table_action)
@@ -326,30 +326,30 @@ class Application(QBaseApplication):
 
                 return export_menu
 
-            new_action = QAction(self.save_data.getIcon('menubar/new.png'), lang['new'], self.window)
+            new_action = QAction(self.save_data.get_icon('menubar/new.png'), lang['new'], self.window)
             new_action.setShortcut('Ctrl+N')
             new_action.triggered.connect(self.file_menu_new_action)
 
-            open_action = QAction(self.save_data.getIcon('menubar/open.png'), lang['open'], self.window)
+            open_action = QAction(self.save_data.get_icon('menubar/open.png'), lang['open'], self.window)
             open_action.setShortcut('Ctrl+O')
             open_action.triggered.connect(self.file_menu_open_action)
 
             import_menu = create_import_menu()
             export_menu = create_export_menu()
 
-            save_action = QAction(self.save_data.getIcon('menubar/save.png'), lang['save'], self.window)
+            save_action = QAction(self.save_data.get_icon('menubar/save.png'), lang['save'], self.window)
             save_action.setShortcut('Ctrl+S')
             save_action.triggered.connect(self.file_menu_save_action)
 
-            save_as_action = QAction(self.save_data.getIcon('menubar/saveAs.png'), lang['saveAs'], self.window)
+            save_as_action = QAction(self.save_data.get_icon('menubar/saveAs.png'), lang['saveAs'], self.window)
             save_as_action.setShortcut('Ctrl+Shift+S')
             save_as_action.triggered.connect(self.file_menu_save_as_action)
 
-            settings_action = QAction(self.save_data.getIcon('menubar/settings.png'), lang['settings'], self.window)
+            settings_action = QAction(self.save_data.get_icon('menubar/settings.png'), lang['settings'], self.window)
             settings_action.setShortcut('Ctrl+Alt+S')
             settings_action.triggered.connect(self.file_menu_settings_action)
 
-            exit_action = QAction(self.save_data.getIcon('menubar/exit.png'), lang['exit'], self.window)
+            exit_action = QAction(self.save_data.get_icon('menubar/exit.png'), lang['exit'], self.window)
             exit_action.setShortcut('Alt+F4')
             exit_action.triggered.connect(self.window.close)
 
@@ -372,13 +372,13 @@ class Application(QBaseApplication):
 
             view_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['title'])
             
-            reset_interface_action = QAction(self.save_data.getIcon('menubar/resetInterface.png'), lang['resetInterface'], self.window)
+            reset_interface_action = QAction(self.save_data.get_icon('menubar/resetInterface.png'), lang['resetInterface'], self.window)
             reset_interface_action.triggered.connect(self.view_menu_reset_interface_action)
 
-            grid_switch_action = QAction(self.save_data.getIcon('menubar/grid.png'), lang['gridSwitch'], self.window)
+            grid_switch_action = QAction(self.save_data.get_icon('menubar/grid.png'), lang['gridSwitch'], self.window)
             grid_switch_action.triggered.connect(self.view_menu_grid_switch_action)
 
-            grid_align_action = QAction(self.save_data.getIcon('menubar/gridAlign.png'), lang['gridAlign'], self.window)
+            grid_align_action = QAction(self.save_data.get_icon('menubar/gridAlign.png'), lang['gridAlign'], self.window)
             grid_align_action.triggered.connect(self.view_menu_grid_align_action)
 
 
@@ -394,17 +394,17 @@ class Application(QBaseApplication):
             about_action = QAction(QIcon('./data/icons/PERTMaker.svg'), lang['about'], self.window)
             about_action.triggered.connect(self.help_menu_about_action)
 
-            about_qt_action = QAction(self.save_data.getIcon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
+            about_qt_action = QAction(self.save_data.get_icon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
             about_qt_action.triggered.connect(self.help_menu_about_pyside_action)
 
-            tips_action = QAction(self.save_data.getIcon('menubar/tips.png'), lang['tips'], self.window)
+            tips_action = QAction(self.save_data.get_icon('menubar/tips.png'), lang['tips'], self.window)
             tips_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage')))
 
             def create_donate_menu():
                 donate_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QMenu']['donate']['title'], self.window)
-                donate_menu.setIcon(self.save_data.getIcon('menubar/donate.png'))
+                donate_menu.setIcon(self.save_data.get_icon('menubar/donate.png'))
 
-                buymeacoffee_action = QAction(self.save_data.getIcon('menubar/buyMeACoffee.png'), 'Buy Me a Coffee', self.window)
+                buymeacoffee_action = QAction(self.save_data.get_icon('menubar/buyMeACoffee.png'), 'Buy Me a Coffee', self.window)
                 buymeacoffee_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://www.buymeacoffee.com/Synell')))
 
                 donate_menu.addAction(buymeacoffee_action)

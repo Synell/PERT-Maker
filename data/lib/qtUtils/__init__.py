@@ -28,11 +28,13 @@ from .QLinkLabel import QLinkLabel
 from .QIconWidget import QIconWidget
 from .QFileZone import QFileZone
 from .QFlowWidget import QFlowWidget
+from .QFlowScrollableWidget import QFlowScrollableWidget
+from .QFlowLayout import QFlowLayout
 from .QColorPicker import QColorPicker
 from .QColorButton import QColorButton
 from .QColorDialog import QColorDialog
 from .QUtilsColor import QUtilsColor
-# from .QLoginWidget import QLoginWidget
+from .QLoginWidget import QLoginWidget
 # from .QLoginDialog import QLoginDialog
 from .QToggleButton import QToggleButton
 from .QNamedToggleButton import QNamedToggleButton

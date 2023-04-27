@@ -205,7 +205,7 @@ class SaveData(QSaveData):
             'dockWidgets': self.dock_widgets
         }
 
-    def load_extra_data(self, extra_data: dict = ...) -> None:
+    def load_extra_data(self, extra_data: dict = ..., reload: list = []) -> None:
         try:
             self.max_loops = extra_data['maxLoops']
             self.grid_size = extra_data['gridSize']
