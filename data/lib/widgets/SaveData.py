@@ -48,8 +48,8 @@ class SaveData(QSaveData):
 
     def settings_menu_extra(self):
         return {
-            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.getIconsDir()}/sidepanel/editor.png'),
-            self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']: (self.settings_menu_updates(), f'{self.getIconsDir()}/sidepanel/updates.png'),
+            self.language_data['QSettingsDialog']['QSidePanel']['editor']['title']: (self.settings_menu_editor(), f'{self.get_icon_dir()}/sidepanel/editor.png'),
+            self.language_data['QSettingsDialog']['QSidePanel']['updates']['title']: (self.settings_menu_updates(), f'{self.get_icon_dir()}/sidepanel/updates.png'),
         }, self.get_extra
 
 
@@ -205,28 +205,30 @@ class SaveData(QSaveData):
             'dockWidgets': self.dock_widgets
         }
 
-    def load_extra_data(self, extra_data: dict = ...) -> None:
-        try:
-            self.max_loops = extra_data['maxLoops']
-            self.grid_size = extra_data['gridSize']
-            self.arrow_move_speed = extra_data['arrowMoveSpeed']
-            self.zoom_speed = extra_data['zoomSpeed']
+    def load_extra_data(self, extra_data: dict = ..., reload: list = []) -> bool:
+        exc = suppress(Exception)
+        res = False
 
-            self.live_refresh_connection_view = extra_data['liveRefreshConnectionView']
-            self.live_min_max = extra_data['liveMinMax']
-            self.live_generate_critical_path = extra_data['liveGenerateCriticalPath']
+        with exc: self.max_loops = extra_data['maxLoops']
+        with exc: self.grid_size = extra_data['gridSize']
+        with exc: self.arrow_move_speed = extra_data['arrowMoveSpeed']
+        with exc: self.zoom_speed = extra_data['zoomSpeed']
 
-            self.grid_mode = extra_data['gridMode']
-            self.grid_size = extra_data['gridSize']
-            self.align_to_grid = extra_data['alignToGrid']
+        with exc: self.live_refresh_connection_view = extra_data['liveRefreshConnectionView']
+        with exc: self.live_min_max = extra_data['liveMinMax']
+        with exc: self.live_generate_critical_path = extra_data['liveGenerateCriticalPath']
 
-            self.export_image_bg_color = QUtilsColor.from_hexa(extra_data['exportImageBgColor'])
-            self.export_image_fg_color = QUtilsColor.from_hexa(extra_data['exportImageFgColor'])
+        with exc: self.grid_mode = extra_data['gridMode']
+        with exc: self.grid_size = extra_data['gridSize']
+        with exc: self.align_to_grid = extra_data['alignToGrid']
 
-            self.check_for_updates = extra_data['checkForUpdates']
-            self.last_check_for_updates = datetime.strptime(extra_data['lastCheckForUpdates'], self.dateformat)
+        with exc: self.export_image_bg_color = QUtilsColor.from_hexa(extra_data['exportImageBgColor'])
+        with exc: self.export_image_fg_color = QUtilsColor.from_hexa(extra_data['exportImageFgColor'])
 
-            self.dock_widgets = extra_data['dockWidgets']
+        with exc: self.check_for_updates = extra_data['checkForUpdates']
+        with exc: self.last_check_for_updates = datetime.strptime(extra_data['lastCheckForUpdates'], self.dateformat)
 
-        except: self.save()
+        with exc: self.dock_widgets = extra_data['dockWidgets']
+
+        return res
 #----------------------------------------------------------------------

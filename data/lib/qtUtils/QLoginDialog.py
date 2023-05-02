@@ -58,5 +58,5 @@ class QLoginDialog(QDialog):
         self.setLayout(self.root.grid_layout)
 
     def exec(self) -> tuple[str, str, bool | None] | None:
-        if super().exec(): return self.login_widget.username.text(), self.login_widget.password.text(), self.login_widget.remember.isChecked() if self.login_widget.remember else None
+        if super().exec(): return self.login_widget._username.text(), self.login_widget._password.text(), self.login_widget._remember.isChecked() if self.login_widget._remember else None
 #----------------------------------------------------------------------
