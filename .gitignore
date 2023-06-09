@@ -163,3 +163,4 @@ data/lib/widgets/updater/*.png
 data/lib/widgets/updater/*.pdn
 data/lib/widgets/updater/data.json
 *.ai
+error.log
