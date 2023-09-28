@@ -1,0 +1,22 @@
+{
+    "title": "PERT Maker > Importer > Tableau",
+    "QTableWidget": {
+        "horizonalHeader": {
+            "task": "Tâche",
+            "previousTasks": "Tâches Précédentes",
+            "time": "Temps"
+        }
+    },
+    "QPushButton": {
+        "open": "Ouvrir...",
+        "import": "Importer",
+        "cancel": "Annuler"
+    },
+    "QFileDialog": {
+        "title": "PERT Maker > Importer > Table > Ouvrir"
+    },
+    "QComboBox": {
+        "tasksAsPathNames": "Tâches en tant que Noms de Chemin",
+        "tasksAsNodeNames": "Tâches en tant que Noms de Nœud"
+    }
+}

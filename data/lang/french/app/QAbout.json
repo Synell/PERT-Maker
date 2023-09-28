@@ -1,0 +1,10 @@
+{
+    "pertMaker": {
+        "title": "A Propos de PERT Maker",
+        "texts": [
+            "PERT Maker est un éditeur de graphiques PERT,\nutilisé pour les statistiques et le management de projets.",
+            "Pert Maker est programmé par %s.",
+            "Accédez au %s pour plus d'informations."
+        ]
+    }
+}

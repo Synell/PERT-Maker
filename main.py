@@ -17,7 +17,7 @@ from data.lib import *
     # Class
 class ApplicationError(QApplication):
     def __init__(self, err: str = ''):
-        super().__init__(argv)
+        super().__init__(sys.argv)
         self.window = QMainWindow()
         self.window.setWindowTitle('PERT Maker - Error')
         QMessageBoxWithWidget(
@@ -79,7 +79,9 @@ def main() -> None:
     except Exception as err:
         print(err)
 
-        with open('./error.log', 'w', encoding = 'utf-8') as f:
+        if not os.path.exists('./log/'): os.mkdir('./log/')
+
+        with open('./log/error.log', 'w', encoding = 'utf-8') as f:
             f.write(str(err) + '\n\n')
             f.write(traceback.format_exc())
 

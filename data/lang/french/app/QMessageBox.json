@@ -1,0 +1,54 @@
+{
+    "critical": {
+        "notImplemented": {
+            "title": "PERT Maker > Fonctionnalité Non-Implémentée",
+            "text": "Cette fonctionnalité n'existe pas encore et sera\ndisponible dans une version ultérieure du logiciel.",
+            "details": "Détails"
+        },
+        "exportImage": {
+            "title": "PERT Maker > Exporter",
+            "text": "Une erreur est survenue lors du processus !",
+            "informativeText": "Veuillez à ce que le graphe soit présent dans votre champs de vue."
+        }
+    },
+    "warning": {
+        "refreshConnectionView": {
+            "title": "PERT Maker > Recharger la Vue des Connexions",
+            "text": "Une erreur est survenue lors du processus !",
+            "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
+            "details": "Détails",
+            "startNode": "Nœud de Départ",
+            "endNode": "Nœud d'Arrivée"
+        },
+        "generateMinMaxTime": {
+            "title": "PERT Maker > Générer les Temps Min et Max",
+            "text": "Une erreur est survenue lors du processus !",
+            "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
+            "details": "Détails",
+            "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie.\n\nBoucles Restantes (1): %s\nBoucles Restantes (2): %s"
+        },
+        "generateCriticalPath": {
+            "title": "Générer le Chemin Critique",
+            "text": "Une erreur est survenue lors du processus !",
+            "informativeText": "Cela peut être dû à des connexions vides\nou à une boucle qui ne devrait pas exister.",
+            "details": "Détails",
+            "label": "La limite de boucles a été atteinte durant le processus,\ndépassant %s boucles. Il s'agit probablement d'une boucle infinie."
+        },
+        "exportTable": {
+            "title": "PERT Maker > Exporter > Tableau",
+            "text": "Votre tableau est vide !",
+            "informativeText": "Aucun tableau ne peut être exporté car il n'y en a pas."
+        },
+        "exportImage": {
+            "title": "PERT Maker > Exporter > Image",
+            "text": "Votre graphe est vide !",
+            "informativeText": "Aucun graphe ne peut être exporté car il n'y en a pas."
+        }
+    },
+    "information": {
+        "settingsReload": {
+            "title": "PERT Maker > Paramètres",
+            "text": "Un redémarrage du logiciel est nécessaire afin\nd'appliquer correctement tous les paramètres."
+        }
+    }
+}

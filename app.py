@@ -13,9 +13,6 @@ from data.lib import *
 
     # Class
 class Application(QBaseApplication):
-    BUILD = '07e715d5'
-    VERSION = 'Experimental'
-
     DELTA = 80
 
     COLOR_NORMAL = QUtilsColor()
@@ -39,12 +36,12 @@ class Application(QBaseApplication):
     ZOOM_MAX = 4.0
 
     def __init__(self, platform: QPlatform) -> None:
-        super().__init__(platform = platform)
+        super().__init__(platform = platform, app_type = QAppType.Main)
 
         self.setOrganizationName('Synel')
-        # self.setApplicationDisplayName('PERT Maker')
-        self.setApplicationName('PERT Maker')
-        self.setApplicationVersion(self.VERSION)
+        # self.setApplicationDisplayName(Info.application_name)
+        self.setApplicationName(Info.application_name)
+        self.setApplicationVersion(Info.version)
 
         self.window.closeEvent = self.close_event
 
@@ -67,15 +64,18 @@ class Application(QBaseApplication):
 
         self.graph = Graph()
 
-        self.save_data = SaveData()
-
-        self.window.setProperty('color', 'magenta')
+        self.save_data = self.save_data = SaveData(
+            app = self,
+            save_path = Info.save_path,
+            main_color_set = Info.main_color_set,
+            neutral_color_set = Info.neutral_color_set
+        )
 
         self.save_data.set_stylesheet(self)
 
         self.load_colors()
 
-        self.setWindowIcon(QIcon('./data/icons/PERTMaker.svg'))
+        self.setWindowIcon(QIcon(Info.icon_path))
 
         self.create_widgets()
         self.file_menu_new_action()
@@ -391,7 +391,7 @@ class Application(QBaseApplication):
 
             help_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['title'])
 
-            about_action = QAction(QIcon('./data/icons/PERTMaker.svg'), lang['about'], self.window)
+            about_action = QAction(QIcon(Info.icon_path), lang['about'], self.window)
             about_action.triggered.connect(self.help_menu_about_action)
 
             about_qt_action = QAction(self.save_data.get_icon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
@@ -400,6 +400,10 @@ class Application(QBaseApplication):
             tips_action = QAction(self.save_data.get_icon('menubar/tips.png'), lang['tips'], self.window)
             tips_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage')))
 
+            reportbug_action = (self.save_data.get_icon('menubar/bug.png', mode = QSaveData.IconMode.Local), self.save_data.language_data['QMenu']['reportBug'])
+            reportbug_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/issues')))
+
+
             def create_donate_menu():
                 donate_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QMenu']['donate']['title'], self.window)
                 donate_menu.setIcon(self.save_data.get_icon('menubar/donate.png'))
@@ -407,7 +411,11 @@ class Application(QBaseApplication):
                 buymeacoffee_action = QAction(self.save_data.get_icon('menubar/buyMeACoffee.png'), 'Buy Me a Coffee', self.window)
                 buymeacoffee_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://www.buymeacoffee.com/Synell')))
 
+                patreon_action = QAction(self.save_data.get_icon('menubar/patreon.png'), 'Patreon', self.window)
+                patreon_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://www.patreon.com/synel')))
+
                 donate_menu.addAction(buymeacoffee_action)
+                donate_menu.addAction(patreon_action)
 
                 return donate_menu
 
@@ -416,6 +424,8 @@ class Application(QBaseApplication):
             help_menu.addAction(about_qt_action)
             help_menu.addSeparator()
             help_menu.addAction(tips_action)
+            help_menu.addSeparator()
+            help_menu.addAction(reportbug_action)
             help_menu.addSeparator()
             help_menu.addMenu(create_donate_menu())
 
@@ -886,8 +896,8 @@ class Application(QBaseApplication):
     def update_title(self):
         s = ''
         if self.unsaved: s = '*'
-        if self.SAVE_PATH: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - {self.SAVE_PATH}{s}')
-        else: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {self.VERSION} | Build: {self.BUILD} - NewPERT{s}')
+        if self.SAVE_PATH: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {Info.version} | Build: {Info.build} - {self.SAVE_PATH}{s}')
+        else: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {Info.version} | Build: {Info.build} - NewPERT{s}')
 
 
 
@@ -1277,7 +1287,7 @@ class Application(QBaseApplication):
         QAboutBox(
             app = self,
             title = lang['title'],
-            logo = './data/icons/PERTMaker.svg',
+            logo = Info.icon_path,
             texts = [
                 lang['texts'][0],
                 lang['texts'][1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.hex};\">Synel</a>'),
@@ -1426,7 +1436,7 @@ class Application(QBaseApplication):
                 generator = QSvgGenerator()
                 generator.setFileName(path)
                 generator.setTitle('.'.join(path.split('/')[-1].split('\\')[-1].split('.')[:-1]))
-                generator.setDescription(f'\nGenerated with PERT Maker.\nVersion: {self.VERSION} - Build: {self.BUILD}\nYou can find this app here: https://github.com/Synell/PERT-Maker/releases/latest\n')
+                generator.setDescription(f'\nGenerated with PERT Maker.\nVersion: {Info.version} - Build: {Info.build}\nYou can find this app here: https://github.com/Synell/PERT-Maker/releases/latest\n')
                 self.generate_canvas_pixmap(generator)
 
                 import xml.etree.ElementTree as ET
@@ -1576,7 +1586,7 @@ class Application(QBaseApplication):
     def check_updates_release(self, rel: dict, app: str) -> None:
         self.update_request.exit()
         self.must_update_link = RequestWorker.get_release(rel, None).link
-        if rel['tag_name'] > self.BUILD: self.set_update(True)
+        if rel['tag_name'] > Info.build: self.set_update(True)
         else: self.save_data.last_check_for_updates = datetime.now()
 
     def check_updates_failed(self, error: str) -> None:

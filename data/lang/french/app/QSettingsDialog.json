@@ -1,0 +1,101 @@
+{
+    "title": "PERT Maker > Paramètres",
+    "QSidePanel": {
+        "appearance": {
+            "title": "Apparence",
+            "QLabel": {
+                "language": {
+                    "title": "Langage",
+                    "description": "Sélectionnez un langage à afficher pour PERT Maker."
+                },
+                "theme": {
+                    "title": "Thème",
+                    "description": "Sélectionnez un thème à afficher pour PERT Maker."
+                }
+            },
+            "QNamedComboBox": {
+                "language": "Langage",
+                "theme": "Thème",
+                "themeVariant": "Variante du Thème"
+            }
+        },
+        "editor": {
+            "title": "Éditeur",
+            "QLabel": {
+                "maxLoops": {
+                    "title": "Maximum de Boucles",
+                    "description": "Défini le nombre maximum de boucles que l'algorithme de résolution peut faire avant de s'arrêter."
+                },
+                "gridSize": {
+                    "title": "Taille de la Grille",
+                    "description": "Défini la taille de la grille."
+                },
+                "arrowMoveSpeed": {
+                    "title": "Vitesse de Déplacement (Flèches)",
+                    "description": "Défini la vitesse de déplacement des flèches."
+                },
+                "zoomSpeed": {
+                    "title": "Vitesse de Zoom",
+                    "description": "Défini la vitesse de zoom."
+                }
+            },
+            "QNamedSpinBox": {
+                "maxLoops": "Maximum de Boucles",
+                "gridSize": "Taille de la Grille",
+                "arrowMoveSpeed": "Vitesse de Déplacement (Flèches)",
+                "zoomSpeed": "Vitesse de Zoom"
+            }
+        },
+        "updates": {
+            "title": "Mises à Jour",
+            "QLabel": {
+                "checkForUpdates": {
+                    "title": "Vérifier les Mises à Jour",
+                    "description": "Détermine la fréquence de vérification des mises à jour de PERT Maker."
+                }
+            },
+            "QNamedComboBox": {
+                "checkForUpdates": {
+                    "title": "Vérifier les Mises à Jour",
+                    "values": {
+                        "never": "Jamais",
+                        "daily": "Quotidienne",
+                        "weekly": "Hebdomadaire",
+                        "monthly": "Mensuelle",
+                        "atLaunch": "Au lancement"
+                    }
+                }
+            }
+        },
+        "data": {
+            "title": "Données",
+            "QLabel": {
+                "clearData": {
+                    "title": "Effacer les Données",
+                    "description": "Efface toutes les données et redémarre l'application."
+                },
+                "importData": {
+                    "title": "Importer les Données",
+                    "description": "Importe des données à partir d'un fichier et redémarre l'application."
+                },
+                "exportData": {
+                    "title": "Exporter les Données",
+                    "description": "Exporte les données vers un fichier."
+                }
+            },
+            "QPushButton": {
+                "clearData": "Effacer les Données",
+                "importData": "Importer les Données",
+                "exportData": "Exporter les Données"
+            },
+            "QFileDialog": {
+                "importData": "PERT Maker > Paramètres > Données > Importer les Données",
+                "exportData": "PERT Maker > Paramètres > Données > Exporter les Données"
+            }
+        }
+    },
+    "QPushButton": {
+        "cancel": "Annuler",
+        "apply": "Appliquer"
+    }
+}

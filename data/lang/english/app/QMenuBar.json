@@ -1,0 +1,58 @@
+{
+    "fileMenu": {
+        "title": "File",
+        "QAction": {
+            "new": "New",
+            "open": "Open...",
+            "save": "Save",
+            "saveAs": "Save As...",
+            "settings": "Settings...",
+            "exit": "Exit"
+        },
+        "QMenu": {
+            "importMenu": {
+                "title": "Import",
+                "QAction": {
+                    "table": "Table..."
+                }
+            },
+            "exportMenu": {
+                "title": "Export",
+                "QAction": {
+                    "table": "Table...",
+                    "image": "Image...",
+                    "svg": "SVG..."
+                },
+                "QFileDialog": {
+                    "table": {
+                        "title": "PERT Maker > Export > Table"
+                    }
+                }
+            }
+        }
+    },
+    "viewMenu": {
+        "title": "View",
+        "QAction": {
+            "resetInterface": "Reset Interface",
+            "gridSwitch": "Switch Grid",
+            "gridAlign": "Align Nodes on Grid"
+        }
+    },
+    "helpMenu": {
+        "title": "Help",
+        "QAction": {
+            "about": "About PERT Maker...",
+            "tips": "Tips...",
+            "aboutPySide": "About PySide..."
+        },
+        "QMenu": {
+            "whatsNew": "Nouveautés...",
+            "changelog": "Changelog...",
+            "reportBug": "Report a Bug...",
+            "donate": {
+                "title": "Donate"
+            }
+        }
+    }
+}

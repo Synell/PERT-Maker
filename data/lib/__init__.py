@@ -7,4 +7,5 @@ from .qtUtils import *
 from .widgets import *
 from .dialog import *
 from .utils import *
+from .globalinfo import *
 #----------------------------------------------------------------------

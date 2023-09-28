@@ -1,0 +1,56 @@
+{
+    "properties": {
+        "title": "Propriétés",
+        "QNamedSpinBox": {
+            "QLabel": {
+                "minTime": "Temps Minimum:",
+                "maxTime": "Temps Maximum:",
+                "time": "Temps:"
+            }
+        },
+        "QNamedComboBox": {
+            "QLabel": {
+                "node": "Nœud:"
+            }
+        },
+        "QNamedLineEdit": {
+            "QLabel": {
+                "displayName": "Nom d'Affichage:"
+            }
+        },
+        "QGroupBox": {
+            "pathToNodeX": "Chemin allant au nœud '%s'"
+        },
+        "QPushButton": {
+            "deleteConnection": "Supprimer la Connexion"
+        }
+    },
+    "connectionView": {
+        "title": "Visualisation des Connexions",
+        "QBetterListWidget": {
+            "task": "Tâche",
+            "previousTasks": "Tâches Antérieures",
+            "time": "Durée"
+        }
+    },
+    "criticalPathView": {
+        "title": "Vue du Chemin Critique",
+        "QBetterListWidget": {
+            "criticalPath": "Chemin Critique"
+        }
+    },
+    "generation": {
+        "title": "Génération",
+        "QPushButton": {
+            "refreshConnectionView": "Recharger la Vue des Connexions",
+            "generateMinMaxTime": "Générer les Temps Min et Max",
+            "generateCriticalPath": "Générer le Chemin Critique"
+        },
+        "QToggleButton": {
+            "liveRefreshConnectionView": "Actualiser la vue des Connexion en Direct",
+            "liveGenerateMinMax": "Générer les Temps Min et Max en Direct",
+            "liveGenerateCriticalPath": "Auto-Générer le Chemin Critique en Direct",
+            "useNodeNamesInsteadOfPathNames": "Utiliser les Noms de Nœud à la Place des Noms de Chemin"
+        }
+    }
+}

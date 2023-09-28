@@ -1,0 +1,27 @@
+{
+    "title": "PERT Maker > Export > Image",
+    "QPushButton": {
+        "export": "Export",
+        "cancel": "Cancel"
+    },
+    "QFileButton": {
+        "title": "Output File",
+        "dialog": "PERT Maker > Export > Image > Output File"
+    },
+    "QColorDialog": {
+        "bgColor": {
+            "title": "PERT Maker > Export > Image > Background Color",
+            "QPushButton": {
+                "cancel": "Cancel",
+                "select": "Select"
+            }
+        },
+        "fgColor": {
+            "title": "PERT Maker > Export > Image > Foreground Color",
+            "QPushButton": {
+                "cancel": "Cancel",
+                "select": "Select"
+            }
+        }
+    }
+}

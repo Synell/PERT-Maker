@@ -1,0 +1,27 @@
+{
+    "title": "PERT Maker > Exporter > Image",
+    "QPushButton": {
+        "export": "Exporter",
+        "cancel": "Annuler"
+    },
+    "QFileButton": {
+        "title": "Fichier Sortant",
+        "dialog": "PERT Maker > Exporter > Image > Fichier Sortant"
+    },
+    "QColorDialog": {
+        "bgColor": {
+            "title": "PERT Maker > Exporter > Image > Couleur de l'Arrière-Plan",
+            "QPushButton": {
+                "cancel": "Annuler",
+                "select": "Sélectionner"
+            }
+        },
+        "fgColor": {
+            "title": "PERT Maker > Exporter > Image > Couleur de la Police",
+            "QPushButton": {
+                "cancel": "Annuler",
+                "select": "Sélectionner"
+            }
+        }
+    }
+}

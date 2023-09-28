@@ -1,0 +1,14 @@
+{
+    "QMainWindow": {
+        "title": "PERT Maker",
+        "QMenuBar": "#ref: app/QMenuBar"
+    },
+    "QSettingsDialog": "#ref: app/QSettingsDialog",
+    "QMessageBox": "#ref: app/QMessageBox",
+    "QFileDialog": "#ref: app/QFileDialog",
+    "QDockWidget": "#ref: app/QDockWidget",
+    "QAbout": "#ref: app/QAbout",
+    "QImportTableDialog": "#ref: app/QImportTableDialog",
+    "QExportImageDialog": "#ref: app/QExportImageDialog",
+    "QStatusBar": "#ref: app/QStatusBar"
+}

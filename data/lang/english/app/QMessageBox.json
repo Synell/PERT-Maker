@@ -1,0 +1,54 @@
+{
+    "critical": {
+        "notImplemented": {
+            "title": "PERT Maker > Not Implemented Feature",
+            "text": "This functionality doesn't exist yet and will be\navailable in a later version of the software.",
+            "details": "Details"
+        },
+        "exportImage": {
+            "title": "PERT Maker > Export",
+            "text": "An error occurred during the process !",
+            "informativeText": "Make sure your graph fits in your field of view."
+        }
+    },
+    "warning": {
+        "refreshConnectionView": {
+            "title": "PERT Maker > Refresh Connection View",
+            "text": "An error occurred during the process !",
+            "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
+            "details": "Details",
+            "startNode": "Start Node",
+            "endNode": "End Node"
+        },
+        "generateMinMaxTime": {
+            "title": "PERT Maker > Generate Min and Max Times",
+            "text": "An error occurred during the process !",
+            "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
+            "details": "Details",
+            "label": "The loop limit has been reached during the process,\nexceeding %s loops. Probably an infinite loop.\n\nLoops Remaining (1): %s\nLoops Remaining (2): %s"
+        },
+        "generateCriticalPath": {
+            "title": "PERT Maker > Generate Critical Path",
+            "text": "An error occurred during the process !",
+            "informativeText": "This could be due to empty connections or\na loop that shouldn't exist.",
+            "details": "Détails",
+            "label": "The loop limit has been reached during the process,\nexceeding %s loops. Probably an infinite loop."
+        },
+        "exportTable": {
+            "title": "PERT Maker > Export > Table",
+            "text": "Your table is empty !",
+            "informativeText": "Can't export a table that doesn't exist."
+        },
+        "exportImage": {
+            "title": "PERT Maker > Export > Image",
+            "text": "Your graph is empty !",
+            "informativeText": "Can't export a graph that doesn't exist."
+        }
+    },
+    "information": {
+        "settingsReload": {
+            "title": "PERT Maker > Settings",
+            "text": "A restart of the software is necessary in order\nto correctly apply all the settings."
+        }
+    }
+}

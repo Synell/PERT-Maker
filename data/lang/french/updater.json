@@ -1,0 +1,56 @@
+{
+    "QUpdater": {
+        "title": "PERT Maker Updater",
+        "QLabel": {
+            "downloading": "Téléchargement... (%s %)",
+            "installing": "Installation... (%s %)",
+            "calculatingRemainingTime": "Calcul du Temps Restant...",
+            "waiting": "En Attente...",
+            "remainingTime": "Temps Restant: %s",
+            "done": "Terminé",
+            "bytes": "%s/s",
+            "packages": "%s paquets/s",
+            "eta": "Temps Restant: %s",
+            "days": "%s jours",
+            "hours": "%s heures",
+            "minutes": "%s minutes",
+            "seconds": "%s secondes",
+            "day": "%s jour",
+            "hour": "%s heure",
+            "minute": "%s minute",
+            "second": "%s seconde",
+            "undefined": "Indéfini"
+        },
+        "QSlidingStackedWidget": {
+            "texts": [
+                "PERT Maker est en train de se mettre à jour.",
+                "PERT Maker vous permet de créer des graphiques PERT facilement.",
+                "Vous pouvez générer le chemin critique et les temps min et max automatiquement.",
+                "Vous n'avez qu'un tableau ? Vous pouvez l'importer directement dans PERT Maker !",
+                "Vous pouvez choisir la fréquence de vérification des mises à jour dans les paramètres."
+            ]
+        },
+        "QMessageBox": {
+            "critical": {
+                "downloadFailed": {
+                    "title": "Erreur de Téléchargement",
+                    "text": "Une erreur est survenue lors du téléchargement de la mise à jour."
+                },
+                "installFailed": {
+                    "title": "Erreur d'Installation",
+                    "text": "Une erreur est survenue lors de l'installation de la mise à jour."
+                },
+                "openAppFailed": {
+                    "title": "Erreur d'Ouverture",
+                    "text": "Une erreur est survenue lors de l'ouverture de PERT Maker."
+                },
+                "appNotFound": {
+                    "title": "Application Introuvable",
+                    "text": "L'application à exécuter n'a pas été trouvée."
+                }
+            },
+            "warning": {},
+            "information": {}
+        }
+    }
+}

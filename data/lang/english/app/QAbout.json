@@ -1,0 +1,10 @@
+{
+    "pertMaker": {
+        "title": "About PERT Maker",
+        "texts": [
+            "PERT Maker is an editor for PERT graphs,\nfor use with statistics and project management.",
+            "Pert Maker was programmed by %s.",
+            "Go to the %s for more information."
+        ]
+    }
+}

@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt
 from datetime import datetime
 import os
 
-from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QNamedComboBox, QNamedSpinBox
+from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QNamedComboBox, QNamedSpinBox, QBaseApplication
 #----------------------------------------------------------------------
 
     # Class
@@ -15,7 +15,7 @@ class SaveData(QSaveData):
     dateformat = '%Y-%m-%dT%H:%M:%SZ'
     COLOR_LINK = QUtilsColor()
 
-    def __init__(self, save_path: str = './data/save.dat') -> None:
+    def __init__(self, app: QBaseApplication, save_path: str = './data/save.dat', main_color_set: QSaveData.ColorSet = None, neutral_color_set: QSaveData.ColorSet = None) -> None:
         self.max_loops = 5000
 
         self.align_to_grid = False
@@ -42,7 +42,7 @@ class SaveData(QSaveData):
 
         self.dock_widgets = {}
 
-        super().__init__(save_path)
+        super().__init__(app, save_path, main_color_set = main_color_set, neutral_color_set = neutral_color_set)
 
 
 
@@ -205,7 +205,7 @@ class SaveData(QSaveData):
             'dockWidgets': self.dock_widgets
         }
 
-    def load_extra_data(self, extra_data: dict = ..., reload: list = []) -> bool:
+    def load_extra_data(self, extra_data: dict = ..., reload: list = [], reload_all: bool = False) -> bool:
         exc = suppress(Exception)
         res = False
 

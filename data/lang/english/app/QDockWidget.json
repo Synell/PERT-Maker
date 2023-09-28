@@ -1,0 +1,56 @@
+{
+    "properties": {
+        "title": "Properties",
+        "QNamedSpinBox": {
+            "QLabel": {
+                "minTime": "Minimum Time",
+                "maxTime": "Maximum Time",
+                "time": "Time"
+            }
+        },
+        "QNamedComboBox": {
+            "QLabel": {
+                "node": "Node"
+            }
+        },
+        "QNamedLineEdit": {
+            "QLabel": {
+                "displayName": "Display Name"
+            }
+        },
+        "QGroupBox": {
+            "pathToNodeX": "Path to Node '%s'"
+        },
+        "QPushButton": {
+            "deleteConnection": "Delete Connection"
+        }
+    },
+    "connectionView": {
+        "title": "Connection View",
+        "QBetterListWidget": {
+            "task": "Task",
+            "previousTasks": "Previous Tasks",
+            "time": "Time"
+        }
+    },
+    "criticalPathView": {
+        "title": "Critical Path View",
+        "QBetterListWidget": {
+            "criticalPath": "Critical Path"
+        }
+    },
+    "generation": {
+        "title": "Generation",
+        "QPushButton": {
+            "refreshConnectionView": "Refresh Connection View",
+            "generateMinMaxTime": "Generate Min and Max Times",
+            "generateCriticalPath": "Generate Critical Path"
+        },
+        "QToggleButton": {
+            "liveRefreshConnectionView": "Refresh Live Connection View",
+            "liveGenerateMinMax": "Generate Live Min and Max Times",
+            "liveGenerateCriticalPath": "Generate Live Critical Path",
+            "useNodeNamesInsteadOfPathNames": "Use Node Names instead of Path Names"
+        }
+    }
+}

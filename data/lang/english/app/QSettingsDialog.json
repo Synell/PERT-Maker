@@ -1,0 +1,101 @@
+{
+    "title": "PERT Maker > Settings",
+    "QSidePanel": {
+        "appearance": {
+            "title": "Appearance",
+            "QLabel": {
+                "language": {
+                    "title": "Language",
+                    "description": "Select a display language for PERT Maker."
+                },
+                "theme": {
+                    "title": "Theme",
+                    "description": "Select a display theme for PERT Maker."
+                }
+            },
+            "QNamedComboBox": {
+                "language": "Language",
+                "theme": "Theme",
+                "themeVariant": "Theme Variant"
+            }
+        },
+        "editor": {
+            "title": "Editor",
+            "QLabel": {
+                "maxLoops": {
+                    "title": "Max Loops",
+                    "description": "Set the maximum number of loops for the algorithm."
+                },
+                "gridSize": {
+                    "title": "Grid Size",
+                    "description": "Set the grid size for the editor."
+                },
+                "arrowMoveSpeed": {
+                    "title": "Arrow Move Speed",
+                    "description": "Set the speed of arrow key movement."
+                },
+                "zoomSpeed": {
+                    "title": "Zoom Speed",
+                    "description": "Set the speed of zooming."
+                }
+            },
+            "QNamedSpinBox": {
+                "maxLoops": "Max Loops",
+                "gridSize": "Grid Size",
+                "arrowMoveSpeed": "Moving Speed (Arrow Keys)",
+                "zoomSpeed": "Zoom Speed"
+            }
+        },
+        "updates": {
+            "title": "Updates",
+            "QLabel": {
+                "checkForUpdates": {
+                    "title": "Check for Updates",
+                    "description": "Determines how often PERT Maker checks for updates."
+                }
+            },
+            "QNamedComboBox": {
+                "checkForUpdates": {
+                    "title": "Check for Updates",
+                    "values": {
+                        "never": "Never",
+                        "daily": "Daily",
+                        "weekly": "Weekly",
+                        "monthly": "Monthly",
+                        "atLaunch": "At Launch"
+                    }
+                }
+            }
+        },
+        "data": {
+            "title": "Data",
+            "QLabel": {
+                "clearData": {
+                    "title": "Clear Data",
+                    "description": "Clears all data stored by PERT Maker and restarts the app."
+                },
+                "importData": {
+                    "title": "Import Data",
+                    "description": "Imports data from a file and restarts the app. This will overwrite all data."
+                },
+                "exportData": {
+                    "title": "Export Data",
+                    "description": "Exports data to a file."
+                }
+            },
+            "QPushButton": {
+                "clearData": "Clear Data",
+                "importData": "Import Data",
+                "exportData": "Export Data"
+            },
+            "QFileDialog": {
+                "importData": "PERT Maker > Settings > Data > Import Data",
+                "exportData": "PERT Maker > Settings > Data > Export Data"
+            }
+        }
+    },
+    "QPushButton": {
+        "cancel": "Cancel",
+        "apply": "Apply"
+    }
+}
