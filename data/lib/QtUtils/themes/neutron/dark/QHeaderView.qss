@@ -1,0 +1,27 @@
+
+/* QHeaderView */
+
+QHeaderView {
+	background-color: #262626;
+	color: #999999;
+	border: 1px solid #313131;
+	border-radius: 5px;
+	/* padding: 2px 16px; */
+	height: 32px;
+	font-size: 13px;
+}
+
+QHeaderView::section {
+	border-style: none;
+	background-color: transparent;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+QHeaderView::down-arrow {
+	image: url({path}tabwidget/downArrow.png);
+}
+
+QHeaderView::up-arrow {
+	image: url({path}tabwidget/upArrow.png);
+}

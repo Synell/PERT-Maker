@@ -1,0 +1,80 @@
+
+/* QNamedDoubleSpinBox */
+
+QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox {
+	height: 33px;
+	border: none;
+	border-bottom: 2px solid transparent;
+	background-color: #262626;
+	font-size: 14px;
+	font-weight: bold;
+	padding-top: 16px;
+	padding-left: 16px;
+	padding-right: 12px;
+}
+
+QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox:hover {
+	background-color: #333333;
+}
+
+QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox:focus {
+	border-bottom: 2px solid #8AAEDB;
+	background-color: #333333;
+}
+
+QWidget[QNamedDoubleSpinBox=true] QLabel {
+	color: #909090;
+	height: 50px;
+	border: none;
+	font-size: 12px;
+	padding-bottom: 24px;
+	padding-left: 16px;
+}
+
+QWidget[QNamedDoubleSpinBox=true] QLabel[hover=true] {
+	color: #909090;
+}
+
+QWidget[QNamedDoubleSpinBox=true] QLabel[focus=true] {
+	color: #3C6FB2;
+}
+
+QWidget[QNamedDoubleSpinBox=true][dark=true] QDoubleSpinBox {
+	background-color: #1A1A1A;
+}
+
+
+
+/* QNamedDoubleSpinBox - Wide */
+
+QWidget[wide=true] QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox, QWidget[QNamedDoubleSpinBox=true][wide=true] QDoubleSpinBox {
+	min-width: 6em;
+}
+
+QWidget[wider=true] QWidget[QNamedDoubleSpinBox=true] QDoubleSpinBox, QWidget[QNamedDoubleSpinBox=true][wider=true] QDoubleSpinBox {
+	min-width: 12em;
+}
+
+
+
+/* QNamedDoubleSpinBox - Main Color */
+
+QWidget[color='{main-color-name}'] QWidget[QNamedDoubleSpinBox=true][color='main'] QDoubleSpinBox:focus, QWidget[QNamedDoubleSpinBox=true][color='{main-color-name}'] QDoubleSpinBox:focus {
+	border-bottom-color: #{main-color-pressed};
+}
+
+QWidget[color='{main-color-name}'] QWidget[QNamedDoubleSpinBox=true][color='main'] QLabel[focus=true], QWidget[QNamedDoubleSpinBox=true][color='{main-color-name}'] QLabel[focus=true] {
+	color: #{main-color-pressed};
+}
+
+
+
+/* QNamedDoubleSpinBox - Neutral Color */
+
+QWidget[color='{neutral-color-name}'] QWidget[QNamedDoubleSpinBox=true][color='main'] QDoubleSpinBox:focus, QWidget[QNamedDoubleSpinBox=true][color='{neutral-color-name}'] QDoubleSpinBox:focus {
+	border-bottom-color: #{neutral-color-pressed};
+}
+
+QWidget[color='{neutral-color-name}'] QWidget[QNamedDoubleSpinBox=true][color='main'] QLabel[focus=true], QWidget[QNamedDoubleSpinBox=true][color='{neutral-color-name}'] QLabel[focus=true] {
+	color: #{neutral-color-pressed};
+}

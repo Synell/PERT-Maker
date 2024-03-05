@@ -1,0 +1,26 @@
+
+/* QAlert */
+
+QLabel[QAlert=true] {
+	border-radius: 10px;
+	background-color: #64404040;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+
+
+/* QAlert - Main Color */
+
+QWidget[color='{main-color-name}'] QWidget[QAlert=true][color='main'] QLabel, QWidget[QAlert=true][color='{main-color-name}'] QLabel, QLabel[QAlert=true][color='{main-color-name}'], QWidget[color='{main-color-name}'] QLabel[QAlert=true][color='main'] {
+	background-color: #64{main-color-pressed};
+}
+
+
+
+/* QAlert - Neutral Color */
+
+QWidget[color='{neutral-color-name}'] QWidget[QAlert=true][color='main'] QLabel, QWidget[QAlert=true][color='{neutral-color-name}'] QLabel, QLabel[QAlert=true][color='{neutral-color-name}'], QWidget[color='{neutral-color-name}'] QLabel[QAlert=true][color='main'] {
+	background-color: #64{neutral-color-pressed};
+}
