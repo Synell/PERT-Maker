@@ -3,7 +3,7 @@
     # Libraries
 from PySide6.QtWidgets import QPushButton
 from PySide6.QtCore import Qt, QEvent, Signal
-from data.lib.qtUtils.QUtilsColor import QUtilsColor
+from data.lib.QtUtils.QUtilsColor import QUtilsColor
 from .QColorDialog import QColorDialog
 #----------------------------------------------------------------------
 

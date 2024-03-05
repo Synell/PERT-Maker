@@ -201,17 +201,17 @@ class QSaveData:
             data = json.load(infile)['qss']
             path = data[self._theme_variant]['location']
 
-        if os.path.exists(f'data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/{path}/main.json'):
-            with open(f'data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/{path}/main.json', 'r', encoding = 'utf-8') as infile:
+        if os.path.exists(f'data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/{path}/main.json'):
+            with open(f'data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/{path}/main.json', 'r', encoding = 'utf-8') as infile:
                 files = json.load(infile)['files']
 
             for file in files:
-                with open(f'data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/{path}/{file}.qss', 'r', encoding = 'utf-8') as infile:
+                with open(f'data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/{path}/{file}.qss', 'r', encoding = 'utf-8') as infile:
                     self._theme_data += infile.read()
 
             self._theme_data = self._theme_data.replace(
                 '{path}',
-                f'data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/{path}/icons/'.replace('//', '/')
+                f'data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/{path}/icons/'.replace('//', '/')
             )
 
             self._theme_data = self._theme_data.replace('{main-color-name}', self._main_color_set.name)
@@ -280,8 +280,8 @@ class QSaveData:
             if asQIcon: return QIcon(f'{self._themes_folder}/{self._theme}/{self._theme_variant}/icons/{path}')
             return f'{self._themes_folder}/{self._theme}/{self._theme_variant}/icons/{path}'
         elif mode == QSaveData.IconMode.Global:
-            if asQIcon: return QIcon(f'./data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/icons/{path}')
-            return f'./data/lib/qtUtils/themes/{self._theme}/{self._theme_variant}/icons/{path}'
+            if asQIcon: return QIcon(f'./data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/icons/{path}')
+            return f'./data/lib/QtUtils/themes/{self._theme}/{self._theme_variant}/icons/{path}'
 
     def settings_menu(self, app: QBaseApplication = None) -> bool:
         dat = self._settings_menu_extra()

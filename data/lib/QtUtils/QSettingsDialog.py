@@ -4,9 +4,9 @@
 from PySide6.QtWidgets import QDialog, QFrame, QLabel, QGridLayout, QWidget, QPushButton, QFileDialog
 from PySide6.QtCore import Qt, Signal
 from typing import Callable
-from data.lib.qtUtils.QGridFrame import QGridFrame
+from data.lib.QtUtils.QGridFrame import QGridFrame
 
-from data.lib.qtUtils.QGridWidget import QGridWidget
+from data.lib.QtUtils.QGridWidget import QGridWidget
 
 from .QScrollableGridWidget import QScrollableGridWidget
 import json, subprocess
@@ -103,7 +103,7 @@ class QSettingsDialog(QDialog):
         self._data = _QData(lang_folder, themes_folder)
 
         self.appearance_tab = self._appearance_tab_widget(settings_data['QSidePanel']['appearance'], current_lang, current_theme, current_theme_variant)
-        self.root.add_widget(self.appearance_tab, settings_data['QSidePanel']['appearance']['title'], f'./data/lib/qtUtils/themes/{current_theme}/{current_theme_variant}/icons/sidepanel/appearance.png')
+        self.root.add_widget(self.appearance_tab, settings_data['QSidePanel']['appearance']['title'], f'./data/lib/QtUtils/themes/{current_theme}/{current_theme_variant}/icons/sidepanel/appearance.png')
 
         self.extra_tabs = extra_tabs
 
@@ -111,7 +111,7 @@ class QSettingsDialog(QDialog):
             self.root.add_widget(v, k, extra_icons[k])
 
         self.data_tab = self._data_tab_widget(settings_data['QSidePanel']['data'])
-        self.root.add_widget(self.data_tab, settings_data['QSidePanel']['data']['title'], f'./data/lib/qtUtils/themes/{current_theme}/{current_theme_variant}/icons/sidepanel/data.png')
+        self.root.add_widget(self.data_tab, settings_data['QSidePanel']['data']['title'], f'./data/lib/QtUtils/themes/{current_theme}/{current_theme_variant}/icons/sidepanel/data.png')
 
         self.root.set_current_index(0)
 

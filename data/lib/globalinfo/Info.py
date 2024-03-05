@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------
 
     # Libraries
-from ..qtUtils import QSaveData, QUtilsColor
+from ..QtUtils import QSaveData, QUtilsColor
 import os
 #----------------------------------------------------------------------
 

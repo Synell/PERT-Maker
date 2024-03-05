@@ -7,7 +7,7 @@ from PySide6.QtCore import Qt
 from datetime import datetime
 import os
 
-from data.lib.qtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QNamedComboBox, QNamedSpinBox, QBaseApplication
+from data.lib.QtUtils import QNamedDoubleSpinBox, QSaveData, QGridFrame, QScrollableGridWidget, QSettingsDialog, QUtilsColor, QNamedComboBox, QNamedSpinBox, QBaseApplication
 #----------------------------------------------------------------------
 
     # Class

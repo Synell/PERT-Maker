@@ -3,7 +3,7 @@
     # Libraries
 from PySide6.QtWidgets import QDialog, QGridLayout, QTableWidget, QTableWidgetItem, QPushButton, QHeaderView, QFileDialog, QComboBox
 from PySide6.QtCore import Qt
-from data.lib.qtUtils import QGridWidget
+from data.lib.QtUtils import QGridWidget
 #----------------------------------------------------------------------
 
     # Class

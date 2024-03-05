@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QPushButton
 from PySide6.QtCore import QSize, Qt, Signal
 from PySide6.QtGui import QPixmap, QIcon
 
-from data.lib.qtUtils import QGridWidget, QIconWidget
+from data.lib.QtUtils import QGridWidget, QIconWidget
 #----------------------------------------------------------------------
 
     # Class

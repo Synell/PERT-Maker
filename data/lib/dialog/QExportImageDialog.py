@@ -4,7 +4,7 @@
 from PySide6.QtWidgets import QDialog, QGridLayout, QLabel, QPushButton
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QPainter
-from data.lib.qtUtils import QColorButton, QFileButton, QFiles, QUtilsColor, QGridWidget, QIconWidget, QScrollableGridFrame
+from data.lib.QtUtils import QColorButton, QFileButton, QFiles, QUtilsColor, QGridWidget, QIconWidget, QScrollableGridFrame
 #----------------------------------------------------------------------
 
     # Class
