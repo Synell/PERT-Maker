@@ -53,7 +53,7 @@ class QUpdater(QBaseApplication):
 
 
     def update_title(self):
-        self.window.setWindowTitle(self.save_data.language_data['QUpdater']['title'] + f' | Version: {Info.version} | Build: {Info.build}')
+        self.window.setWindowTitle(self.save_data.get_lang_data('QUpdater.title') + f' | Version: {Info.version} | Build: {Info.build}')
 
     def load_colors(self):
         qss = super().load_colors()
@@ -67,10 +67,10 @@ class QUpdater(QBaseApplication):
 
 
     def not_implemented(self, text = ''):
-        lang = self.save_data.language_data['QMessageBox']['critical']['notImplemented']
+        lang = self.save_data.get_lang_data('QMessageBox.critical.notImplemented')
 
         if text:
-            w = QDropDownWidget(text = self.save_data.language_data['QMessageBox']['critical']['notImplemented']['details'], widget = QLabel(text))
+            w = QDropDownWidget(text = self.save_data.get_lang_data('QMessageBox.critical.notImplemented.details'), widget = QLabel(text))
         else: w = None
 
         QMessageBoxWithWidget(
@@ -96,11 +96,11 @@ class QUpdater(QBaseApplication):
         top_frame.grid_layout.setSpacing(5)
         top_frame.grid_layout.setContentsMargins(15, 10, 15, 10)
 
-        self.progress_percent = QLabel(self.save_data.language_data['QUpdater']['QLabel']['downloading'].replace('%s', self.save_data.language_data['QUpdater']['QLabel']['waiting']))
+        self.progress_percent = QLabel(self.save_data.get_lang_data('QUpdater.QLabel.downloading').replace('%s', self.save_data.get_lang_data('QUpdater.QLabel.waiting')))
         self.progress_percent.setProperty('h', 2)
         top_frame.grid_layout.addWidget(self.progress_percent, 0, 0, 1, 2)
 
-        self.progress_eta = QLabel(self.save_data.language_data['QUpdater']['QLabel']['calculatingRemainingTime'])
+        self.progress_eta = QLabel(self.save_data.get_lang_data('QUpdater.QLabel.calculatingRemainingTime'))
         self.progress_eta.setProperty('subtitle', True)
         self.progress_eta.setProperty('bold', True)
         top_frame.grid_layout.addWidget(self.progress_eta, 1, 0)
@@ -160,7 +160,7 @@ class QUpdater(QBaseApplication):
         self.texts.layout().setSpacing(0)
         bottom_frame.top.grid_layout.addWidget(self.texts, 0, 0)
 
-        for text in self.save_data.language_data['QUpdater']['QSlidingStackedWidget']['texts']:
+        for text in self.save_data.get_lang_data('QUpdater.QSlidingStackedWidget.texts'):
             w = QGridFrame()
             w.grid_layout.setSpacing(0)
             w.grid_layout.setContentsMargins(50, 0, 50, 0)
@@ -218,33 +218,33 @@ class QUpdater(QBaseApplication):
         self.texts.slide_loop_next(QSlidingStackedWidget.Direction.Right2Left)
 
     def download_speed_changed(self, speed: float):
-        self.progress_speed.setText(self.save_data.language_data['QUpdater']['QLabel']['bytes'].replace('%s', self.convert(speed)))
+        self.progress_speed.setText(self.save_data.get_lang_data('QUpdater.QLabel.bytes').replace('%s', self.convert(speed)))
 
     def download_eta_changed(self, eta: float):
-        self.progress_eta.setText(self.save_data.language_data['QUpdater']['QLabel']['eta'].replace('%s', self.convert_time(eta)))
+        self.progress_eta.setText(self.save_data.get_lang_data('QUpdater.QLabel.eta').replace('%s', self.convert_time(eta)))
 
     def download_progress_changed(self, progress: float):
         if self.progress._anim.state() != QPropertyAnimation.State.Running: self.progress.setValue(int(progress * 50))
-        self.progress_percent.setText(self.save_data.language_data['QUpdater']['QLabel']['downloading'].replace('%s', f'{int(progress * 100)} %'))
+        self.progress_percent.setText(self.save_data.get_lang_data('QUpdater.QLabel.downloading').replace('%s', f'{int(progress * 100)} %'))
 
     def download_done(self):
         self.progress.setValue(50)
-        self.progress_percent.setText(self.save_data.language_data['QUpdater']['QLabel']['downloading'].replace('%s', self.save_data.language_data['QUpdater']['QLabel']['done']))
-        self.progress_eta.setText(self.save_data.language_data['QUpdater']['QLabel']['done'])
+        self.progress_percent.setText(self.save_data.get_lang_data('QUpdater.QLabel.downloading').replace('%s', self.save_data.get_lang_data('QUpdater.QLabel.done')))
+        self.progress_eta.setText(self.save_data.get_lang_data('QUpdater.QLabel.done'))
 
     def install_speed_changed(self, speed: float):
-        self.progress_speed.setText(self.save_data.language_data['QUpdater']['QLabel']['items'].replace('%s', f'{speed}'))
+        self.progress_speed.setText(self.save_data.get_lang_data('QUpdater.QLabel.items').replace('%s', f'{speed}'))
 
     def install_eta_changed(self, eta: float):
-        self.progress_eta.setText(self.save_data.language_data['QUpdater']['QLabel']['eta'].replace('%s', self.convert_time(eta)))
+        self.progress_eta.setText(self.save_data.get_lang_data('QUpdater.QLabel.eta').replace('%s', self.convert_time(eta)))
 
     def install_progress_changed(self, progress: float):
         if self.progress._anim.state() != QPropertyAnimation.State.Running: self.progress.setValue(int(50 + progress * 50))
-        self.progress_percent.setText(self.save_data.language_data['QUpdater']['QLabel']['installing'].replace('%s', f'{int(progress * 100)} %'))
+        self.progress_percent.setText(self.save_data.get_lang_data('QUpdater.QLabel.installing').replace('%s', f'{int(progress * 100)} %'))
 
     def install_done(self):
         self.progress.setValue(100)
-        self.progress_percent.setText(self.save_data.language_data['QUpdater']['QLabel']['done'])
+        self.progress_percent.setText(self.save_data.get_lang_data('QUpdater.QLabel.done'))
         self.progress_eta.setText('')
         self.progress_speed.setText('')
 
@@ -262,11 +262,11 @@ class QUpdater(QBaseApplication):
     def install_failed(self, error: str, exit_code: int):
         QMessageBoxWithWidget(
             app = self,
-            title = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['downloadFailed' if exit_code < 2 else 'installFailed']['title'],
-            text = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['downloadFailed' if exit_code < 2 else 'installFailed']['text'],
+            title = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.downloadFailed' if exit_code < 2 else 'installFailed.title'),
+            text = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.downloadFailed' if exit_code < 2 else 'installFailed.text'),
             informative_text = str(sys.argv[2]),
             icon = QMessageBoxWithWidget.Icon.Critical,
-            widget = QDropDownWidget(text = self.save_data.language_data['QMessageBox']['critical']['notImplemented']['details'], widget = QLabel(error))
+            widget = QDropDownWidget(text = self.save_data.get_lang_data('QMessageBox.critical.notImplemented.details'), widget = QLabel(error))
         ).exec()
 
     def convert(self, bytes: float) -> str:
@@ -287,15 +287,15 @@ class QUpdater(QBaseApplication):
         seconds = secs % 60
 
         if days == -1:
-            return self.save_data.language_data['QUpdater']['QLabel']['undefined']
+            return self.save_data.get_lang_data('QUpdater.QLabel.undefined')
         elif days > 0:
-            return (self.save_data.language_data["QUpdater"]["QLabel"]["days"] if days > 1 else self.save_data.language_data["QUpdater"]["QLabel"]["day"]).replace('%s', str(days))
+            return (self.save_data.get_lang_data('QUpdater.QLabel.days') if days > 1 else self.save_data.get_lang_data('QUpdater.QLabel.day')).replace('%s', str(days))
         elif hours > 0:
-            return (self.save_data.language_data["QUpdater"]["QLabel"]["hours"] if hours > 1 else self.save_data.language_data["QUpdater"]["QLabel"]["hour"]).replace('%s', str(hours))
+            return (self.save_data.get_lang_data('QUpdater.QLabel.hours') if hours > 1 else self.save_data.get_lang_data('QUpdater.QLabel.hour')).replace('%s', str(hours))
         elif minutes > 0:
-            return (self.save_data.language_data["QUpdater"]["QLabel"]["minutes"] if minutes > 1 else self.save_data.language_data["QUpdater"]["QLabel"]["minute"]).replace('%s', str(minutes))
+            return (self.save_data.get_lang_data('QUpdater.QLabel.minutes') if minutes > 1 else self.save_data.get_lang_data('QUpdater.QLabel.minute')).replace('%s', str(minutes))
         else:
-            return (self.save_data.language_data["QUpdater"]["QLabel"]["seconds"] if seconds > 1 else self.save_data.language_data["QUpdater"]["QLabel"]["second"]).replace('%s', str(seconds))
+            return (self.save_data.get_lang_data('QUpdater.QLabel.seconds') if seconds > 1 else self.save_data.get_lang_data('QUpdater.QLabel.second')).replace('%s', str(seconds))
 
     def open_app(self):
         if len(sys.argv) > 2:
@@ -303,11 +303,11 @@ class QUpdater(QBaseApplication):
             except Exception as e:
                 QMessageBoxWithWidget(
                     app = self,
-                    title = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['openAppFailed']['title'],
-                    text = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['openAppFailed']['text'],
+                    title = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.openAppFailed.title'),
+                    text = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.openAppFailed.text'),
                     informative_text = str(sys.argv[2]),
                     icon = QMessageBoxWithWidget.Icon.Critical,
-                    widget = QDropDownWidget(text = self.save_data.language_data['QMessageBox']['critical']['notImplemented']['details'], widget = QLabel(str(e)))
+                    widget = QDropDownWidget(text = self.save_data.get_lang_data('QMessageBox.critical.notImplemented.details'), widget = QLabel(str(e)))
                 ).exec()
 
             self.exit()
@@ -315,8 +315,8 @@ class QUpdater(QBaseApplication):
         else:
             QMessageBoxWithWidget(
                 app = self,
-                title = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['appNotFound']['title'],
-                text = self.save_data.language_data['QUpdater']['QMessageBox']['critical']['appNotFound']['text'],
+                title = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.appNotFound.title'),
+                text = self.save_data.get_lang_data('QUpdater.QMessageBox.critical.appNotFound.text'),
                 icon = QMessageBoxWithWidget.Icon.Critical
             ).exec()
 #----------------------------------------------------------------------

@@ -60,7 +60,7 @@ def main() -> None:
             sys.exit(0)
 
         app = Application(platf)
-        app.window.showNormal()
+        app.window.showMaximized()
         exit_code = app.exec()
         if exit_code == 0:
             if app.must_update and (not app.must_restart):

@@ -94,15 +94,15 @@ class Application(QBaseApplication):
 
     def not_implemented(self, text = ''):
         if text:
-            w = QDropDownWidget(text = lang['details'], widget = QLabel(text))
+            w = QDropDownWidget(text = lang.get('details'), widget = QLabel(text))
         else: w = None
 
-        lang = self.save_data.language_data['QMessageBox']['critical']['notImplemented']
+        lang = self.save_data.get_lang_data('QMessageBox.critical.notImplemented')
 
         QMessageBoxWithWidget(
             app = self,
-            title = lang['title'],
-            text = lang['text'],
+            title = lang.get('title'),
+            text = lang.get('text'),
             icon = QMessageBoxWithWidget.Icon.Critical,
             widget = w
         ).exec()
@@ -134,7 +134,7 @@ class Application(QBaseApplication):
         empty_widget.grid_layout.setSpacing(0)
         self.status_bar.addPermanentWidget(empty_widget, 2)
 
-        self.update_button = QPushButton(self.save_data.language_data['QStatusBar']['QPushButton']['update'])
+        self.update_button = QPushButton(self.save_data.get_lang_data('QStatusBar.QPushButton.update'))
         self.update_button.setCursor(Qt.CursorShape.PointingHandCursor)
         self.update_button.clicked.connect(self.update_click)
         self.update_button.setProperty('color', 'main')
@@ -219,7 +219,7 @@ class Application(QBaseApplication):
         self.properties_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.properties_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.properties_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['properties']['title'])
+        self.properties_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.properties.title'))
         self.properties_menu_dock_widget.setObjectName('properties')
         self.properties_menu_dock_widget.setWidget(self.properties_menu)
         if 'properties' in self.save_data.dock_widgets: self.properties_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['properties'])
@@ -232,7 +232,7 @@ class Application(QBaseApplication):
         self.connection_view_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.connection_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.connection_view_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['connectionView']['title'])
+        self.connection_view_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.connectionView.title'))
         self.connection_view_menu_dock_widget.setObjectName('connectionView')
         self.connection_view_menu_dock_widget.setWidget(self.connection_view_menu)
         if 'connectionView' in self.save_data.dock_widgets: self.connection_view_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['connectionView'])
@@ -247,7 +247,7 @@ class Application(QBaseApplication):
         self.critical_path_view_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.critical_path_view_menu.scroll_widget.setProperty('QDockWidget', True)
         
-        self.critical_path_view_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['criticalPathView']['title'])
+        self.critical_path_view_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.criticalPathView.title'))
         self.critical_path_view_menu_dock_widget.setObjectName('criticalPathView')
         self.critical_path_view_menu_dock_widget.setWidget(self.critical_path_view_menu)
         if 'criticalPathView' in self.save_data.dock_widgets: self.critical_path_view_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['criticalPathView'])
@@ -266,7 +266,7 @@ class Application(QBaseApplication):
         self.generation_menu.setFrameShape(QFrame.Shape.NoFrame)
         self.generation_menu.scroll_widget.setProperty('QDockWidget', True)
 
-        self.generation_menu_dock_widget = QSavableDockWidget(self.save_data.language_data['QDockWidget']['generation']['title'])
+        self.generation_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.generation.title'))
         self.generation_menu_dock_widget.setObjectName('generation')
         self.generation_menu_dock_widget.setWidget(self.generation_menu)
         if 'generation' in self.save_data.dock_widgets: self.generation_menu_dock_widget.load_dict(self.window, self.save_data.dock_widgets['generation'])
@@ -292,17 +292,17 @@ class Application(QBaseApplication):
         menuBar = self.window.menuBar()
 
         def create_file_menu():
-            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QAction']
+            lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QAction')
 
-            file_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['title'])
+            file_menu: QMenu = menuBar.addMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.title'))
 
             def create_import_menu():
-                lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['QAction']
+                lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QMenu.importMenu.QAction')
 
-                import_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['importMenu']['title'], self.window)
+                import_menu = QMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QMenu.importMenu.title'), self.window)
                 import_menu.setIcon(self.save_data.get_icon('menubar/import.png'))
 
-                table_action = QAction(lang['table'], self.window)
+                table_action = QAction(lang.get('table'), self.window)
                 table_action.triggered.connect(self.file_menu_import_menu_table_action)
 
                 import_menu.addAction(table_action)
@@ -310,15 +310,15 @@ class Application(QBaseApplication):
                 return import_menu
 
             def create_export_menu():
-                lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['QAction']
+                lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QMenu.exportMenu.QAction')
 
-                export_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']['title'], self.window)
+                export_menu = QMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QMenu.exportMenu.title'), self.window)
                 export_menu.setIcon(self.save_data.get_icon('menubar/export.png'))
 
-                table_action = QAction(lang['table'], self.window)
+                table_action = QAction(lang.get('table'), self.window)
                 table_action.triggered.connect(self.file_menu_export_menu_table_action)
 
-                image_action = QAction(lang['image'], self.window)
+                image_action = QAction(lang.get('image'), self.window)
                 image_action.triggered.connect(self.file_menu_export_menu_image_action)
 
                 export_menu.addAction(table_action)
@@ -326,30 +326,30 @@ class Application(QBaseApplication):
 
                 return export_menu
 
-            new_action = QAction(self.save_data.get_icon('menubar/new.png'), lang['new'], self.window)
+            new_action = QAction(self.save_data.get_icon('menubar/new.png'), lang.get('new'), self.window)
             new_action.setShortcut('Ctrl+N')
             new_action.triggered.connect(self.file_menu_new_action)
 
-            open_action = QAction(self.save_data.get_icon('menubar/open.png'), lang['open'], self.window)
+            open_action = QAction(self.save_data.get_icon('menubar/open.png'), lang.get('open'), self.window)
             open_action.setShortcut('Ctrl+O')
             open_action.triggered.connect(self.file_menu_open_action)
 
             import_menu = create_import_menu()
             export_menu = create_export_menu()
 
-            save_action = QAction(self.save_data.get_icon('menubar/save.png'), lang['save'], self.window)
+            save_action = QAction(self.save_data.get_icon('menubar/save.png'), lang.get('save'), self.window)
             save_action.setShortcut('Ctrl+S')
             save_action.triggered.connect(self.file_menu_save_action)
 
-            save_as_action = QAction(self.save_data.get_icon('menubar/saveAs.png'), lang['saveAs'], self.window)
+            save_as_action = QAction(self.save_data.get_icon('menubar/saveAs.png'), lang.get('saveAs'), self.window)
             save_as_action.setShortcut('Ctrl+Shift+S')
             save_as_action.triggered.connect(self.file_menu_save_as_action)
 
-            settings_action = QAction(self.save_data.get_icon('menubar/settings.png'), lang['settings'], self.window)
+            settings_action = QAction(self.save_data.get_icon('menubar/settings.png'), lang.get('settings'), self.window)
             settings_action.setShortcut('Ctrl+Alt+S')
             settings_action.triggered.connect(self.file_menu_settings_action)
 
-            exit_action = QAction(self.save_data.get_icon('menubar/exit.png'), lang['exit'], self.window)
+            exit_action = QAction(self.save_data.get_icon('menubar/exit.png'), lang.get('exit'), self.window)
             exit_action.setShortcut('Alt+F4')
             exit_action.triggered.connect(self.window.close)
 
@@ -368,17 +368,17 @@ class Application(QBaseApplication):
             file_menu.addAction(exit_action)
 
         def create_view_menu():
-            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['QAction']
+            lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.viewMenu.QAction')
 
-            view_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['viewMenu']['title'])
+            view_menu: QMenu = menuBar.addMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.viewMenu.title'))
             
-            reset_interface_action = QAction(self.save_data.get_icon('menubar/resetInterface.png'), lang['resetInterface'], self.window)
+            reset_interface_action = QAction(self.save_data.get_icon('menubar/resetInterface.png'), lang.get('resetInterface'), self.window)
             reset_interface_action.triggered.connect(self.view_menu_reset_interface_action)
 
-            grid_switch_action = QAction(self.save_data.get_icon('menubar/grid.png'), lang['gridSwitch'], self.window)
+            grid_switch_action = QAction(self.save_data.get_icon('menubar/grid.png'), lang.get('gridSwitch'), self.window)
             grid_switch_action.triggered.connect(self.view_menu_grid_switch_action)
 
-            grid_align_action = QAction(self.save_data.get_icon('menubar/gridAlign.png'), lang['gridAlign'], self.window)
+            grid_align_action = QAction(self.save_data.get_icon('menubar/gridAlign.png'), lang.get('gridAlign'), self.window)
             grid_align_action.triggered.connect(self.view_menu_grid_align_action)
 
 
@@ -387,25 +387,25 @@ class Application(QBaseApplication):
             view_menu.addAction(grid_align_action)
 
         def create_help_menu():
-            lang = self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QAction']
+            lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.helpMenu.QAction')
 
-            help_menu: QMenu = menuBar.addMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['title'])
+            help_menu: QMenu = menuBar.addMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.helpMenu.title'))
 
-            about_action = QAction(QIcon(Info.icon_path), lang['about'], self.window)
+            about_action = QAction(QIcon(Info.icon_path), lang.get('about'), self.window)
             about_action.triggered.connect(self.help_menu_about_action)
 
-            about_qt_action = QAction(self.save_data.get_icon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang['aboutPySide'], self.window)
+            about_qt_action = QAction(self.save_data.get_icon('menubar/qt.png', mode = QSaveData.IconMode.Global), lang.get('aboutPySide'), self.window)
             about_qt_action.triggered.connect(self.help_menu_about_pyside_action)
 
-            tips_action = QAction(self.save_data.get_icon('menubar/tips.png'), lang['tips'], self.window)
+            tips_action = QAction(self.save_data.get_icon('menubar/tips.png'), lang.get('tips'), self.window)
             tips_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/blob/main/README.md#usage')))
 
-            reportbug_action = (self.save_data.get_icon('menubar/bug.png', mode = QSaveData.IconMode.Local), self.save_data.language_data['QMenu']['reportBug'])
+            reportbug_action = QAction(self.save_data.get_icon('menubar/bug.png', mode = QSaveData.IconMode.Local), self.save_data.get_lang_data('QMenu.reportBug'))
             reportbug_action.triggered.connect(lambda: QDesktopServices.openUrl(QUrl('https://github.com/Synell/PERT-Maker/issues')))
 
 
             def create_donate_menu():
-                donate_menu = QMenu(self.save_data.language_data['QMainWindow']['QMenuBar']['helpMenu']['QMenu']['donate']['title'], self.window)
+                donate_menu = QMenu(self.save_data.get_lang_data('QMainWindow.QMenuBar.helpMenu.QMenu.donate.title'), self.window)
                 donate_menu.setIcon(self.save_data.get_icon('menubar/donate.png'))
 
                 buymeacoffee_action = QAction(self.save_data.get_icon('menubar/buyMeACoffee.png'), 'Buy Me a Coffee', self.window)
@@ -496,23 +496,23 @@ class Application(QBaseApplication):
                     ', '.join(prevLst),
                     str(paths[n]['value'])
                 ],
-                alignmentFlag = Qt.AlignmentFlag.AlignCenter
+                alignment_flag = Qt.AlignmentFlag.AlignCenter
             )
 
         if len(errors) > 0 and not self.save_data.live_refresh_connection_view:
-            lang = self.save_data.language_data['QMessageBox']['warning']['refreshConnectionView']
+            lang = self.save_data.get_lang_data('QMessageBox.warning.refreshConnectionView')
 
-            listWidget = QBetterListWidget(headers = [lang['startNode'], lang['endNode']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
+            listWidget = QBetterListWidget(headers = [lang.get('startNode'), lang.get('endNode')], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
             listWidget.setMinimumHeight(100)
             for e in errors:
-                listWidget.add_item(items = [str(e[0]), str(e[1])], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
+                listWidget.add_item(items = [str(e[0]), str(e[1])], alignment_flag = Qt.AlignmentFlag.AlignCenter)
 
-            dropDownWidget = QDropDownWidget(text = lang['details'], widget = listWidget)
+            dropDownWidget = QDropDownWidget(text = lang.get('details'), widget = listWidget)
             msgBox = QMessageBoxWithWidget(
                 app = self,
-                title = lang['title'],
-                text = lang['text'],
-                informative_text = lang['informativeText'],
+                title = lang.get('title'),
+                text = lang.get('text'),
+                informative_text = lang.get('informativeText'),
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
@@ -577,16 +577,16 @@ class Application(QBaseApplication):
         self.canvas.update()
 
         if (max_loops1 == 0 or max_loops2 == 2) and not self.save_data.live_min_max:
-            lang = self.save_data.language_data['QMessageBox']['warning']['generate_min_max_time']
+            lang = self.save_data.get_lang_data('QMessageBox.warning.generate_min_max_time')
 
-            label = QLabel(lang['label'].replace('%s', str(self.save_data.max_loops), 1).replace('%s', str(max_loops1), 1).replace('%s', str(max_loops2), 1))
+            label = QLabel(lang.get('label').replace('%s', str(self.save_data.max_loops), 1).replace('%s', str(max_loops1), 1).replace('%s', str(max_loops2), 1))
 
-            dropDownWidget = QDropDownWidget(text = lang['details'], widget = label)
+            dropDownWidget = QDropDownWidget(text = lang.get('details'), widget = label)
             QMessageBoxWithWidget(
                 app = self,
-                title = lang['title'],
-                text = lang['text'],
-                informative_text = lang['informativeText'],
+                title = lang.get('title'),
+                text = lang.get('text'),
+                informative_text = lang.get('informativeText'),
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
@@ -630,39 +630,39 @@ class Application(QBaseApplication):
         self.criticalPathTable.clear()
 
         for n in path:
-            self.criticalPathTable.add_item(items = [n], alignmentFlag = Qt.AlignmentFlag.AlignCenter)
+            self.criticalPathTable.add_item(items = [n], alignment_flag = Qt.AlignmentFlag.AlignCenter)
 
 
         if (max_loops == 0) and not self.save_data.live_generate_critical_path:
-            lang = self.save_data.language_data['QMessageBox']['warning']['generateCriticalPath']
+            lang = self.save_data.get_lang_data('QMessageBox.warning.generateCriticalPath')
 
-            label = QLabel(lang['label'].replace('%s', str(self.save_data.max_loops, 1)))
+            label = QLabel(lang.get('label').replace('%s', str(self.save_data.max_loops, 1)))
 
-            dropDownWidget = QDropDownWidget(text = lang['details'], widget = label)
+            dropDownWidget = QDropDownWidget(text = lang.get('details'), widget = label)
             QMessageBoxWithWidget(
                 app = self,
-                title = lang['title'],
-                text = lang['text'],
-                informative_text = lang['informativeText'],
+                title = lang.get('title'),
+                text = lang.get('text'),
+                informative_text = lang.get('informativeText'),
                 icon = QMessageBoxWithWidget.Icon.Warning,
                 widget = dropDownWidget
             ).exec()
 
 
     def create_connection_view_menu(self):
-        lang = self.save_data.language_data['QDockWidget']['connectionView']['QBetterListWidget']
+        lang = self.save_data.get_lang_data('QDockWidget.connectionView.QBetterListWidget')
 
-        self.connectionTable = QBetterListWidget(headers = [lang['task'], lang['previousTasks'], lang['time']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
+        self.connectionTable = QBetterListWidget(headers = [lang.get('task'), lang.get('previousTasks'), lang.get('time')], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
         self.connection_view_menu.scroll_layout.addWidget(self.connectionTable, 0, 0)
 
     def create_critical_path_view_menu(self):
-        lang = self.save_data.language_data['QDockWidget']['criticalPathView']['QBetterListWidget']
+        lang = self.save_data.get_lang_data('QDockWidget.criticalPathView.QBetterListWidget')
 
-        self.criticalPathTable = QBetterListWidget(headers = [lang['criticalPath']], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
+        self.criticalPathTable = QBetterListWidget(headers = [lang.get('criticalPath')], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
         self.critical_path_view_menu.scroll_layout.addWidget(self.criticalPathTable, 0, 0)
 
     def create_generation_menu(self):
-        lang = self.save_data.language_data['QDockWidget']['generation']
+        lang = self.save_data.get_lang_data('QDockWidget.generation')
 
         def rcv_value_changed(value: int):
             if value:
@@ -690,35 +690,35 @@ class Application(QBaseApplication):
             if self.save_data.live_min_max: self.generate_min_max_time()
             if self.save_data.live_generate_critical_path: self.generate_critical_path()
 
-        live_refresh_connection_view_button = QPushButton(lang['QPushButton']['refreshConnectionView'])
+        live_refresh_connection_view_button = QPushButton(lang.get('QPushButton.refreshConnectionView'))
         live_refresh_connection_view_button.setCursor(Qt.CursorShape.PointingHandCursor)
         live_refresh_connection_view_button.setProperty('color', 'main')
         live_refresh_connection_view_button.clicked.connect(self.refresh_connection_view)
         live_refresh_connection_view_checkbox = QToggleButton()
-        live_refresh_connection_view_checkbox.setToolTip(lang['QToggleButton']['liveRefreshConnectionView'])
+        live_refresh_connection_view_checkbox.setToolTip(lang.get('QToggleButton.liveRefreshConnectionView'))
         if self.save_data.live_refresh_connection_view: live_refresh_connection_view_checkbox.setCheckState(Qt.CheckState.Checked)
         live_refresh_connection_view_checkbox.stateChanged.connect(rcv_value_changed)
 
-        generate_min_max_time_button = QPushButton(lang['QPushButton']['generateMinMaxTime'])
+        generate_min_max_time_button = QPushButton(lang.get('QPushButton.generateMinMaxTime'))
         generate_min_max_time_button.setCursor(Qt.CursorShape.PointingHandCursor)
         generate_min_max_time_button.setProperty('color', 'main')
         generate_min_max_time_button.clicked.connect(self.generate_min_max_time)
         generate_min_max_time_checkbox = QToggleButton()
-        generate_min_max_time_checkbox.setToolTip(lang['QToggleButton']['liveGenerateMinMax'])
+        generate_min_max_time_checkbox.setToolTip(lang.get('QToggleButton.liveGenerateMinMax'))
         if self.save_data.live_min_max: generate_min_max_time_checkbox.setCheckState(Qt.CheckState.Checked)
         generate_min_max_time_checkbox.stateChanged.connect(mm_value_changed)
 
-        generate_critical_path_button = QPushButton(lang['QPushButton']['generateCriticalPath'])
+        generate_critical_path_button = QPushButton(lang.get('QPushButton.generateCriticalPath'))
         generate_critical_path_button.setCursor(Qt.CursorShape.PointingHandCursor)
         generate_critical_path_button.setProperty('color', 'main')
         generate_critical_path_button.clicked.connect(self.generate_critical_path)
         live_generate_critical_path_checkbox = QToggleButton()
-        live_generate_critical_path_checkbox.setToolTip(lang['QToggleButton']['liveGenerateCriticalPath'])
+        live_generate_critical_path_checkbox.setToolTip(lang.get('QToggleButton.liveGenerateCriticalPath'))
         if self.save_data.live_generate_critical_path: live_generate_critical_path_checkbox.setCheckState(Qt.CheckState.Checked)
         live_generate_critical_path_checkbox.stateChanged.connect(gcp_value_changed)
 
         self.use_node_names_instead_of_path_names_checkbox = QNamedToggleButton()
-        self.use_node_names_instead_of_path_names_checkbox.setText(lang['QToggleButton']['useNodeNamesInsteadOfPathNames'])
+        self.use_node_names_instead_of_path_names_checkbox.setText(lang.get('QToggleButton.useNodeNamesInsteadOfPathNames'))
         if self.use_node_names: self.use_node_names_instead_of_path_names_checkbox.toggle_button.setCheckState(Qt.CheckState.Checked)
         self.use_node_names_instead_of_path_names_checkbox.toggle_button.stateChanged.connect(unniopn_value_changed)
 
@@ -737,7 +737,7 @@ class Application(QBaseApplication):
         unniopn_value_changed(self.use_node_names)
 
     def properties_menu_load(self):
-        lang = self.save_data.language_data['QDockWidget']['properties']
+        lang = self.save_data.get_lang_data('QDockWidget.properties')
 
         def edit_name(name: str):
             if not name: return
@@ -762,7 +762,8 @@ class Application(QBaseApplication):
             self.properties_menu.scroll_layout.itemAt(i).widget().deleteLater()
         if not self.selected_item: return
 
-        min_time_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['minTime'])
+        min_time_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.QLabel.minTime'))
+        min_time_spinbox.set_range(0, 100000)
         min_time_spinbox.double_spin_box.setValue(self.selected_item.minTime)
         min_time_spinbox.double_spin_box.valueChanged.connect(edit_min_time)
 
@@ -770,7 +771,8 @@ class Application(QBaseApplication):
         self.properties_menu.scroll_layout.setAlignment(min_time_spinbox, Qt.AlignmentFlag.AlignTop)
 
 
-        max_time_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['maxTime'])
+        max_time_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.QLabel.maxTime'))
+        max_time_spinbox.set_range(0, 100000)
         max_time_spinbox.double_spin_box.setValue(self.selected_item.maxTime)
         max_time_spinbox.double_spin_box.valueChanged.connect(edit_max_time)
 
@@ -778,7 +780,7 @@ class Application(QBaseApplication):
         self.properties_menu.scroll_layout.setAlignment(max_time_spinbox, Qt.AlignmentFlag.AlignTop)
 
 
-        name_entry = QNamedLineEdit(None, '', lang['QNamedLineEdit']['QLabel']['displayName'])
+        name_entry = QNamedLineEdit(None, '', lang.get('QNamedLineEdit.QLabel.displayName'))
         name_entry.line_edit.setText(self.selected_item.name)
         name_entry.line_edit.textChanged.connect(edit_name)
 
@@ -789,7 +791,7 @@ class Application(QBaseApplication):
         lst = list(self.selected_item.next.keys())
         if not lst: return
 
-        node_combobox = QNamedComboBox(None, lang['QNamedComboBox']['QLabel']['node'])
+        node_combobox = QNamedComboBox(None, lang.get('QNamedComboBox.QLabel.node'))
 
         self.properties_menu.scroll_layout.addWidget(node_combobox, 1, 1)
         self.properties_menu.scroll_layout.setAlignment(node_combobox, Qt.AlignmentFlag.AlignTop)
@@ -809,7 +811,7 @@ class Application(QBaseApplication):
         self.properties_menu.scroll_layout.setAlignment(node_groupbox, Qt.AlignmentFlag.AlignTop)
     
     def properties_menu_node_groupbox_load(self, groupbox: QGridGroupBox, key: str):
-        lang = self.save_data.language_data['QDockWidget']['properties']
+        lang = self.save_data.get_lang_data('QDockWidget.properties')
         self.selected_node = key
 
         def edit_name(name: str):
@@ -832,16 +834,17 @@ class Application(QBaseApplication):
         for i in reversed(range(groupbox.grid_layout.count())):
             groupbox.grid_layout.itemAt(i).widget().deleteLater()
 
-        groupbox.setTitle(lang['QGroupBox']['pathToNodeX'].replace('%s', key))
+        groupbox.setTitle(lang.get('QGroupBox.pathToNodeX').replace('%s', key))
 
-        name_entry = QNamedLineEdit(None, '', lang['QNamedLineEdit']['QLabel']['displayName'])
+        name_entry = QNamedLineEdit(None, '', lang.get('QNamedLineEdit.QLabel.displayName'))
         name_entry.line_edit.setText(self.selected_item.next[key].name)
         name_entry.line_edit.textChanged.connect(edit_name)
-        value_spinbox = QNamedDoubleSpinBox(None, lang['QNamedSpinBox']['QLabel']['time'])
+        value_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.QLabel.time'))
+        value_spinbox.set_range(0, 100000)
         value_spinbox.double_spin_box.setValue(self.selected_item.next[key].value)
         value_spinbox.double_spin_box.valueChanged.connect(edit_value)
 
-        delete_button = QPushButton(lang['QPushButton']['deleteConnection'])
+        delete_button = QPushButton(lang.get('QPushButton.deleteConnection'))
         delete_button.setCursor(Qt.CursorShape.PointingHandCursor)
         delete_button.setProperty('color', 'main')
         delete_button.clicked.connect(remove_connection)
@@ -896,8 +899,8 @@ class Application(QBaseApplication):
     def update_title(self):
         s = ''
         if self.unsaved: s = '*'
-        if self.SAVE_PATH: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {Info.version} | Build: {Info.build} - {self.SAVE_PATH}{s}')
-        else: self.window.setWindowTitle(self.save_data.language_data['QMainWindow']['title'] + f' | Version: {Info.version} | Build: {Info.build} - NewPERT{s}')
+        if self.SAVE_PATH: self.window.setWindowTitle(self.save_data.get_lang_data('QMainWindow.title') + f' | Version: {Info.version} | Build: {Info.build} - {self.SAVE_PATH}{s}')
+        else: self.window.setWindowTitle(self.save_data.get_lang_data('QMainWindow.title') + f' | Version: {Info.version} | Build: {Info.build} - NewPERT{s}')
 
 
 
@@ -1190,12 +1193,12 @@ class Application(QBaseApplication):
         self.set_unsaved()
 
     def file_menu_open_action(self):
-        lang = self.save_data.language_data['QFileDialog']['open']
+        lang = self.save_data.get_lang_data('QFileDialog.open')
 
         path = QFileDialog.getOpenFileName(
             parent = self.window,
             dir = './',
-            caption = lang['title'],
+            caption = lang.get('title'),
             filter = 'Python PERT (*.pypert)'
         )[0]
 
@@ -1240,12 +1243,12 @@ class Application(QBaseApplication):
         self.set_saved()
 
     def file_menu_save_as_action(self):
-        lang = self.save_data.language_data['QFileDialog']['saveAs']
+        lang = self.save_data.get_lang_data('QFileDialog.saveAs')
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
             dir = './',
-            caption = lang['title'],
+            caption = lang.get('title'),
             filter = 'Python PERT (*.pypert)'
         )[0]
 
@@ -1283,15 +1286,15 @@ class Application(QBaseApplication):
 
 
     def help_menu_about_action(self):
-        lang = self.save_data.language_data['QAbout']['pertMaker']
+        lang = self.save_data.get_lang_data('QAbout.pertMaker')
         QAboutBox(
             app = self,
-            title = lang['title'],
+            title = lang.get('title'),
             logo = Info.icon_path,
             texts = [
-                lang['texts'][0],
-                lang['texts'][1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.hex};\">Synel</a>'),
-                lang['texts'][2].replace('%s', f'<a href=\"https://github.com/Synell/PERT-Maker\" style=\"color: {self.COLOR_LINK.hex};\">PERT Maker Github</a>')
+                lang.get('texts')[0],
+                lang.get('texts')[1].replace('%s', f'<a href=\"https://github.com/Synell\" style=\"color: {self.COLOR_LINK.hex};\">Synel</a>'),
+                lang.get('texts')[2].replace('%s', f'<a href=\"https://github.com/Synell/PERT-Maker\" style=\"color: {self.COLOR_LINK.hex};\">PERT Maker Github</a>')
             ]
         ).exec()
 
@@ -1300,7 +1303,7 @@ class Application(QBaseApplication):
 
 
     def file_menu_import_menu_table_action(self):
-        data = QImportTableDialog(self.window, self.save_data.language_data['QImportTableDialog'], int(self.use_node_names)).exec()
+        data = QImportTableDialog(self.window, self.save_data.get_lang_data('QImportTableDialog'), int(self.use_node_names)).exec()
         if not data: return
 
         self.status_bar.progress_bar.setHidden(False)
@@ -1396,18 +1399,18 @@ class Application(QBaseApplication):
         if not self.connectionTable.get_items():
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.save_data.language_data['QMessageBox']['warning']['exportTable']['title'],
-                text = self.save_data.language_data['QMessageBox']['warning']['exportTable']['text'],
-                informative_text = self.save_data.language_data['QMessageBox']['warning']['exportTable']['informativeText'],
+                title = self.save_data.get_lang_data('QMessageBox.warning.exportTable.title'),
+                text = self.save_data.get_lang_data('QMessageBox.warning.exportTable.text'),
+                informative_text = self.save_data.get_lang_data('QMessageBox.warning.exportTable.informativeText'),
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
-        lang = self.save_data.language_data['QMainWindow']['QMenuBar']['fileMenu']['QMenu']['exportMenu']
+        lang = self.save_data.get_lang_data('QMainWindow.QMenuBar.fileMenu.QMenu.exportMenu')
 
         path = QFileDialog.getSaveFileName(
             parent = self.window,
             dir = './',
-            caption = lang['QFileDialog']['table']['title'],
+            caption = lang.get('QFileDialog.table.title'),
             filter = 'CSV (*.csv)'
         )[0]
 
@@ -1420,14 +1423,14 @@ class Application(QBaseApplication):
         if not self.graph.nodes:
             return QMessageBoxWithWidget(
                 app = self,
-                title = self.save_data.language_data['QMessageBox']['warning']['exportImage']['title'],
-                text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['text'],
-                informative_text = self.save_data.language_data['QMessageBox']['warning']['exportImage']['informativeText'],
+                title = self.save_data.get_lang_data('QMessageBox.warning.exportImage.title'),
+                text = self.save_data.get_lang_data('QMessageBox.warning.exportImage.text'),
+                informative_text = self.save_data.get_lang_data('QMessageBox.warning.exportImage.informativeText'),
                 icon = QMessageBoxWithWidget.Icon.Warning
             ).exec()
 
         data = self.generate_canvas_pixmap()
-        result = QExportImageDialog(self.window, self.save_data.language_data['QExportImageDialog'], self.save_data.export_image_bg_color, self.save_data.export_image_fg_color, data).exec()
+        result = QExportImageDialog(self.window, self.save_data.get_lang_data('QExportImageDialog'), self.save_data.export_image_bg_color, self.save_data.export_image_fg_color, data).exec()
         if result:
             path = result['path']
             bg, fg = result['bg'], result['fg']

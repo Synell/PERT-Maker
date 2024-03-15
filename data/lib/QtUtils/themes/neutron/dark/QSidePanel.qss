@@ -135,6 +135,14 @@ QWidget[color='{main-color-name}'] QWidget[QSidePanel=true][color='main'] QPushB
 	background-color: #{main-color-normal};
 }
 
+QWidget[color='{main-color-name}'] QWidget[QSidePanel=true][color='main'] QPushButton:disabled, QWidget[QSidePanel=true][color='{main-color-name}'] QPushButton:disabled {
+	color: #404040;
+}
+
+QWidget[color='{main-color-name}'] QWidget[QSidePanel=true][color='main'] QPushButton[selected=true]:disabled, QWidget[QSidePanel=true][color='{main-color-name}'] QPushButton[selected=true]:disabled {
+	background-color: #{main-color-disabled};
+}
+
 
 
 /* QSidePanel - Neutral Color */
@@ -164,4 +172,12 @@ QWidget[color='{neutral-color-name}'] QWidget[QSidePanel=true][color='main'] QPu
 QWidget[color='{neutral-color-name}'] QWidget[QSidePanel=true][color='main'] QPushButton[selected=true]:focus, QWidget[QSidePanel=true][color='{neutral-color-name}'] QPushButton[selected=true]:focus {
 	background-color: #{neutral-color-normal};
 	color: #000000;
+}
+
+QWidget[color='{neutral-color-name}'] QWidget[QSidePanel=true][color='main'] QPushButton:disabled, QWidget[QSidePanel=true][color='{neutral-color-name}'] QPushButton:disabled {
+	color: #404040;
+}
+
+QWidget[color='{neutral-color-name}'] QWidget[QSidePanel=true][color='main'] QPushButton[selected=true]:disabled, QWidget[QSidePanel=true][color='{neutral-color-name}'] QPushButton[selected=true]:disabled {
+	background-color: #{neutral-color-disabled};
 }
