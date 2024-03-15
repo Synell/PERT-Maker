@@ -1,7 +1,8 @@
 {
     "info": {
         "name": "Français",
-        "version": "07e715d5",
+        "version": "07e83f83",
+        "author": "Synel",
         "description": "Langage français pour l'application PERT Maker."
     },
     "root": {
