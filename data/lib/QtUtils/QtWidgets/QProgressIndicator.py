@@ -117,16 +117,16 @@ class QProgressIndicator(QFrame):
 
     def _rebuild(self) -> None:
         match self._direction:
-            case QProgressIndicator.Direction.Left2Right:
+            case QDirection.Left2Right:
                 self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
-            case QProgressIndicator.Direction.Right2Left:
+            case QDirection.Right2Left:
                 self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
 
-            case QProgressIndicator.Direction.Top2Bottom:
+            case QDirection.Top2Bottom:
                 self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
-            case QProgressIndicator.Direction.Bottom2Top:
+            case QDirection.Bottom2Top:
                 self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
 
@@ -149,7 +149,7 @@ class QProgressIndicator(QFrame):
         self._bar.setProperty('QProgressIndicatorBar', True)
         self._bar.setProperty('active', False)
 
-        if self._direction in (QProgressIndicator.Direction.Left2Right, QProgressIndicator.Direction.Right2Left):
+        if self._direction in (QDirection.Left2Right, QDirection.Right2Left):
             self._active_bar.setFixedHeight(2)
             self._layout.addWidget(self._active_bar, 0, 0, 1, max(self._current_index + 1, 1), Qt.AlignmentFlag.AlignVCenter)
 
@@ -170,8 +170,8 @@ class QProgressIndicator(QFrame):
             item.setFixedWidth(16 if self._compact else 32)
             item.setFixedHeight(16 if self._compact else 32)
             item.setProperty('compact', self._compact)
-            
-            if self._direction in (QProgressIndicator.Direction.Left2Right, QProgressIndicator.Direction.Right2Left):
+
+            if self._direction in (QDirection.Left2Right, QDirection.Right2Left):
                 self._layout.addWidget(item, 0, i)
 
             else:
