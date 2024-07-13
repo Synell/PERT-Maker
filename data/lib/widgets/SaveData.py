@@ -58,72 +58,72 @@ class SaveData(QSaveData):
     def settings_menu_editor(self):
         lang = self.get_lang_data('QSettingsDialog.QSidePanel.editor')
         widget = QScrollableGridWidget()
-        widget.scroll_layout.setSpacing(0)
-        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
+        widget.layout_.setSpacing(0)
+        widget.layout_.setContentsMargins(0, 0, 0, 0)
 
         root_frame = QGridFrame()
-        root_frame.grid_layout.setSpacing(16)
-        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
-        widget.scroll_layout.addWidget(root_frame, 0, 0)
-        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
+        root_frame.layout_.setSpacing(16)
+        root_frame.layout_.setContentsMargins(0, 0, 16, 0)
+        widget.layout_.addWidget(root_frame, 0, 0)
+        widget.layout_.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
 
 
         label = QSettingsDialog.textGroup(lang.get('QLabel.maxLoops.title'), lang.get('QLabel.maxLoops.description'))
-        root_frame.grid_layout.addWidget(label, 0, 0)
+        root_frame.layout_.addWidget(label, 0, 0)
 
         widget.max_loops_spinbox = QNamedSpinBox(None, lang.get('QNamedSpinBox.maxLoops'))
         widget.max_loops_spinbox.setRange(255, 65535)
         widget.max_loops_spinbox.setValue(self.max_loops)
-        root_frame.grid_layout.addWidget(widget.max_loops_spinbox, 1, 0)
-        root_frame.grid_layout.setAlignment(widget.max_loops_spinbox, Qt.AlignmentFlag.AlignLeft)
+        root_frame.layout_.addWidget(widget.max_loops_spinbox, 1, 0)
+        root_frame.layout_.setAlignment(widget.max_loops_spinbox, Qt.AlignmentFlag.AlignLeft)
 
 
         frame = QFrame()
         frame.setProperty('border-top', True)
         frame.setFixedHeight(1)
-        root_frame.grid_layout.addWidget(frame, 2, 0)
+        root_frame.layout_.addWidget(frame, 2, 0)
 
 
         label = QSettingsDialog.textGroup(lang.get('QLabel.gridSize.title'), lang.get('QLabel.gridSize.description'))
-        root_frame.grid_layout.addWidget(label, 3, 0)
+        root_frame.layout_.addWidget(label, 3, 0)
 
         widget.grid_size_spinbox = QNamedSpinBox(None, lang.get('QNamedSpinBox.gridSize'))
         widget.grid_size_spinbox.setRange(10, 200)
         widget.grid_size_spinbox.setValue(self.grid_size)
-        root_frame.grid_layout.addWidget(widget.grid_size_spinbox, 4, 0)
-        root_frame.grid_layout.setAlignment(widget.grid_size_spinbox, Qt.AlignmentFlag.AlignLeft)
+        root_frame.layout_.addWidget(widget.grid_size_spinbox, 4, 0)
+        root_frame.layout_.setAlignment(widget.grid_size_spinbox, Qt.AlignmentFlag.AlignLeft)
 
 
         frame = QFrame()
         frame.setProperty('border-top', True)
         frame.setFixedHeight(1)
-        root_frame.grid_layout.addWidget(frame, 5, 0)
+        root_frame.layout_.addWidget(frame, 5, 0)
 
 
         label = QSettingsDialog.textGroup(lang.get('QLabel.arrowMoveSpeed.title'), lang.get('QLabel.arrowMoveSpeed.description'))
-        root_frame.grid_layout.addWidget(label, 6, 0)
+        root_frame.layout_.addWidget(label, 6, 0)
 
         widget.arrow_move_speed_spinbox = QNamedSpinBox(None, lang.get('QNamedSpinBox.arrowMoveSpeed'))
         widget.arrow_move_speed_spinbox.setRange(1, 200)
         widget.arrow_move_speed_spinbox.setValue(self.arrow_move_speed)
-        root_frame.grid_layout.addWidget(widget.arrow_move_speed_spinbox, 7, 0)
-        root_frame.grid_layout.setAlignment(widget.arrow_move_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
+        root_frame.layout_.addWidget(widget.arrow_move_speed_spinbox, 7, 0)
+        root_frame.layout_.setAlignment(widget.arrow_move_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
 
 
         frame = QFrame()
         frame.setProperty('border-top', True)
         frame.setFixedHeight(1)
-        root_frame.grid_layout.addWidget(frame, 8, 0)
+        root_frame.layout_.addWidget(frame, 8, 0)
 
 
         label = QSettingsDialog.textGroup(lang.get('QLabel.zoomSpeed.title'), lang.get('QLabel.zoomSpeed.description'))
-        root_frame.grid_layout.addWidget(label, 9, 0)
+        root_frame.layout_.addWidget(label, 9, 0)
 
         widget.zoom_speed_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.zoomSpeed'))
         widget.zoom_speed_spinbox.setRange(0.25, 4.0)
         widget.zoom_speed_spinbox.setValue(self.zoom_speed)
-        root_frame.grid_layout.addWidget(widget.zoom_speed_spinbox, 10, 0)
-        root_frame.grid_layout.setAlignment(widget.zoom_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
+        root_frame.layout_.addWidget(widget.zoom_speed_spinbox, 10, 0)
+        root_frame.layout_.setAlignment(widget.zoom_speed_spinbox, Qt.AlignmentFlag.AlignLeft)
 
 
         return widget
@@ -133,19 +133,19 @@ class SaveData(QSaveData):
     def settings_menu_updates(self):
         lang = self.get_lang_data('QSettingsDialog.QSidePanel.updates')
         widget = QScrollableGridWidget()
-        widget.scroll_layout.setSpacing(0)
-        widget.scroll_layout.setContentsMargins(0, 0, 0, 0)
+        widget.layout_.setSpacing(0)
+        widget.layout_.setContentsMargins(0, 0, 0, 0)
 
 
         root_frame = QGridFrame()
-        root_frame.grid_layout.setSpacing(16)
-        root_frame.grid_layout.setContentsMargins(0, 0, 16, 0)
-        widget.scroll_layout.addWidget(root_frame, 0, 0)
-        widget.scroll_layout.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
+        root_frame.layout_.setSpacing(16)
+        root_frame.layout_.setContentsMargins(0, 0, 16, 0)
+        widget.layout_.addWidget(root_frame, 0, 0)
+        widget.layout_.setAlignment(root_frame, Qt.AlignmentFlag.AlignTop)
 
 
         label = QSettingsDialog.textGroup(lang.get('QLabel.checkForUpdates.title'), lang.get('QLabel.checkForUpdates.description'))
-        root_frame.grid_layout.addWidget(label, 0, 0)
+        root_frame.layout_.addWidget(label, 0, 0)
 
         widget.check_for_updates_combobox = QNamedComboBox(None, lang.get('QNamedComboBox.checkForUpdates.title'))
         widget.check_for_updates_combobox.combo_box.addItems([
@@ -156,8 +156,8 @@ class SaveData(QSaveData):
             lang.get('QNamedComboBox.checkForUpdates.values.atLaunch')
         ])
         widget.check_for_updates_combobox.combo_box.setCurrentIndex(self.check_for_updates)
-        root_frame.grid_layout.addWidget(widget.check_for_updates_combobox, 1, 0)
-        root_frame.grid_layout.setAlignment(widget.check_for_updates_combobox, Qt.AlignmentFlag.AlignLeft)
+        root_frame.layout_.addWidget(widget.check_for_updates_combobox, 1, 0)
+        root_frame.layout_.setAlignment(widget.check_for_updates_combobox, Qt.AlignmentFlag.AlignLeft)
 
 
         return widget

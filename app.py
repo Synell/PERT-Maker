@@ -45,8 +45,8 @@ class Application(QBaseApplication):
 
         self.window.closeEvent = self.close_event
 
-        self.must_update = None
-        self.must_update_link = None
+        self._must_update = None
+        self._must_update_link = None
 
         self.selected_item = None
         self.selected_node = None
@@ -64,7 +64,7 @@ class Application(QBaseApplication):
 
         self.graph = Graph()
 
-        self.save_data = self.save_data = SaveData(
+        self._save_data = self._save_data = SaveData(
             app = self,
             save_path = Info.save_path,
             main_color_set = Info.main_color_set,
@@ -109,12 +109,12 @@ class Application(QBaseApplication):
 
     def create_widgets(self):
         self.root = QGridWidget()
-        self.root.grid_layout.setSpacing(0)
-        self.root.grid_layout.setContentsMargins(0, 0, 0, 0)
+        self.root.layout_.setSpacing(0)
+        self.root.layout_.setContentsMargins(0, 0, 0, 0)
 
         self.canvas = QWidget()
         self.canvas.setMinimumSize(600, 400)
-        self.root.grid_layout.addWidget(self.canvas, 0, 0)
+        self.root.layout_.addWidget(self.canvas, 0, 0)
         self.canvas.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.canvas.setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground, True)
 
@@ -130,8 +130,8 @@ class Application(QBaseApplication):
 
         empty_widget = QGridWidget()
         empty_widget.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setSpacing(0)
+        empty_widget.layout_.setContentsMargins(0, 0, 0, 0)
+        empty_widget.layout_.setSpacing(0)
         self.status_bar.addPermanentWidget(empty_widget, 2)
 
         self.update_button = QPushButton(self.save_data.get_lang_data('QStatusBar.QPushButton.update'))
@@ -139,21 +139,21 @@ class Application(QBaseApplication):
         self.update_button.clicked.connect(self.update_click)
         self.update_button.setProperty('color', 'main')
         self.update_button.setProperty('transparent', True)
-        empty_widget.grid_layout.addWidget(self.update_button, 0, 0)
+        empty_widget.layout_.addWidget(self.update_button, 0, 0)
         self.update_button.setVisible(False)
 
 
         empty_widget = QGridWidget()
         empty_widget.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setSpacing(0)
+        empty_widget.layout_.setContentsMargins(0, 0, 0, 0)
+        empty_widget.layout_.setSpacing(0)
         self.status_bar.addPermanentWidget(empty_widget, 12)
 
 
         empty_widget = QGridWidget()
         empty_widget.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setSpacing(0)
+        empty_widget.layout_.setContentsMargins(0, 0, 0, 0)
+        empty_widget.layout_.setSpacing(0)
         self.status_bar.addPermanentWidget(empty_widget, 3)
 
         self.status_bar.progress_bar = QProgressBar()
@@ -162,49 +162,49 @@ class Application(QBaseApplication):
         self.status_bar.progress_bar.setValue(0)
         self.status_bar.progress_bar.setProperty('class', 'small')
         self.status_bar.progress_bar.setHidden(True)
-        empty_widget.grid_layout.addWidget(self.status_bar.progress_bar)
+        empty_widget.layout_.addWidget(self.status_bar.progress_bar)
 
 
         empty_widget = QGridWidget()
         empty_widget.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setContentsMargins(0, 0, 0, 0)
-        empty_widget.grid_layout.setSpacing(0)
+        empty_widget.layout_.setContentsMargins(0, 0, 0, 0)
+        empty_widget.layout_.setSpacing(0)
         self.status_bar.addPermanentWidget(empty_widget, 1)
 
 
         self.status_bar.zoom = QGridWidget()
         self.status_bar.zoom.setContentsMargins(0, 0, 0, 0)
-        self.status_bar.zoom.grid_layout.setContentsMargins(0, 0, 0, 0)
-        self.status_bar.zoom.grid_layout.setSpacing(0)
+        self.status_bar.zoom.layout_.setContentsMargins(0, 0, 0, 0)
+        self.status_bar.zoom.layout_.setSpacing(0)
 
         self.status_bar.zoom.zoom_min = QToolButton()
         self.status_bar.zoom.zoom_min.setIcon(self.save_data.get_icon('statusbar/zoomMin.png'))
         self.status_bar.zoom.zoom_min.clicked.connect(self.zoom_min)
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_min, 0, 0)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_min, 0, 0)
 
         self.status_bar.zoom.zoom_out = QToolButton()
         self.status_bar.zoom.zoom_out.setIcon(self.save_data.get_icon('statusbar/zoomOut.png'))
         self.status_bar.zoom.zoom_out.clicked.connect(self.zoom_out)
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_out, 0, 1)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_out, 0, 1)
 
         self.status_bar.zoom.zoom_slider = QSlider()
         self.status_bar.zoom.zoom_slider.setOrientation(Qt.Orientation.Horizontal)
         self.status_bar.zoom.zoom_slider.setRange(25, 400)
         self.status_bar.zoom.zoom_slider.valueChanged.connect(self.zoom_slider_value_changed)
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_slider, 0, 2)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_slider, 0, 2)
 
         self.status_bar.zoom.zoom_in = QToolButton()
         self.status_bar.zoom.zoom_in.setIcon(self.save_data.get_icon('statusbar/zoomIn.png'))
         self.status_bar.zoom.zoom_in.clicked.connect(self.zoom_in)
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_in, 0, 3)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_in, 0, 3)
 
         self.status_bar.zoom.zoom_max = QToolButton()
         self.status_bar.zoom.zoom_max.setIcon(self.save_data.get_icon('statusbar/zoomMax.png'))
         self.status_bar.zoom.zoom_max.clicked.connect(self.zoom_max)
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_max, 0, 4)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_max, 0, 4)
 
         self.status_bar.zoom.zoom_level = QLabel()
-        self.status_bar.zoom.grid_layout.addWidget(self.status_bar.zoom.zoom_level, 0, 5)
+        self.status_bar.zoom.layout_.addWidget(self.status_bar.zoom.zoom_level, 0, 5)
 
         self.update_zoom()
 
@@ -217,7 +217,7 @@ class Application(QBaseApplication):
         self.properties_menu.setMinimumWidth(300)
         self.properties_menu.setMinimumHeight(200)
         self.properties_menu.setFrameShape(QFrame.Shape.NoFrame)
-        self.properties_menu.scroll_widget.setProperty('QDockWidget', True)
+        self.properties_menu.widget_.setProperty('QDockWidget', True)
         
         self.properties_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.properties.title'))
         self.properties_menu_dock_widget.setObjectName('properties')
@@ -230,7 +230,7 @@ class Application(QBaseApplication):
         self.connection_view_menu.setMinimumWidth(450)
         self.connection_view_menu.setMinimumHeight(200)
         self.connection_view_menu.setFrameShape(QFrame.Shape.NoFrame)
-        self.connection_view_menu.scroll_widget.setProperty('QDockWidget', True)
+        self.connection_view_menu.widget_.setProperty('QDockWidget', True)
         
         self.connection_view_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.connectionView.title'))
         self.connection_view_menu_dock_widget.setObjectName('connectionView')
@@ -245,7 +245,7 @@ class Application(QBaseApplication):
         self.critical_path_view_menu.setMinimumWidth(450)
         self.critical_path_view_menu.setMinimumHeight(200)
         self.critical_path_view_menu.setFrameShape(QFrame.Shape.NoFrame)
-        self.critical_path_view_menu.scroll_widget.setProperty('QDockWidget', True)
+        self.critical_path_view_menu.widget_.setProperty('QDockWidget', True)
         
         self.critical_path_view_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.criticalPathView.title'))
         self.critical_path_view_menu_dock_widget.setObjectName('criticalPathView')
@@ -264,7 +264,7 @@ class Application(QBaseApplication):
         self.generation_menu.setMinimumWidth(450)
         self.generation_menu.setMinimumHeight(200)
         self.generation_menu.setFrameShape(QFrame.Shape.NoFrame)
-        self.generation_menu.scroll_widget.setProperty('QDockWidget', True)
+        self.generation_menu.widget_.setProperty('QDockWidget', True)
 
         self.generation_menu_dock_widget = QSavableDockWidget(self.save_data.get_lang_data('QDockWidget.generation.title'))
         self.generation_menu_dock_widget.setObjectName('generation')
@@ -653,13 +653,13 @@ class Application(QBaseApplication):
         lang = self.save_data.get_lang_data('QDockWidget.connectionView.QBetterListWidget')
 
         self.connectionTable = QBetterListWidget(headers = [lang.get('task'), lang.get('previousTasks'), lang.get('time')], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
-        self.connection_view_menu.scroll_layout.addWidget(self.connectionTable, 0, 0)
+        self.connection_view_menu.layout_.addWidget(self.connectionTable, 0, 0)
 
     def create_critical_path_view_menu(self):
         lang = self.save_data.get_lang_data('QDockWidget.criticalPathView.QBetterListWidget')
 
         self.criticalPathTable = QBetterListWidget(headers = [lang.get('criticalPath')], minimum_section_size = 100, alignment_flag = Qt.AlignmentFlag.AlignCenter)
-        self.critical_path_view_menu.scroll_layout.addWidget(self.criticalPathTable, 0, 0)
+        self.critical_path_view_menu.layout_.addWidget(self.criticalPathTable, 0, 0)
 
     def create_generation_menu(self):
         lang = self.save_data.get_lang_data('QDockWidget.generation')
@@ -723,13 +723,13 @@ class Application(QBaseApplication):
         self.use_node_names_instead_of_path_names_checkbox.toggle_button.stateChanged.connect(unniopn_value_changed)
 
 
-        self.generation_menu.scroll_layout.addWidget(live_refresh_connection_view_button, 0, 0)
-        self.generation_menu.scroll_layout.addWidget(live_refresh_connection_view_checkbox, 0, 1)
-        self.generation_menu.scroll_layout.addWidget(generate_min_max_time_button, 1, 0)
-        self.generation_menu.scroll_layout.addWidget(generate_min_max_time_checkbox, 1, 1)
-        self.generation_menu.scroll_layout.addWidget(generate_critical_path_button, 2, 0)
-        self.generation_menu.scroll_layout.addWidget(live_generate_critical_path_checkbox, 2, 1)
-        self.generation_menu.scroll_layout.addWidget(self.use_node_names_instead_of_path_names_checkbox, 3, 0, 1, 2)
+        self.generation_menu.layout_.addWidget(live_refresh_connection_view_button, 0, 0)
+        self.generation_menu.layout_.addWidget(live_refresh_connection_view_checkbox, 0, 1)
+        self.generation_menu.layout_.addWidget(generate_min_max_time_button, 1, 0)
+        self.generation_menu.layout_.addWidget(generate_min_max_time_checkbox, 1, 1)
+        self.generation_menu.layout_.addWidget(generate_critical_path_button, 2, 0)
+        self.generation_menu.layout_.addWidget(live_generate_critical_path_checkbox, 2, 1)
+        self.generation_menu.layout_.addWidget(self.use_node_names_instead_of_path_names_checkbox, 3, 0, 1, 2)
 
         rcv_value_changed(self.save_data.live_refresh_connection_view)
         mm_value_changed(self.save_data.live_min_max)
@@ -758,8 +758,8 @@ class Application(QBaseApplication):
             self.canvas.update()
             self.set_unsaved()
 
-        for i in reversed(range(self.properties_menu.scroll_layout.count())):
-            self.properties_menu.scroll_layout.itemAt(i).widget().deleteLater()
+        for i in reversed(range(self.properties_menu.layout_.count())):
+            self.properties_menu.layout_.itemAt(i).widget().deleteLater()
         if not self.selected_item: return
 
         min_time_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.QLabel.minTime'))
@@ -767,8 +767,8 @@ class Application(QBaseApplication):
         min_time_spinbox.double_spin_box.setValue(self.selected_item.minTime)
         min_time_spinbox.double_spin_box.valueChanged.connect(edit_min_time)
 
-        self.properties_menu.scroll_layout.addWidget(min_time_spinbox, 0, 0)
-        self.properties_menu.scroll_layout.setAlignment(min_time_spinbox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.layout_.addWidget(min_time_spinbox, 0, 0)
+        self.properties_menu.layout_.setAlignment(min_time_spinbox, Qt.AlignmentFlag.AlignTop)
 
 
         max_time_spinbox = QNamedDoubleSpinBox(None, lang.get('QNamedSpinBox.QLabel.maxTime'))
@@ -776,16 +776,16 @@ class Application(QBaseApplication):
         max_time_spinbox.double_spin_box.setValue(self.selected_item.maxTime)
         max_time_spinbox.double_spin_box.valueChanged.connect(edit_max_time)
 
-        self.properties_menu.scroll_layout.addWidget(max_time_spinbox, 0, 1)
-        self.properties_menu.scroll_layout.setAlignment(max_time_spinbox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.layout_.addWidget(max_time_spinbox, 0, 1)
+        self.properties_menu.layout_.setAlignment(max_time_spinbox, Qt.AlignmentFlag.AlignTop)
 
 
         name_entry = QNamedLineEdit(None, '', lang.get('QNamedLineEdit.QLabel.displayName'))
         name_entry.line_edit.setText(self.selected_item.name)
         name_entry.line_edit.textChanged.connect(edit_name)
 
-        self.properties_menu.scroll_layout.addWidget(name_entry, 1, 0)
-        self.properties_menu.scroll_layout.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.layout_.addWidget(name_entry, 1, 0)
+        self.properties_menu.layout_.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
 
 
         lst = list(self.selected_item.next.keys())
@@ -793,8 +793,8 @@ class Application(QBaseApplication):
 
         node_combobox = QNamedComboBox(None, lang.get('QNamedComboBox.QLabel.node'))
 
-        self.properties_menu.scroll_layout.addWidget(node_combobox, 1, 1)
-        self.properties_menu.scroll_layout.setAlignment(node_combobox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.layout_.addWidget(node_combobox, 1, 1)
+        self.properties_menu.layout_.setAlignment(node_combobox, Qt.AlignmentFlag.AlignTop)
 
 
         node_groupbox = QGridGroupBox()
@@ -807,8 +807,8 @@ class Application(QBaseApplication):
 
         node_combobox.combo_box.currentIndexChanged.connect(lambda i: self.properties_menu_node_groupbox_load(node_groupbox, lst[i]))
 
-        self.properties_menu.scroll_layout.addWidget(node_groupbox, 2, 0, 1, 2)
-        self.properties_menu.scroll_layout.setAlignment(node_groupbox, Qt.AlignmentFlag.AlignTop)
+        self.properties_menu.layout_.addWidget(node_groupbox, 2, 0, 1, 2)
+        self.properties_menu.layout_.setAlignment(node_groupbox, Qt.AlignmentFlag.AlignTop)
     
     def properties_menu_node_groupbox_load(self, groupbox: QGridGroupBox, key: str):
         lang = self.save_data.get_lang_data('QDockWidget.properties')
@@ -831,8 +831,8 @@ class Application(QBaseApplication):
             self.properties_menu_load()
             self.set_unsaved()
 
-        for i in reversed(range(groupbox.grid_layout.count())):
-            groupbox.grid_layout.itemAt(i).widget().deleteLater()
+        for i in reversed(range(groupbox.layout_.count())):
+            groupbox.layout_.itemAt(i).widget().deleteLater()
 
         groupbox.setTitle(lang.get('QGroupBox.pathToNodeX').replace('%s', key))
 
@@ -849,12 +849,12 @@ class Application(QBaseApplication):
         delete_button.setProperty('color', 'main')
         delete_button.clicked.connect(remove_connection)
 
-        groupbox.grid_layout.addWidget(name_entry, 0, 0)
-        groupbox.grid_layout.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
-        groupbox.grid_layout.addWidget(value_spinbox, 0, 1)
-        groupbox.grid_layout.setAlignment(value_spinbox, Qt.AlignmentFlag.AlignTop)
-        groupbox.grid_layout.addWidget(delete_button, 1, 0, 1, 2)
-        groupbox.grid_layout.setAlignment(delete_button, Qt.AlignmentFlag.AlignTop)
+        groupbox.layout_.addWidget(name_entry, 0, 0)
+        groupbox.layout_.setAlignment(name_entry, Qt.AlignmentFlag.AlignTop)
+        groupbox.layout_.addWidget(value_spinbox, 0, 1)
+        groupbox.layout_.setAlignment(value_spinbox, Qt.AlignmentFlag.AlignTop)
+        groupbox.layout_.addWidget(delete_button, 1, 0, 1, 2)
+        groupbox.layout_.setAlignment(delete_button, Qt.AlignmentFlag.AlignTop)
 
         self.canvas.update()
 
@@ -1581,19 +1581,19 @@ class Application(QBaseApplication):
 
 
     def check_updates(self) -> None:
-        self.update_request = RequestWorker([self.UPDATE_LINK])
-        self.update_request.signals.received.connect(self.check_updates_release)
-        self.update_request.signals.failed.connect(self.check_updates_failed)
-        self.update_request.start()
+        self._update_request = RequestWorker([self.UPDATE_LINK])
+        self._update_request.signals.received.connect(self.check_updates_release)
+        self._update_request.signals.failed.connect(self.check_updates_failed)
+        self._update_request.start()
 
     def check_updates_release(self, rel: dict, app: str) -> None:
-        self.update_request.exit()
-        self.must_update_link = RequestWorker.get_release(rel, None).link
+        self._update_request.exit()
+        self._must_update_link = RequestWorker.get_release(rel, None).link
         if rel['tag_name'] > Info.build: self.set_update(True)
         else: self.save_data.last_check_for_updates = datetime.now()
 
     def check_updates_failed(self, error: str) -> None:
-        self.update_request.exit()
+        self._update_request.exit()
         print('Failed to check for updates:', error)
 
     def set_update(self, update: bool) -> None:
@@ -1601,7 +1601,7 @@ class Application(QBaseApplication):
 
     def update_click(self) -> None:
         self.save_data.save()
-        self.must_update = self.must_update_link
+        self._must_update = self._must_update_link
         self.exit()
 
     def close_event(self, event: QCloseEvent) -> None:

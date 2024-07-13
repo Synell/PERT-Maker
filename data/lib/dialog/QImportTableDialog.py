@@ -21,21 +21,21 @@ class QImportTableDialog(QDialog):
         self.setMinimumHeight(300)
 
         right_buttons = QGridWidget()
-        right_buttons.grid_layout.setSpacing(16)
-        right_buttons.grid_layout.setContentsMargins(0, 0, 0, 0)
+        right_buttons.layout_.setSpacing(16)
+        right_buttons.layout_.setContentsMargins(0, 0, 0, 0)
 
         button = QPushButton(lang['QPushButton']['cancel'])
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         button.clicked.connect(self.reject)
         button.setProperty('color', 'white')
         button.setProperty('transparent', True)
-        right_buttons.grid_layout.addWidget(button, 0, 0)
+        right_buttons.layout_.addWidget(button, 0, 0)
 
         button = QPushButton(lang['QPushButton']['import'])
         button.setCursor(Qt.CursorShape.PointingHandCursor)
         button.clicked.connect(self.accept_verification)
         button.setProperty('color', 'main')
-        right_buttons.grid_layout.addWidget(button, 0, 1)
+        right_buttons.layout_.addWidget(button, 0, 1)
 
         self.table_widget = QTableWidget()
         self.table_widget.setRowCount(50)

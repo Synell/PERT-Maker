@@ -3,7 +3,7 @@
     # Libraries
 from enum import Enum
 from typing import Callable, Iterator
-from PySide6.QtWidgets import QPushButton, QSizePolicy, QFrame
+from PySide6.QtWidgets import QPushButton, QSizePolicy, QFrame, QWidget
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import Qt, Signal
 from .QScrollableGridFrame import QScrollableGridFrame
@@ -100,8 +100,8 @@ class QSidePanel(QScrollableGridFrame):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self._items = []
-        self.scroll_layout.setSpacing(5)
-        self.scroll_layout.setContentsMargins(10, 10, 10, 10)
+        self.layout_.setSpacing(5)
+        self.layout_.setContentsMargins(10, 10, 10, 10)
         self.set_width(width)
         self.setProperty('QSidePanel', True)
 
@@ -139,12 +139,15 @@ class QSidePanel(QScrollableGridFrame):
     def set_current_item(self, item: QSidePanelItem) -> None:
         self.set_current_index(self.items.index(item))
 
+    def set_current_widget(self, widget: QWidget) -> None:
+        self.set_current_index(self.index_of(widget))
+
     def update(self) -> None:
         if self._current_index >= self.count(): self._current_index = self.count() - 1
         if self._current_index < 0: self._current_index = 0
 
-        for i in reversed(range(self.scroll_layout.count())):
-            self.scroll_layout.itemAt(i).widget().setParent(None)
+        for i in reversed(range(self.layout_.count())):
+            self.layout_.itemAt(i).widget().setParent(None)
 
         send_param = lambda i: lambda: self._clicked(i)
 
@@ -157,7 +160,7 @@ class QSidePanel(QScrollableGridFrame):
                 item._widget.setProperty('selected', True) if index == self._current_index else item._widget.setProperty('selected', False)
                 item._widget.clearFocus()
                 item._widget.update()
-            self.scroll_layout.addWidget(item._widget, index, 0)
+            self.layout_.addWidget(item._widget, index, 0)
 
     def _clicked(self, index: int) -> None:
         self.current_index_changed.emit(index)
